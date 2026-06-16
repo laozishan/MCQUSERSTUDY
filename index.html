@@ -84,12 +84,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 .source-badge{display:inline-flex;align-items:center;gap:6px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:4px 10px;font-size:11px;color:var(--text2);margin-bottom:10px}
 .source-badge strong{color:var(--text)}
 .vignette{font-size:14px;line-height:1.9}
-.hl-core{background:#fff8db;padding:1px 3px;border-radius:4px;border:1.5px solid transparent;transition:.16s ease;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.hl-core{background:#fff8db;padding:1px 3px;border-radius:3px;border:0;box-shadow:inset 0 0 0 1px rgba(218,165,32,.38);transition:.16s ease;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 .hl-core.linkable{cursor:default}
-.hl-core.active-link{background:#fff3cd;border-color:#c48a1d;box-shadow:0 0 0 2px rgba(196,138,29,.14)}
-.hl-core.mini-support-link{background:#cdefdc!important;border-color:#16723b!important;color:#0e4c28!important;box-shadow:0 0 0 2px rgba(22,114,59,.26)!important}
-.hl-core.mini-against-link{background:#ffd1d1!important;border-color:#a92222!important;color:#6f1515!important;box-shadow:0 0 0 2px rgba(169,34,34,.26)!important}
-.hl-core.click-focus{background:#ffe7bf;border-color:#d97706;box-shadow:0 0 0 2px rgba(217,119,6,.14)}
+.hl-core.mini-only{background:transparent;box-shadow:none;color:inherit}
+.hl-core.active-link{background:#fff3cd;color:inherit;box-shadow:inset 0 0 0 1.5px rgba(196,138,29,.78)}
+.hl-core.mini-only.active-link{background:transparent;box-shadow:none;color:inherit}
+.hl-core.mini-support-link,.hl-core.mini-only.mini-support-link{background:#dff4e8!important;color:#0e4c28!important;box-shadow:inset 0 0 0 1.8px rgba(22,114,59,.86)!important}
+.hl-core.mini-against-link,.hl-core.mini-only.mini-against-link{background:#ffe0e0!important;color:#6f1515!important;box-shadow:inset 0 0 0 1.8px rgba(169,34,34,.86)!important}
+.hl-core.click-focus{background:#ffe7bf;box-shadow:inset 0 0 0 1.5px rgba(217,119,6,.75)}
 .vignette-flash{outline:2px solid #7aa7d9 !important;outline-offset:2px;transition:outline .15s}
 
 /* Question section */
@@ -199,10 +201,14 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 .mini-distractor-svg{width:100%;height:auto;display:block;background:#fff;overflow:visible}
 .mini-evidence-node{cursor:pointer}
 .mini-evidence-node rect{transition:.12s}
-.mini-evidence-node:hover rect{stroke-width:2.4}
+.mini-evidence-node[data-role="supports"]:hover rect{fill:#dff4e8;stroke:#1a6b3c;stroke-width:2.8}
+.mini-evidence-node[data-role="supports"]:hover text{fill:#0e4c28}
+.mini-evidence-node[data-role="against"]:hover rect{fill:#ffe0e0;stroke:#8a2d2d;stroke-width:2.8}
+.mini-evidence-node[data-role="against"]:hover text{fill:#6f1515}
 .mini-expected-node{cursor:pointer}
 .mini-expected-node rect{transition:.12s}
-.mini-expected-node:hover rect{stroke-width:2.4}
+.mini-expected-node:hover rect{fill:#f1efec;stroke:#9b8f84;stroke-width:2.6}
+.mini-expected-node:hover text{fill:#5f5852}
 .mini-distractor-node{cursor:pointer}
 .mini-distractor-node rect{transition:.12s}
 .mini-distractor-node:hover rect{stroke-width:2.4}
@@ -249,12 +255,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 .clue-tag.remove{background:var(--reject-bg);border-color:#d9a7a7;color:var(--reject)}
 .clue-tag.keep{background:var(--correct-bg);border-color:var(--correct-border);color:var(--correct)}
 .clue-note{font-size:11px;color:var(--text3);margin-top:8px;line-height:1.45}
-.hl-core.remove-selected{background:#ffe2e2;border-color:#c24141;box-shadow:0 0 0 2px rgba(194,65,65,.12)}
-.hl-core.deleted-preview{background:#ffe2e2;border-color:#c24141;text-decoration:line-through;color:#8a2d2d}
+.hl-core.remove-selected{background:#ffe2e2;color:#8a2d2d;box-shadow:inset 0 0 0 1.5px rgba(194,65,65,.70)}
+.hl-core.deleted-preview{background:#ffe2e2;text-decoration:line-through;color:#8a2d2d;box-shadow:inset 0 0 0 1.5px rgba(194,65,65,.70)}
 .graph-tool-btn.delete-node{border-color:#d9a7a7;color:var(--reject);background:#fff7f7}
 .graph-tool-btn.delete-node:hover{background:var(--reject-bg);border-color:var(--reject)}
 /* In-graph controls */
-.reasoning-board{position:relative}
 .graph-toolbar{position:absolute;top:14px;right:16px;z-index:8;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;pointer-events:auto}
 .graph-tool-btn{border:1px solid var(--border);background:rgba(255,255,255,.94);border-radius:999px;padding:8px 12px;font-family:inherit;font-size:11px;font-weight:900;color:var(--text2);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:.14s}
 .graph-tool-btn:hover{border-color:var(--accent);color:var(--accent)}
@@ -652,9 +657,6 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
         </div>
         <div class="main-graph-hover-hint" id="mainGraphHoverHint">Hover on nodes to see the explanation.</div>
         <div class="right-text-panel delayed-panel" id="kgTextPanel">
-          <div class="right-text-panel-head">
-            <div class="right-text-panel-title">Text explanation</div>
-          </div>
           <div class="right-text-body open">
             <div class="why" id="kgTextWhy"></div>
             <div class="distractor-grid" id="kgTextDistractors"></div>
@@ -689,13 +691,20 @@ let selectedDiff='easy', selectedMode='new', selectedPickerTask=null;
 let currentDomain='neurology';
 var domainStateReady=false;
 
-const DOMAIN_TOPICS={
-  neurology:[{value:'cerebral_hemispheres_vascular_supply',label:'Cerebral hemispheres and vascular supply'}],
-  pediatrics:[{value:'pediatric_respiratory_system',label:'Pediatric respiratory system'}]
+const DOMAIN_TOPICS = {
+  neurology: [{value: 'cerebral_hemispheres_vascular_supply', label: 'Cerebral hemispheres and vascular supply'}],
+  pediatrics: [{value: 'pediatric_respiratory_system', label: 'Pediatric respiratory system'}]
 };
-const DOMAIN_COPY={
-  neurology:{sub:'User study prototype - Question Setup',desc:'Configure your medical education question parameters'},
-  pediatrics:{sub:'Pediatrics respiratory prototype - Question Setup',desc:'Configure pediatric respiratory MCQ review materials'}
+
+const DOMAIN_COPY = {
+  neurology: {
+    sub: 'Neurology prototype - Question Setup',
+    desc: 'Configure neurology MCQ review materials'
+  },
+  pediatrics: {
+    sub: 'Pediatrics prototype - Question Setup',
+    desc: 'Configure pediatrics MCQ review materials'
+  }
 };
 
 function deepClone(obj){return JSON.parse(JSON.stringify(obj));}
@@ -1220,7 +1229,7 @@ const STUDY_DATA={
         "source": "Neurology · New-onset focal aware motor seizure · Urgency of imaging",
         "correct": "C",
         "question_stem": "What is the most appropriate immediate next step in management?",
-        "vignette": "A 45-year-old woman with no significant past medical history presents to the emergency department after a witnessed episode of rhythmic jerking of her right hand and forearm lasting about two minutes, during which she remained fully aware and could describe what was happening to her. The episode resolved spontaneously without postictal confusion. She has no headache, no fever, and no history of head trauma. Neurological examination, including strength, sensation, and coordination, is entirely normal. Vital signs are normal. A serum prolactin level drawn shortly after the episode is mildly elevated.",
+        "vignette": "A 45-year-old woman with no significant past medical history presents to the emergency department after a witnessed episode of rhythmic jerking of her right hand and forearm lasting about two minutes, during which she remained fully aware and could describe what was happening to her. The episode resolved spontaneously without postictal confusion. She has no headache, no fever, and no history of head trauma. Neurological examination, including strength, sensation, and coordination, is entirely normal. Vital signs are normal. A serum prolactin level drawn six hours after the episode is mildly elevated.",
         "options": {
           "A": "Reassure the patient and arrange routine follow-up in 6 months",
           "B": "Start an antiepileptic drug and discharge with outpatient follow-up",
@@ -1242,8 +1251,8 @@ const STUDY_DATA={
             "why": "A rapid return to baseline is compatible with a focal aware seizure and does not remove the need to evaluate a first adult focal seizure."
           },
           {
-            "phrase": "serum prolactin level drawn shortly after the episode is mildly elevated",
-            "why": "When obtained soon after an event, an elevated prolactin level can support an epileptic seizure rather than a functional episode."
+            "phrase": "serum prolactin level drawn six hours after the episode is mildly elevated",
+            "why": "The elevated prolactin level supports an epileptic seizure rather than a functional episode."
           }
         ],
         "distractors": [
@@ -1344,6 +1353,12 @@ const STUDY_DATA={
           }
         ],
         "kgData": {
+          "layout": {
+            "findingY": {"f1": 72, "f2": 160, "f3": 248, "f5": 340, "f6": 428, "f4": 516},
+            "mechY": {"m1": 255, "m2": 516},
+            "dxY": 360,
+            "minH": 620
+          },
           "evidence": [
             {
               "id": "ev1",
@@ -1444,12 +1459,12 @@ const STUDY_DATA={
             },
             {
               "id": "f3",
-              "label": "Expressive aphasia\nleft MCA territory",
-              "nodeType": "localization",
+              "label": "Expressive aphasia\nsyndrome",
+              "nodeType": "syndrome",
               "from": [
                 "ev3"
               ],
-              "tooltip": "Effortful nonfluent speech with preserved command following supports dominant-hemisphere expressive aphasia."
+              "tooltip": "Follows commands plus effortful nonfluent speech is a syndrome-recognition clue for expressive aphasia, rather than a pure anatomical localization clue."
             },
             {
               "id": "f4",
@@ -1491,7 +1506,7 @@ const STUDY_DATA={
                 "f5",
                 "f6"
               ],
-              "tooltip": "Sudden onset, right face/arm-predominant weakness, nonfluent aphasia, and UMN signs together localize to the left MCA territory."
+              "tooltip": "Sudden onset, right face/arm-predominant weakness, expressive aphasia syndrome, and UMN signs together support left MCA territory ischemia."
             },
             {
               "id": "m2",
@@ -1654,6 +1669,12 @@ const STUDY_DATA={
           }
         ],
         "kgData": {
+          "layout": {
+            "findingY": {"f1": 85, "f5": 200, "f6": 300, "f4": 450, "f3": 600},
+            "mechY": {"m1": 185, "m3": 385, "m2": 500},
+            "dxY": 295,
+            "minH": 700
+          },
           "evidence": [
             {
               "id": "ev1",
@@ -1745,7 +1766,7 @@ const STUDY_DATA={
             },
             {
               "id": "f4",
-              "label": "Embolic branch\ninfarct risk",
+              "label": "AF off\nanticoagulation",
               "nodeType": "risk",
               "from": [
                 "ev5"
@@ -1932,6 +1953,12 @@ const STUDY_DATA={
         }
       ],
       "kgData": {
+        "layout": {
+          "findingY": {"f1": 82, "f2": 175, "f3": 285, "f5": 380, "f4": 500},
+          "mechY": {"m1": 130, "m3": 360, "m2": 500},
+          "dxY": 330,
+          "minH": 600
+        },
         "evidence": [
           {
             "id": "ev1",
@@ -2469,7 +2496,7 @@ const STUDY_DATA={
         "source": "Neurology · New-onset focal aware motor seizure · Urgency of imaging",
         "correct": "C",
         "question_stem": "What is the most appropriate immediate next step in management?",
-        "vignette": "A 45-year-old woman with no significant past medical history presents to the emergency department after a witnessed episode of rhythmic jerking of her right hand and forearm lasting about two minutes, during which she remained fully aware and could describe what was happening to her. The episode resolved spontaneously without postictal confusion. She has no headache, no fever, and no history of head trauma. Neurological examination, including strength, sensation, and coordination, is entirely normal. Vital signs are normal. A serum prolactin level drawn shortly after the episode is mildly elevated.",
+        "vignette": "A 45-year-old woman with no significant past medical history presents to the emergency department after a witnessed episode of rhythmic jerking of her right hand and forearm lasting about two minutes, during which she remained fully aware and could describe what was happening to her. The episode resolved spontaneously without postictal confusion. She has no headache, no fever, and no history of head trauma. Neurological examination, including strength, sensation, and coordination, is entirely normal. Vital signs are normal. A serum prolactin level drawn six hours after the episode is mildly elevated.",
         "options": {
           "A": "Reassure the patient and arrange routine follow-up in 6 months",
           "B": "Start an antiepileptic drug and discharge with outpatient follow-up",
@@ -2491,8 +2518,8 @@ const STUDY_DATA={
             "why": "A rapid return to baseline is compatible with a focal aware seizure and does not remove the need to evaluate a first adult focal seizure."
           },
           {
-            "phrase": "serum prolactin level drawn shortly after the episode is mildly elevated",
-            "why": "When obtained soon after an event, an elevated prolactin level can support an epileptic seizure rather than a functional episode."
+            "phrase": "serum prolactin level drawn six hours after the episode is mildly elevated",
+            "why": "The elevated prolactin level supports an epileptic seizure rather than a functional episode."
           }
         ],
         "distractors": [
@@ -2593,6 +2620,12 @@ const STUDY_DATA={
           }
         ],
         "kgData": {
+          "layout": {
+            "findingY": {"f1": 72, "f2": 160, "f3": 248, "f5": 340, "f6": 428, "f4": 516},
+            "mechY": {"m1": 255, "m2": 516},
+            "dxY": 360,
+            "minH": 620
+          },
           "evidence": [
             {
               "id": "ev1",
@@ -2693,12 +2726,12 @@ const STUDY_DATA={
             },
             {
               "id": "f3",
-              "label": "Expressive aphasia\nleft MCA territory",
-              "nodeType": "localization",
+              "label": "Expressive aphasia\nsyndrome",
+              "nodeType": "syndrome",
               "from": [
                 "ev3"
               ],
-              "tooltip": "Effortful nonfluent speech with preserved command following supports dominant-hemisphere expressive aphasia."
+              "tooltip": "Follows commands plus effortful nonfluent speech is a syndrome-recognition clue for expressive aphasia, rather than a pure anatomical localization clue."
             },
             {
               "id": "f4",
@@ -2740,7 +2773,7 @@ const STUDY_DATA={
                 "f5",
                 "f6"
               ],
-              "tooltip": "Sudden onset, right face/arm-predominant weakness, nonfluent aphasia, and UMN signs together localize to the left MCA territory."
+              "tooltip": "Sudden onset, right face/arm-predominant weakness, expressive aphasia syndrome, and UMN signs together support left MCA territory ischemia."
             },
             {
               "id": "m2",
@@ -2903,6 +2936,12 @@ const STUDY_DATA={
           }
         ],
         "kgData": {
+          "layout": {
+            "findingY": {"f1": 85, "f5": 200, "f6": 300, "f4": 450, "f3": 600},
+            "mechY": {"m1": 185, "m3": 385, "m2": 500},
+            "dxY": 295,
+            "minH": 700
+          },
           "evidence": [
             {
               "id": "ev1",
@@ -2994,7 +3033,7 @@ const STUDY_DATA={
             },
             {
               "id": "f4",
-              "label": "Embolic branch\ninfarct risk",
+              "label": "AF off\nanticoagulation",
               "nodeType": "risk",
               "from": [
                 "ev5"
@@ -3319,6 +3358,13 @@ const STUDY_DATA={
               "short": "Right air trapping",
               "phrase": "hyperinflation of the right lung with mediastinal shift toward the left",
               "nodeType": "imaging"
+            },
+            {
+              "id": "ev_rigid_bronch",
+              "label": "Rigid bronchoscopy\npreferred for removal",
+              "short": "Rigid bronchoscopy preferred",
+              "nodeType": "treatment",
+              "hiddenInMain": true
             }
           ],
           "findings": [
@@ -3439,18 +3485,16 @@ const STUDY_DATA={
             },
             {
               "target": "Flexible bronchoscopy for foreign body removal",
-              "supports": [
-                "ev2",
-                "ev5"
+              "supports": [],
+              "against": [
+                "ev_rigid_bronch"
               ],
-              "against": [],
               "expected": "Diagnostic airway visualization",
-              "expectedExplanation": "Flexible bronchoscopy can help diagnosis, but rigid bronchoscopy is preferred for removal.",
-              "explanation": "The diagnosis is correct, but the therapeutic procedure is rigid bronchoscopy.",
+              "expectedExplanation": "Flexible bronchoscopy can help with diagnostic airway visualization, but this does not make it the preferred removal method in a toddler.",
+              "explanation": "Flexible bronchoscopy is diagnostically relevant, but rigid bronchoscopy is preferred for therapeutic removal of pediatric airway foreign bodies.",
               "rationales": {
-                "supports": {
-                  "ev2": "The choking episode correctly raises airway foreign body suspicion, but it supports bronchoscopy as a category rather than the flexible approach specifically.",
-                  "ev5": "Air trapping supports a removable airway foreign body, but in a toddler the therapeutic removal procedure is rigid bronchoscopy."
+                "against": {
+                  "ev_rigid_bronch": "Rigid bronchoscopy is preferred for therapeutic removal in children because it provides better airway control and a larger working channel for extraction."
                 }
               }
             }
@@ -3587,6 +3631,12 @@ const STUDY_DATA={
           }
         ],
         "kgData": {
+          "layout": {
+            "findingY": {"f1": 88, "f2": 176, "f3": 310, "f4": 402, "f5": 555},
+            "mechY": {"m1": 132, "m2": 356, "m3": 555},
+            "dxY": 330,
+            "minH": 640
+          },
           "evidence": [
             {
               "id": "ev1",
@@ -3801,23 +3851,24 @@ const STUDY_DATA={
         },
         "supporting": [
           {
-            "phrase": "bilateral expiratory wheeze",
-            "why": "Bilateral expiratory wheeze is the exam finding for diffuse lower-airway obstruction."
+            "phrase": "cough is worse at night",
+            "why": "Nocturnal cough is a classic asthma symptom pattern."
           },
           {
-            "phrase": "FEV1 improves by 15%",
-            "why": "A significant bronchodilator response demonstrates reversible airflow obstruction."
-          },
-          {
-            "phrase": [
-              "cough is worse at night",
-              "triggered by running during recess"
-            ],
-            "why": "Nocturnal and exercise-triggered symptoms form the classic asthma symptom pattern."
+            "phrase": "triggered by running during recess",
+            "why": "Exercise-triggered cough/wheeze supports variable asthma symptoms."
           },
           {
             "phrase": "history of eczema as an infant, and her father has asthma",
             "why": "Personal eczema history and a first-degree family history of asthma establish an atopic predisposition."
+          },
+          {
+            "phrase": "bilateral expiratory wheeze",
+            "why": "Bilateral expiratory wheeze supports lower-airway obstruction."
+          },
+          {
+            "phrase": "FEV1 improves by 15%",
+            "why": "A significant bronchodilator response provides objective evidence of reversible airflow obstruction."
           }
         ],
         "distractors": [
@@ -3847,6 +3898,13 @@ const STUDY_DATA={
           }
         ],
         "kgData": {
+          "layout": {
+            "findingY": {"f1": 88, "f2": 176, "f3": 286, "f4": 396, "f5": 484},
+            "mechY": {"m1": 286},
+            "mechX": {"m1": 690},
+            "dxY": 286,
+            "minH": 560
+          },
           "evidence": [
             {
               "id": "ev1",
@@ -3881,103 +3939,68 @@ const STUDY_DATA={
               "label": "FEV1 improves\nby 15%",
               "short": "Bronchodilator response",
               "phrase": "FEV1 improves by 15%",
-              "nodeType": "test"
+              "nodeType": "sign"
             }
           ],
           "findings": [
             {
               "id": "f1",
-              "label": "Diffuse lower-airway\nobstruction",
-              "nodeType": "finding",
-              "from": [
-                "ev4"
-              ],
-              "tooltip": "Bilateral expiratory wheeze is the physical-exam finding for diffuse lower-airway obstruction."
+              "label": "Nocturnal cough",
+              "nodeType": "symptom",
+              "from": ["ev1"],
+              "tooltip": "Night cough is a classic asthma symptom pattern and supports variable airway disease."
             },
             {
               "id": "f2",
-              "label": "Reversible airflow\nobstruction",
-              "nodeType": "finding",
-              "from": [
-                "ev5"
-              ],
-              "tooltip": "A bronchodilator response demonstrates reversible airflow obstruction."
+              "label": "Exercise-triggered\ncough/wheeze",
+              "nodeType": "symptom",
+              "from": ["ev2"],
+              "tooltip": "Exercise-triggered cough or wheeze is a common asthma trigger pattern."
             },
             {
               "id": "f3",
               "label": "Atopic predisposition\n(eczema + family Hx)",
-              "nodeType": "risk",
-              "from": [
-                "ev3"
-              ],
-              "tooltip": "Personal history of eczema and a first-degree relative with asthma are major atopic risk factors that increase the prior probability of asthma."
+              "nodeType": "history",
+              "from": ["ev3"],
+              "tooltip": "Personal eczema history and a first-degree relative with asthma increase the prior probability of asthma."
             },
             {
               "id": "f4",
-              "label": "Classic asthma\nsymptom pattern",
-              "nodeType": "syndrome",
-              "from": [
-                "ev1",
-                "ev2"
-              ],
-              "tooltip": "Nocturnal and exercise-triggered symptoms form a classic asthma symptom pattern."
+              "label": "Bilateral expiratory\nwheeze",
+              "nodeType": "sign",
+              "from": ["ev4"],
+              "tooltip": "Bilateral expiratory wheeze indicates diffuse lower-airway obstruction."
+            },
+            {
+              "id": "f5",
+              "label": "Bronchodilator\nresponse",
+              "nodeType": "sign",
+              "from": ["ev5"],
+              "tooltip": "Improvement after bronchodilator provides objective evidence of reversible airflow obstruction."
             }
           ],
           "mechs": [
             {
-              "id": "m_phys",
-              "label": "Reversible obstructive\nphysiology",
-              "nodeType": "mechanism",
-              "layer": "core",
-              "from": [
-                "f1",
-                "f2"
-              ],
-              "tooltip": "Expiratory wheeze plus bronchodilator response demonstrate reversible obstructive physiology."
-            },
-            {
-              "id": "m_trigger",
-              "label": "Atopic inflammatory\ntrigger pattern",
-              "nodeType": "mechanism",
-              "layer": "core",
-              "from": [
-                "f4",
-                "f3"
-              ],
-              "tooltip": "Classic nocturnal/exercise symptoms plus atopic predisposition support an inflammatory asthma trigger pattern."
-            },
-            {
               "id": "m1",
-              "label": "Reversible inflammatory\nairway disease",
+              "label": "Bronchial\nhyperresponsiveness",
               "nodeType": "mechanism",
-              "layer": "consequence",
-              "from": [
-                "m_phys",
-                "m_trigger"
-              ],
-              "tooltip": "Asthma is supported by both objective reversible obstruction and an atopic trigger pattern."
+              "layer": "core",
+              "from": ["f1", "f2", "f3", "f4", "f5"],
+              "tooltip": "Bronchial hyperresponsiveness is the core asthma mechanism that links nocturnal symptoms, exercise triggers, atopy, expiratory wheeze, and bronchodilator reversibility."
             }
           ],
           "dx": {
             "id": "dx",
             "label": "Asthma",
             "nodeType": "diagnosis",
-            "from": [
-              "m1"
-            ],
-            "tooltip": "Asthma best unifies diffuse lower-airway obstruction, reversible airflow obstruction, classic symptom triggers, and atopic predisposition."
+            "from": ["m1"],
+            "tooltip": "Asthma is the best diagnosis because the five supporting clues converge on bronchial hyperresponsiveness."
           },
           "excludeCards": [
             {
               "target": "Vocal cord dysfunction (exercise-induced laryngeal obstruction)",
-              "supports": [
-                "ev2"
-              ],
-              "against": [
-                "ev1",
-                "ev4",
-                "ev5"
-              ],
+              "supports": ["ev2"],
+              "against": ["ev1", "ev4", "ev5"],
               "expected": "Inspiratory throat tightness during exercise",
               "expectedExplanation": "VCD/EILO usually produces inspiratory throat-localized symptoms and does not cause reversible lower-airway obstruction.",
               "explanation": "The bronchodilator response and nocturnal symptoms favor asthma."
@@ -3985,10 +4008,7 @@ const STUDY_DATA={
             {
               "target": "Cystic fibrosis",
               "supports": [],
-              "against": [
-                "ev3",
-                "ev5"
-              ],
+              "against": ["ev3", "ev5"],
               "expected": "Chronic wet cough, failure to thrive, steatorrhea",
               "expectedExplanation": "CF requires chronic suppurative/pancreatic features that are absent here.",
               "explanation": "The case is atopic and reversible rather than CF-like."
@@ -3996,23 +4016,15 @@ const STUDY_DATA={
             {
               "target": "Foreign body aspiration",
               "supports": [],
-              "against": [
-                "ev4",
-                "ev1"
-              ],
+              "against": ["ev4", "ev1"],
               "expected": "Sudden choking and unilateral findings",
               "expectedExplanation": "Foreign body aspiration is usually abrupt and focal.",
               "explanation": "The case has recurrent diffuse wheeze."
             },
             {
               "target": "Gastroesophageal reflux disease",
-              "supports": [
-                "ev1"
-              ],
-              "against": [
-                "ev4",
-                "ev5"
-              ],
+              "supports": ["ev1"],
+              "against": ["ev4", "ev5"],
               "expected": "Reflux symptoms or feeding association",
               "expectedExplanation": "GERD can cause cough but does not explain reversible obstructive spirometry.",
               "explanation": "Airflow reversibility favors asthma."
@@ -4043,11 +4055,8 @@ const STUDY_DATA={
       },
       "supporting": [
         {
-          "phrase": [
-            "harsh, strained sound while trying to catch her breath",
-            "resolved within a few minutes once she stopped running"
-          ],
-          "why": "Exercise-associated respiratory symptoms are compatible with an asthma trigger pattern, but this clue is nonspecific and must be weighed against objective lower-airway evidence."
+          "phrase": "recurrent episodes of cough and breathlessness, most often during soccer practice",
+          "why": "Recurrent cough and breathlessness with exercise support a classic asthma symptom pattern."
         },
         {
           "phrase": "a few scattered end-expiratory wheezes audible only on forced exhalation",
@@ -4059,7 +4068,7 @@ const STUDY_DATA={
         },
         {
           "phrase": "occasionally has a dry cough at night, particularly after a cold",
-          "why": "Post-viral nocturnal cough is compatible with an asthma symptom pattern, though it is a softer clue than spirometry."
+          "why": "Post-viral nocturnal cough is compatible with a classic asthma symptom pattern."
         },
         {
           "phrase": "history of eczema as an infant, and her father has asthma",
@@ -4093,6 +4102,13 @@ const STUDY_DATA={
         }
       ],
       "kgData": {
+        "layout": {
+          "findingY": {"f1": 86, "f2": 174, "f3": 282, "f4": 390, "f5": 492},
+          "mechY": {"m1": 286},
+          "mechX": {"m1": 690},
+          "dxY": 286,
+          "minH": 570
+        },
         "evidence": [
           {
             "id": "ev1",
@@ -4102,7 +4118,8 @@ const STUDY_DATA={
               "harsh, strained sound while trying to catch her breath",
               "resolved within a few minutes once she stopped running"
             ],
-            "nodeType": "symptom"
+            "nodeType": "symptom",
+            "hiddenInMain": true
           },
           {
             "id": "ev2",
@@ -4116,7 +4133,7 @@ const STUDY_DATA={
             "label": "Scattered end-expiratory\nwheezes on forced exhalation",
             "short": "Subtle expiratory wheeze",
             "phrase": "a few scattered end-expiratory wheezes audible only on forced exhalation",
-            "nodeType": "symptom"
+            "nodeType": "sign"
           },
           {
             "id": "ev4",
@@ -4142,119 +4159,82 @@ const STUDY_DATA={
             ],
             "nodeType": "history",
             "hiddenInMain": true
+          },
+          {
+            "id": "ev7",
+            "label": "Recurrent cough/breathlessness\nduring exercise",
+            "short": "Exercise-associated cough",
+            "phrase": "recurrent episodes of cough and breathlessness, most often during soccer practice",
+            "nodeType": "symptom"
           }
         ],
         "findings": [
           {
             "id": "f1",
-            "label": "Exercise throat sound\nresolves with rest",
+            "label": "Exercise-associated\nrecurrent symptoms",
             "nodeType": "symptom",
-            "from": [
-              "ev1"
-            ],
-            "tooltip": "Exercise-associated throat symptoms can occur with asthma but are nonspecific; the clue is interpreted with the lower-airway obstruction and spirometry pattern."
+            "from": ["ev7"],
+            "tooltip": "Recurrent cough and breathlessness during soccer practice support an exercise-triggered asthma symptom pattern."
           },
           {
             "id": "f2",
-            "label": "Lower-airway\nobstruction",
-            "nodeType": "finding",
-            "from": [
-              "ev3"
-            ],
-            "tooltip": "End-expiratory wheezes on forced exhalation indicate lower-airway narrowing."
+            "label": "Subtle expiratory\nwheeze",
+            "nodeType": "sign",
+            "from": ["ev3"],
+            "tooltip": "End-expiratory wheezes on forced exhalation support lower-airway obstruction."
           },
           {
             "id": "f3",
-            "label": "Reversible\nobstruction",
-            "nodeType": "finding",
-            "from": [
-              "ev4"
-            ],
-            "tooltip": "Improvement from an obstructive FEV1/FVC ratio to a normal ratio after bronchodilator anchors reversible lower-airway obstruction."
+            "label": "Bronchodilator-reversible\nobstruction",
+            "nodeType": "sign",
+            "from": ["ev4"],
+            "tooltip": "An obstructive FEV1/FVC ratio that normalizes after bronchodilator provides objective evidence of reversible airflow obstruction."
           },
           {
             "id": "f4",
-            "label": "Nocturnal cough\nafter colds",
+            "label": "Nocturnal/post-viral\ncough",
             "nodeType": "symptom",
-            "from": [
-              "ev2"
-            ],
-            "tooltip": "Intermittent nighttime cough after viral illnesses is compatible with an asthma symptom pattern."
+            "from": ["ev2"],
+            "tooltip": "Dry cough at night after colds is compatible with a classic asthma symptom pattern."
           },
           {
             "id": "f5",
             "label": "Atopic predisposition\n(eczema + paternal asthma)",
             "nodeType": "history",
-            "from": [
-              "ev5"
-            ],
+            "from": ["ev5"],
             "tooltip": "Personal eczema history and a parent with asthma increase the prior probability of asthma."
           }
         ],
         "mechs": [
           {
-            "id": "m_phys",
-            "label": "Reversible obstructive\nphysiology",
-            "nodeType": "mechanism",
-            "layer": "core",
-            "from": [
-              "f2",
-              "f3"
-            ],
-            "tooltip": "Expiratory wheeze and bronchodilator-normalized obstruction demonstrate reversible obstructive physiology."
-          },
-          {
-            "id": "m_trigger",
-            "label": "Atopic inflammatory\ntrigger pattern",
-            "nodeType": "mechanism",
-            "layer": "core",
-            "from": [
-              "f1",
-              "f4",
-              "f5"
-            ],
-            "tooltip": "Atopy plus exercise/viral-associated symptoms support an inflammatory asthma trigger pattern."
-          },
-          {
             "id": "m1",
-            "label": "Reversible inflammatory\nairway disease",
+            "label": "Bronchial\nhyperresponsiveness",
             "nodeType": "mechanism",
-            "layer": "consequence",
-            "from": [
-              "m_phys",
-              "m_trigger"
-            ],
-            "tooltip": "Asthma is supported by objective reversible obstruction plus an atopic, trigger-associated clinical pattern."
+            "layer": "core",
+            "from": ["f1", "f2", "f3", "f4", "f5"],
+            "tooltip": "Bronchial hyperresponsiveness explains variable cough and breathlessness, exercise or viral triggers, expiratory wheeze, and reversible airflow obstruction in asthma."
           }
         ],
         "dx": {
           "id": "dx",
           "label": "Asthma",
           "nodeType": "diagnosis",
-          "from": [
-            "m1"
-          ],
-          "tooltip": "Asthma best unifies reversible lower-airway obstruction, expiratory wheeze, atopic predisposition, and viral/exercise-associated symptoms."
+          "from": ["m1"],
+          "tooltip": "Asthma best unifies the five supporting clues through bronchial hyperresponsiveness. The harsh exertional throat sound is kept as a VCD distractor clue rather than a core asthma support."
         },
         "excludeCards": [
           {
             "target": "Vocal cord dysfunction (exercise-induced laryngeal obstruction)",
-            "supports": [
-              "ev1"
-            ],
-            "against": [
-              "ev4"
-            ],
-            "expected": "VCD typically: normal spirometry, inspiratory stridor, no bronchodilator response",
+            "supports": ["ev1"],
+            "against": ["ev4"],
+            "expected": "Normal spirometry, inspiratory stridor, no bronchodilator response",
             "expectedExplanation": "The exertional throat sound makes VCD/EILO plausible, but this patient has the opposite pattern that matters most for the answer: reversible lower-airway obstruction after bronchodilator.",
             "explanation": "One symptom supports VCD/EILO, but objective bronchodilator-reversible obstruction favors asthma."
           },
           {
             "target": "Foreign body aspiration",
             "supports": [],
-            "against": [
-              "ev4"
-            ],
+            "against": ["ev4"],
             "expected": "Abrupt choking and unilateral findings",
             "expectedExplanation": "Foreign body aspiration should have sudden onset and focal/unilateral findings rather than recurrent exertional symptoms with reversible spirometry.",
             "explanation": "Reversible obstruction argues against a fixed aspirated foreign body."
@@ -4262,9 +4242,7 @@ const STUDY_DATA={
           {
             "target": "Cystic fibrosis",
             "supports": [],
-            "against": [
-              "ev6"
-            ],
+            "against": ["ev6"],
             "expected": "Chronic wet cough, recurrent pneumonia, steatorrhea, failure to thrive",
             "expectedExplanation": "CF would usually add chronic infection and pancreatic/malabsorption features; this vignette instead centers on atopy and reversible obstruction.",
             "explanation": "The missing CF pattern makes cystic fibrosis unlikely."
@@ -4272,9 +4250,7 @@ const STUDY_DATA={
           {
             "target": "Habit cough",
             "supports": [],
-            "against": [
-              "ev4"
-            ],
+            "against": ["ev4"],
             "expected": "Absent during sleep and normal objective testing",
             "expectedExplanation": "Habit cough should not produce an abnormal FEV1/FVC ratio that improves after bronchodilator.",
             "explanation": "Objective reversible obstruction supports organic lower-airway disease."
@@ -4454,6 +4430,13 @@ const STUDY_DATA={
               "short": "Right air trapping",
               "phrase": "hyperinflation of the right lung with mediastinal shift toward the left",
               "nodeType": "imaging"
+            },
+            {
+              "id": "ev_rigid_bronch",
+              "label": "Rigid bronchoscopy\npreferred for removal",
+              "short": "Rigid bronchoscopy preferred",
+              "nodeType": "treatment",
+              "hiddenInMain": true
             }
           ],
           "findings": [
@@ -4574,18 +4557,16 @@ const STUDY_DATA={
             },
             {
               "target": "Flexible bronchoscopy for foreign body removal",
-              "supports": [
-                "ev2",
-                "ev5"
+              "supports": [],
+              "against": [
+                "ev_rigid_bronch"
               ],
-              "against": [],
               "expected": "Diagnostic airway visualization",
-              "expectedExplanation": "Flexible bronchoscopy can help diagnosis, but rigid bronchoscopy is preferred for removal.",
-              "explanation": "The diagnosis is correct, but the therapeutic procedure is rigid bronchoscopy.",
+              "expectedExplanation": "Flexible bronchoscopy can help with diagnostic airway visualization, but this does not make it the preferred removal method in a toddler.",
+              "explanation": "Flexible bronchoscopy is diagnostically relevant, but rigid bronchoscopy is preferred for therapeutic removal of pediatric airway foreign bodies.",
               "rationales": {
-                "supports": {
-                  "ev2": "The choking episode correctly raises airway foreign body suspicion, but it supports bronchoscopy as a category rather than the flexible approach specifically.",
-                  "ev5": "Air trapping supports a removable airway foreign body, but in a toddler the therapeutic removal procedure is rigid bronchoscopy."
+                "against": {
+                  "ev_rigid_bronch": "Rigid bronchoscopy is preferred for therapeutic removal in children because it provides better airway control and a larger working channel for extraction."
                 }
               }
             }
@@ -4722,6 +4703,12 @@ const STUDY_DATA={
           }
         ],
         "kgData": {
+          "layout": {
+            "findingY": {"f1": 88, "f2": 176, "f3": 310, "f4": 402, "f5": 555},
+            "mechY": {"m1": 132, "m2": 356, "m3": 555},
+            "dxY": 330,
+            "minH": 640
+          },
           "evidence": [
             {
               "id": "ev1",
@@ -4936,23 +4923,24 @@ const STUDY_DATA={
         },
         "supporting": [
           {
-            "phrase": "bilateral expiratory wheeze",
-            "why": "Bilateral expiratory wheeze is the exam finding for diffuse lower-airway obstruction."
+            "phrase": "cough is worse at night",
+            "why": "Nocturnal cough is a classic asthma symptom pattern."
           },
           {
-            "phrase": "FEV1 improves by 15%",
-            "why": "A significant bronchodilator response demonstrates reversible airflow obstruction."
-          },
-          {
-            "phrase": [
-              "cough is worse at night",
-              "triggered by running during recess"
-            ],
-            "why": "Nocturnal and exercise-triggered symptoms form the classic asthma symptom pattern."
+            "phrase": "triggered by running during recess",
+            "why": "Exercise-triggered cough/wheeze supports variable asthma symptoms."
           },
           {
             "phrase": "history of eczema as an infant, and her father has asthma",
             "why": "Personal eczema history and a first-degree family history of asthma establish an atopic predisposition."
+          },
+          {
+            "phrase": "bilateral expiratory wheeze",
+            "why": "Bilateral expiratory wheeze supports lower-airway obstruction."
+          },
+          {
+            "phrase": "FEV1 improves by 15%",
+            "why": "A significant bronchodilator response provides objective evidence of reversible airflow obstruction."
           }
         ],
         "distractors": [
@@ -4982,6 +4970,13 @@ const STUDY_DATA={
           }
         ],
         "kgData": {
+          "layout": {
+            "findingY": {"f1": 88, "f2": 176, "f3": 286, "f4": 396, "f5": 484},
+            "mechY": {"m1": 286},
+            "mechX": {"m1": 690},
+            "dxY": 286,
+            "minH": 560
+          },
           "evidence": [
             {
               "id": "ev1",
@@ -5016,103 +5011,68 @@ const STUDY_DATA={
               "label": "FEV1 improves\nby 15%",
               "short": "Bronchodilator response",
               "phrase": "FEV1 improves by 15%",
-              "nodeType": "test"
+              "nodeType": "sign"
             }
           ],
           "findings": [
             {
               "id": "f1",
-              "label": "Diffuse lower-airway\nobstruction",
-              "nodeType": "finding",
-              "from": [
-                "ev4"
-              ],
-              "tooltip": "Bilateral expiratory wheeze is the physical-exam finding for diffuse lower-airway obstruction."
+              "label": "Nocturnal cough",
+              "nodeType": "symptom",
+              "from": ["ev1"],
+              "tooltip": "Night cough is a classic asthma symptom pattern and supports variable airway disease."
             },
             {
               "id": "f2",
-              "label": "Reversible airflow\nobstruction",
-              "nodeType": "finding",
-              "from": [
-                "ev5"
-              ],
-              "tooltip": "A bronchodilator response demonstrates reversible airflow obstruction."
+              "label": "Exercise-triggered\ncough/wheeze",
+              "nodeType": "symptom",
+              "from": ["ev2"],
+              "tooltip": "Exercise-triggered cough or wheeze is a common asthma trigger pattern."
             },
             {
               "id": "f3",
               "label": "Atopic predisposition\n(eczema + family Hx)",
-              "nodeType": "risk",
-              "from": [
-                "ev3"
-              ],
-              "tooltip": "Personal history of eczema and a first-degree relative with asthma are major atopic risk factors that increase the prior probability of asthma."
+              "nodeType": "history",
+              "from": ["ev3"],
+              "tooltip": "Personal eczema history and a first-degree relative with asthma increase the prior probability of asthma."
             },
             {
               "id": "f4",
-              "label": "Classic asthma\nsymptom pattern",
-              "nodeType": "syndrome",
-              "from": [
-                "ev1",
-                "ev2"
-              ],
-              "tooltip": "Nocturnal and exercise-triggered symptoms form a classic asthma symptom pattern."
+              "label": "Bilateral expiratory\nwheeze",
+              "nodeType": "sign",
+              "from": ["ev4"],
+              "tooltip": "Bilateral expiratory wheeze indicates diffuse lower-airway obstruction."
+            },
+            {
+              "id": "f5",
+              "label": "Bronchodilator\nresponse",
+              "nodeType": "sign",
+              "from": ["ev5"],
+              "tooltip": "Improvement after bronchodilator provides objective evidence of reversible airflow obstruction."
             }
           ],
           "mechs": [
             {
-              "id": "m_phys",
-              "label": "Reversible obstructive\nphysiology",
-              "nodeType": "mechanism",
-              "layer": "core",
-              "from": [
-                "f1",
-                "f2"
-              ],
-              "tooltip": "Expiratory wheeze plus bronchodilator response demonstrate reversible obstructive physiology."
-            },
-            {
-              "id": "m_trigger",
-              "label": "Atopic inflammatory\ntrigger pattern",
-              "nodeType": "mechanism",
-              "layer": "core",
-              "from": [
-                "f4",
-                "f3"
-              ],
-              "tooltip": "Classic nocturnal/exercise symptoms plus atopic predisposition support an inflammatory asthma trigger pattern."
-            },
-            {
               "id": "m1",
-              "label": "Reversible inflammatory\nairway disease",
+              "label": "Bronchial\nhyperresponsiveness",
               "nodeType": "mechanism",
-              "layer": "consequence",
-              "from": [
-                "m_phys",
-                "m_trigger"
-              ],
-              "tooltip": "Asthma is supported by both objective reversible obstruction and an atopic trigger pattern."
+              "layer": "core",
+              "from": ["f1", "f2", "f3", "f4", "f5"],
+              "tooltip": "Bronchial hyperresponsiveness is the core asthma mechanism that links nocturnal symptoms, exercise triggers, atopy, expiratory wheeze, and bronchodilator reversibility."
             }
           ],
           "dx": {
             "id": "dx",
             "label": "Asthma",
             "nodeType": "diagnosis",
-            "from": [
-              "m1"
-            ],
-            "tooltip": "Asthma best unifies diffuse lower-airway obstruction, reversible airflow obstruction, classic symptom triggers, and atopic predisposition."
+            "from": ["m1"],
+            "tooltip": "Asthma is the best diagnosis because the five supporting clues converge on bronchial hyperresponsiveness."
           },
           "excludeCards": [
             {
               "target": "Vocal cord dysfunction (exercise-induced laryngeal obstruction)",
-              "supports": [
-                "ev2"
-              ],
-              "against": [
-                "ev1",
-                "ev4",
-                "ev5"
-              ],
+              "supports": ["ev2"],
+              "against": ["ev1", "ev4", "ev5"],
               "expected": "Inspiratory throat tightness during exercise",
               "expectedExplanation": "VCD/EILO usually produces inspiratory throat-localized symptoms and does not cause reversible lower-airway obstruction.",
               "explanation": "The bronchodilator response and nocturnal symptoms favor asthma."
@@ -5120,10 +5080,7 @@ const STUDY_DATA={
             {
               "target": "Cystic fibrosis",
               "supports": [],
-              "against": [
-                "ev3",
-                "ev5"
-              ],
+              "against": ["ev3", "ev5"],
               "expected": "Chronic wet cough, failure to thrive, steatorrhea",
               "expectedExplanation": "CF requires chronic suppurative/pancreatic features that are absent here.",
               "explanation": "The case is atopic and reversible rather than CF-like."
@@ -5131,23 +5088,15 @@ const STUDY_DATA={
             {
               "target": "Foreign body aspiration",
               "supports": [],
-              "against": [
-                "ev4",
-                "ev1"
-              ],
+              "against": ["ev4", "ev1"],
               "expected": "Sudden choking and unilateral findings",
               "expectedExplanation": "Foreign body aspiration is usually abrupt and focal.",
               "explanation": "The case has recurrent diffuse wheeze."
             },
             {
               "target": "Gastroesophageal reflux disease",
-              "supports": [
-                "ev1"
-              ],
-              "against": [
-                "ev4",
-                "ev5"
-              ],
+              "supports": ["ev1"],
+              "against": ["ev4", "ev5"],
               "expected": "Reflux symptoms or feeding association",
               "expectedExplanation": "GERD can cause cough but does not explain reversible obstructive spirometry.",
               "explanation": "Airflow reversibility favors asthma."
@@ -5261,7 +5210,7 @@ function renderRightSupportPanel({rerenderGraph=false}={}){
   const showText=shouldShowTextPanel();
   const showKg=shouldShowKgBoard();
   setDisplay(UI.rightTextPanel,showText?'block':'none');
-  setDisplay(UI.rightTextPanelHead,(t.mode==='text' || isTask3TextSupport())?'none':'flex');
+  setDisplay(UI.rightTextPanelHead,(t.mode==='text' || isTask3TextSupport() || isBothToggleTask())?'none':'flex');
   setOpen(UI.rightTextBody,showText);
   if(showText){
     renderTextExplanation();
@@ -5310,19 +5259,45 @@ function persistReviewState(){
 // ==============================================================
 // VIGNETTE HIGHLIGHTING
 // ==============================================================
+function mainGraphEvidenceIdsForTask(task){
+  const kg=task&&task.kgData;
+  if(!kg || !(kg.evidence||[]).length)return null;
+  const removed=getRemovedEvidenceSet(currentTask);
+  const ids=new Set();
+
+  // Only phrases that feed visible main-graph nodes should be highlighted in
+  // the vignette. Evidence used only inside distractor mini-graphs is marked
+  // hiddenInMain and stays unhighlighted by default.
+  (kg.evidence||[]).forEach(ev=>{
+    if(ev && ev.id && !ev.hiddenInMain && !removed.has(ev.id))ids.add(ev.id);
+  });
+
+  const mainNodes=[...(kg.findings||[]),...(kg.patterns||[]),...(kg.mechs||[])].filter(n=>n&&!n.hiddenInMain);
+  mainNodes.forEach(n=>{
+    evidenceIdsForNodeId(kg,n.id).forEach(eid=>{
+      const ev=getEvidenceById(kg,eid);
+      if(ev && !ev.hiddenInMain && !removed.has(eid))ids.add(eid);
+    });
+  });
+  return ids;
+}
+
 function getEvidenceHighlights(task){
   const removed=getRemovedEvidenceSet(currentTask);
   const evidence=(task.kgData&&task.kgData.evidence)||[];
-  const source=evidence.length
-    ? evidence
-    : ((task.supporting||[]).map((item,idx)=>({id:`support_${idx}`,phrase:item.phrase})));
-  return source.filter(ev=>!removed.has(ev.id)).flatMap(ev=>{
-    const phrases=Array.isArray(ev.phrase)?ev.phrase:(ev.phrase?[ev.phrase]:[]);
-    return phrases.map(p=>({id:ev.id,phrase:p,len:p.length}));
-  }).sort((a,b)=>b.len-a.len);
+  const mainEvidenceIds=mainGraphEvidenceIdsForTask(task);
+  if(evidence.length){
+    return evidence.filter(ev=>ev&&ev.id&&!removed.has(ev.id)).flatMap(ev=>{
+      const phrases=Array.isArray(ev.phrase)?ev.phrase:(ev.phrase?[ev.phrase]:[]);
+      const visibleInMain=!ev.hiddenInMain && (!mainEvidenceIds || mainEvidenceIds.has(ev.id));
+      return phrases.map(p=>({id:ev.id,phrase:p,len:p.length,visibleInMain}));
+    }).sort((a,b)=>b.len-a.len);
+  }
+  return ((task.supporting||[]).map((item,idx)=>({id:`support_${idx}`,phrase:item.phrase,visibleInMain:true})))
+    .filter(ev=>!removed.has(ev.id))
+    .flatMap(ev=>phraseList(ev.phrase).map(p=>({id:ev.id,phrase:p,len:p.length,visibleInMain:true})))
+    .sort((a,b)=>b.len-a.len);
 }
-
-
 
 function supportIdForIndex(idx){return `support_${idx}`;}
 function supportPhraseLabel(phrase){return phraseList(phrase).map(p=>`\"${p}\"`).join(' + ');}
@@ -5419,13 +5394,48 @@ function getTaskDisplayVignette(task){
     .trim();
 }
 
-function highlight(v,task){
-  let html=esc(v);
-  getEvidenceHighlights(task).forEach(item=>{
-    const pattern=escReg(esc(item.phrase));
-    html=html.replace(new RegExp(pattern,'i'),m=>`<span class="hl-core linkable" data-evid="${item.id}">${m}</span>`);
+function highlightSpanMatchesEvidence(el,id){
+  const ids=String(el&&el.dataset?el.dataset.evid:'').split('|').filter(Boolean);
+  return ids.includes(String(id||''));
+}
+function forEachHighlightSpanByEvidence(id,callback){
+  document.querySelectorAll('.hl-core[data-evid]').forEach(el=>{
+    if(highlightSpanMatchesEvidence(el,id)) callback(el);
   });
-  return html;
+}
+
+function highlight(v,task){
+  const source=String(v||'');
+  const highlights=getEvidenceHighlights(task)
+    .filter(item=>item&&item.id&&item.phrase)
+    .map(item=>({id:String(item.id),phrase:String(item.phrase),visibleInMain:item.visibleInMain!==false}))
+    .sort((a,b)=>b.phrase.length-a.phrase.length);
+
+  const ranges=[];
+  highlights.forEach(item=>{
+    const idx=source.toLowerCase().indexOf(item.phrase.toLowerCase());
+    if(idx<0)return;
+    const end=idx+item.phrase.length;
+    const same=ranges.find(r=>r.start===idx && r.end===end);
+    if(same){
+      if(!same.ids.includes(item.id)) same.ids.push(item.id);
+      same.visibleInMain=same.visibleInMain || item.visibleInMain;
+      return;
+    }
+    const overlaps=ranges.some(r=>idx<r.end && end>r.start);
+    if(!overlaps)ranges.push({start:idx,end,ids:[item.id],visibleInMain:item.visibleInMain});
+  });
+  ranges.sort((a,b)=>a.start-b.start);
+
+  let out='',cursor=0;
+  ranges.forEach(r=>{
+    out+=esc(source.slice(cursor,r.start));
+    const cls=`hl-core linkable${r.visibleInMain?'':' mini-only'}`;
+    out+=`<span class="${cls}" data-evid="${esc(r.ids.join('|'))}">${esc(source.slice(r.start,r.end))}</span>`;
+    cursor=r.end;
+  });
+  out+=esc(source.slice(cursor));
+  return out;
 }
 
 function renderCurrentVignette(){
@@ -5445,7 +5455,7 @@ function renderCurrentVignette(){
 function setLinkedEvidenceState(evid,active){
   const ids=resolveEvidenceIds(evid);
   ids.forEach(id=>{
-    document.querySelectorAll(`.hl-core[data-evid="${id}"]`).forEach(el=>el.classList.toggle('active-link',active));
+    forEachHighlightSpanByEvidence(id,el=>el.classList.toggle('active-link',active));
     document.querySelectorAll('.kg-node[data-evid]').forEach(el=>{
       const evids=(el.dataset.evid||'').split('|').filter(Boolean);
       if(evids.includes(id)) el.classList.toggle('active',active);
@@ -5455,30 +5465,13 @@ function setLinkedEvidenceState(evid,active){
 }
 
 function setMiniEvidenceHighlight(evid,role,active){
-  const cls=role==='supports'?'mini-support-link':'mini-against-link';
-  const color=role==='supports'
-    ? {bg:'#cdefdc',border:'#16723b',text:'#0e4c28',shadow:'rgba(22,114,59,.26)'}
-    : {bg:'#ffd1d1',border:'#a92222',text:'#6f1515',shadow:'rgba(169,34,34,.26)'};
-  document.querySelectorAll(`.hl-core[data-evid="${evid}"]`).forEach(el=>{
-    el.classList.toggle(cls,!!active);
-    if(active){
-      el.style.background=color.bg;
-      el.style.borderColor=color.border;
-      el.style.color=color.text;
-      el.style.boxShadow=`0 0 0 2px ${color.shadow}`;
-    }else{
-      el.style.background='';
-      el.style.borderColor='';
-      el.style.color='';
-      el.style.boxShadow='';
-    }
-  });
-  document.querySelectorAll('.kg-node[data-evid]').forEach(el=>{
-    const evids=(el.dataset.evid||'').split('|').filter(Boolean);
-    if(evids.includes(evid)) el.classList.toggle('active',!!active);
+  const roleClass=String(role||'against')==='supports'?'mini-support-link':'mini-against-link';
+  resolveEvidenceIds(evid).forEach(id=>{
+    forEachHighlightSpanByEvidence(id,el=>{
+      el.classList.toggle(roleClass,!!active);
+    });
   });
 }
-
 function scrollToVignette(evids=[]){
   const vc=document.getElementById('vignetteSection');
   if(vc){
@@ -5487,7 +5480,7 @@ function scrollToVignette(evids=[]){
     setTimeout(()=>vc.classList.remove('vignette-flash'),1200);
   }
   [...new Set((evids||[]).flatMap(evid=>resolveEvidenceIds(evid)))].forEach(evid=>{
-    document.querySelectorAll(`.hl-core[data-evid="${evid}"]`).forEach(el=>{
+    forEachHighlightSpanByEvidence(evid,el=>{
       el.classList.add('active-link','click-focus');
       setTimeout(()=>el.classList.remove('active-link','click-focus'),1400);
     });
@@ -5617,7 +5610,9 @@ function loadTask(n){
   textExplanationDeleteMode=false;
   graphEditMode=false;
   focusedKgNodeId=null;
-  task3ClueEditMode=false; graphEditMode=false; editOpen=false; focusedKgNodeId=null; selectedGraphItem=null;
+  task3ClueEditMode=false;
+  editOpen=false;
+  selectedGraphItem=null;
   const t=tasks[currentTask]||{};
   const isRevised=!!(t&&t.revised) || revisedTasks.has(n);
   explanationVisible = !isRevised;
@@ -5836,6 +5831,7 @@ const NODE_TYPE_LABELS={
   mech:'Mechanism',
   dx:'Diagnosis',
   risk:'Risk factor',
+  syndrome:'Syndrome',
   localization:'Localization',
   context:'Context',
   cognitive:'Cognitive clue',
@@ -5859,6 +5855,7 @@ const NODE_COLORS={
   mech:{fill:'#ffedd5',stroke:'#ea580c'},
   dx:{fill:'#dbeafe',stroke:'#2563eb'},
   risk:{fill:'#fdf2f8',stroke:'#db2777'},
+  syndrome:{fill:'#f3e8ff',stroke:'#9333ea'},
   localization:{fill:'#e0f2fe',stroke:'#0284c7'},
   context:{fill:'#eef2ff',stroke:'#4f46e5'},
   cognitive:{fill:'#fef3c7',stroke:'#d97706'},
@@ -5881,6 +5878,7 @@ const NODE_TYPE_BADGE_LABELS={
   mech:'MECHANISM',
   dx:'DIAGNOSIS',
   risk:'RISK FACTOR',
+  syndrome:'SYNDROME',
   localization:'LOCALIZATION',
   context:'CONTEXT',
   cognitive:'COGNITIVE CLUE',
@@ -5993,7 +5991,7 @@ function makeEdge(from,to,label,color,meta={}){
 
 function makeLegend(W,H,usedTypes=[]){
   const normalizeLegendType=t=>({finding:'symptom',pattern:'pattern',mech:'mechanism',dx:'diagnosis',risk:'risk',localization:'localization',context:'demographic',cognitive:'symptom',imaging:'sign'}[t]||t);
-  const ordered=['evidence','demographic','symptom','sign','history','risk','course','pattern','localization','anatomy','mechanism','disorder','diagnosis','treatment'];
+  const ordered=['evidence','demographic','symptom','sign','history','risk','course','syndrome','pattern','localization','anatomy','mechanism','disorder','diagnosis','treatment'];
   usedTypes=Array.from(new Set((usedTypes||[]).map(normalizeLegendType)));
   const active=ordered.filter(key=>usedTypes.includes(key));
   if(!active.length)return '';
@@ -6544,13 +6542,11 @@ function renderKG(){
   const W=1180,LEGEND_H=44;
   const cfCount=visibleFindings.length,pCount=visiblePatterns.length,mCount=visibleMechs.length;
   const hasMechanismLayers=visibleMechs.some(m=>m.layer);
+  const kgLayout=kg.layout || {};
   const NODE_H=52, GROUP_GAP=34;
   const totalBandH=Math.max(cfCount,1)*NODE_H + Math.max(cfCount-1,0)*GROUP_GAP;
-  const targetLowerForLayout=String(t.target||'').toLowerCase();
-  const taskSpecificMinH=currentTask===5
-    ? (tasks[currentTask]?.regenerated ? 590 : 520)
-    : ((currentTask===4 && targetLowerForLayout.includes('cystic fibrosis')) ? 640 : 360);
-  const graphH=Math.max(totalBandH+120, taskSpecificMinH);
+  const layoutMinH=Number.isFinite(Number(kgLayout.minH)) ? Number(kgLayout.minH) : 360;
+  const graphH=Math.max(totalBandH+120, layoutMinH);
   const H=graphH+LEGEND_H;
 
   const SIDE_PAD=130;
@@ -6638,55 +6634,23 @@ function renderKG(){
   const dxBase=avgKnown(kg.dx.from,dxSourceMap,graphH/2);
   const dxY=[clampY(dxBase-8)];
 
-  // Task 5 uses a deliberately fixed, non-crossing clinical reasoning layout.
-  // The node order matches the reviewed target layout: language localization at the top,
-  // motor sparing / embolic mechanism in the middle, and visual-field localization at the bottom.
-  if(currentTask===5){
-    const regenerated=!!t.regenerated;
-    const targetLower=String(t.target||'').toLowerCase();
-    let task5FindingY,task5MechanismY,task5DxY;
-    if(targetLower.includes('asthma') && !regenerated){
-      task5FindingY={f1:100, f2:185, f4:325, f3:410};
-      task5MechanismY={m_phys:142, m_trigger:368, m1:282};
-      task5DxY=282;
-    }else if(targetLower.includes('asthma') && regenerated){
-      task5FindingY={f2:130, f3:250, f1:360, f5:450, f4:540};
-      task5MechanismY={m_phys:210, m_trigger:455, m1:340};
-      task5DxY=340;
-    }else if(targetLower.includes('left mca inferior')){
-      task5FindingY={f1:82, f2:175, f3:285, f5:380, f4:500};
-      task5MechanismY={m1:130, m3:360, m2:500};
-      task5DxY=330;
-    }else{
-      task5FindingY=regenerated
-        ? {f1:90, f2:170, f3:285, f5:385, f4:485}
-        : {f1:85, f5:185, f6:285, f4:385, f3:500};
-      task5MechanismY=regenerated
-        ? {m1:130, m3:335, m2:485}
-        : {m1:185, m3:385, m2:500};
-      task5DxY=regenerated?335:385;
-    }
-    Object.keys(task5FindingY).forEach(id=>{ if(cfYMap[id]!==undefined) cfYMap[id]=task5FindingY[id]; });
-    Object.keys(task5MechanismY).forEach(id=>{ if(mYMap[id]!==undefined) mYMap[id]=task5MechanismY[id]; });
-    dxY[0]=task5DxY;
+  // Apply optional, data-driven node coordinates from kgData.layout.
+  // This keeps clinical content and layout decisions inside each question's KG data
+  // instead of hard-coding Task 4/5 branches in the renderer.
+  function applyYLayout(layoutMap,targetMap){
+    Object.entries(layoutMap || {}).forEach(([id,y])=>{
+      const yy=Number(y);
+      if(Number.isFinite(yy) && targetMap[id]!==undefined)targetMap[id]=yy;
+    });
   }
+  applyYLayout(kgLayout.findingY,cfYMap);
+  applyYLayout(kgLayout.patternY,pYMap);
+  applyYLayout(kgLayout.mechY,mYMap);
+  if(Number.isFinite(Number(kgLayout.dxY)))dxY[0]=Number(kgLayout.dxY);
 
-  if(currentTask===4){
-    const targetLower=String(t.target||'').toLowerCase();
-    const task4FindingY=targetLower.includes('cystic fibrosis')
-      ? {f1:88, f2:176, f3:310, f4:402, f5:555}
-      : {f1:72, f2:145, f3:220, f5:325, f6:405, f4:510};
-    Object.keys(task4FindingY).forEach(id=>{ if(cfYMap[id]!==undefined) cfYMap[id]=task4FindingY[id]; });
-    const task4MechanismY=targetLower.includes('cystic fibrosis')
-      ? {m1:132, m2:356, m3:555}
-      : {m1:285, m2:505};
-    Object.keys(task4MechanismY).forEach(id=>{ if(mYMap[id]!==undefined) mYMap[id]=task4MechanismY[id]; });
-    dxY[0]=targetLower.includes('cystic fibrosis')?330:360;
-  }
-
-  // Final pass: prevent same-column nodes from colliding after task-specific
+  // Final pass: prevent same-column nodes from colliding after data-driven
   // semantic ordering. This keeps regenerated or edited graphs readable without
-  // hand-tuning every node when the KG changes.
+  // hand-tuning the renderer when the KG changes.
   relaxLayerCollisions(visibleFindings,cfYMap,{minGap:88,top:72,bottom:graphH-76});
   relaxLayerCollisions(visiblePatterns,pYMap,{minGap:88,top:72,bottom:graphH-76});
   relaxLayerCollisions(visibleMechs,mYMap,{minGap:90,top:72,bottom:graphH-76});
@@ -6731,11 +6695,15 @@ function renderKG(){
       isInteractive?{interactive:true,tooltip:mergedNodeTooltip(kg,p.id,p.tooltip),tooltipTitle:semanticTypeLabel(p,'pattern'),showDeleteControl:(graphEditMode && canEditDelete),...focusMeta(p.id)}:{showDeleteControl:(graphEditMode && canEditDelete),...focusMeta(p.id)});
     nodeMap[p.id]=n;nodesSvg+=n.svg;
   });
+  function layoutX(layoutMap,id,fallback){
+    const xx=Number((layoutMap||{})[id]);
+    return Number.isFinite(xx)?xx:fallback;
+  }
   const mechXFor=m=>hasMechanismLayers
     ? COL[m.layer==='consequence'?'mechDown':'mechUp']
     : COL.mech;
   visibleMechs.forEach((m,i)=>{
-    const pos=nodePos(m.id,mechXFor(m),mYMap[m.id]);
+    const pos=nodePos(m.id,layoutX(kgLayout.mechX,m.id,mechXFor(m)),mYMap[m.id]);
     const canEditDelete=nodeHasDeletableEvidence(m.id);
     const n=makeNode(m.id,semanticTypeFor(m,'mech'),m.label,pos.cx,pos.cy,
       isInteractive?{interactive:true,tooltip:mergedNodeTooltip(kg,m.id,m.tooltip),tooltipTitle:semanticTypeLabel(m,'mech'),showDeleteControl:(graphEditMode && canEditDelete),...focusMeta(m.id)}:{showDeleteControl:(graphEditMode && canEditDelete),...focusMeta(m.id)});
@@ -6794,8 +6762,6 @@ function renderKG(){
     const relation=edge.relation||'associated_with';
     const eid=edgeIdFor(edge.from,edge.to,relation);
     const label=getEdgeLabel(eid,relation);
-    const sourceLabel=getNodeRecord(kg,edge.from)?.node?.label||edge.from;
-    const targetLabel=getNodeRecord(kg,edge.to)?.node?.label||edge.to;
     edgesSvg+=makeEdge(from,to,label,edge.color||'#6f6b62',
       isInteractive?edgeMeta(edge.from,edge.to,relation,{}):edgeMeta(edge.from,edge.to,relation));
   });
@@ -7142,8 +7108,8 @@ function renderExcludeCards(){
   const W=680;
   const CLUE_CX=150;
   const DX_CX=545;
-  const START_Y=54;
-  const STEP_Y=64;
+  const START_Y=24;
+  const STEP_Y=80;
   const NODE_W=210;
   const DX_W=195;
   const LEFT_MARGIN=CLUE_CX-NODE_W/2;
@@ -7152,11 +7118,13 @@ function renderExcludeCards(){
   function fixedNode({cx,cy,label,type='support',attrs='',cls=''}){
     const colors=type==='option'
       ? {fill:'#eef4fb',stroke:'#2d5f8a',text:'#234a6d',dash:''}
-      : type==='against'
-        ? {fill:'#fff1f1',stroke:'#9b2d2d',text:'#6c2020',dash:''}
-        : type==='missing'
-          ? {fill:'#f8fafc',stroke:'#9b8f84',text:'#5f5a52',dash:'stroke-dasharray="5 4"'}
-          : {fill:'#edf7f2',stroke:'#1a6b3c',text:'#174a2d',dash:''};
+      : type==='missing'
+        ? {fill:'#f7f5f2',stroke:'#9b8f84',text:'#5f5852',dash:'stroke-dasharray="5 4"'}
+        : type==='support'
+          ? {fill:'#edf7f2',stroke:'#1a6b3c',text:'#174a2d',dash:''}
+          : type==='against'
+            ? {fill:'#fff1f1',stroke:'#8a2d2d',text:'#6f1515',dash:''}
+            : {fill:'#fff',stroke:'#d4cfc7',text:'#1a1814',dash:''};
     const w=type==='option'?DX_W:NODE_W;
     const font=14;
     const clean=cleanLabel(label);
@@ -7222,7 +7190,7 @@ function renderExcludeCards(){
     }
     const nodeCount=Math.max(clueItems.length,1);
     const hasExpected=clueItems.some(item=>item.expected);
-    const H=Math.max(255,START_Y+(nodeCount-1)*STEP_Y+92+(hasExpected?28:0));
+    const H=Math.max(100,START_Y+(nodeCount-1)*STEP_Y+30+(hasExpected?28:0));
     const dxY=(START_Y+(nodeCount-1)*STEP_Y)/2;
     const dx=fixedNode({cx:DX_CX,cy:dxY,label:c.target,type:'option',cls:'mini-distractor-node',attrs:`data-explanation="${esc(c.explanation||'')}", data-title="${esc('Answer option: '+c.target)}"`});
     dx.label=c.target;
