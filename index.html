@@ -460,7 +460,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
     <label class="issue"><input type="checkbox" value="clinically_inaccurate"><div><strong>Clinically inaccurate</strong><span>Incorrect, unrealistic, or contradictory vignette information.</span></div></label>
     <label class="issue"><input type="checkbox" value="key_information_missing"><div><strong>Key information missing</strong><span>Essential diagnostic details are absent.</span></div></label>
     <label class="issue"><input type="checkbox" value="answer_ambiguous"><div><strong>Answer ambiguous</strong><span>The correct answer is unclear or one or more distractors could reasonably be correct.</span></div></label>
-    <label class="issue"><input type="checkbox" value="distractors_too_easy"><div><strong>Distractors too easy</strong><span>Incorrect options are implausible or trivial to eliminate.</span></div></label>
+    <label class="issue"><input type="checkbox" value="question_too_easy"><div><strong>Question too easy</strong><span>The question is too easy because the answer cues or distractors make the correct option obvious.</span></div></label>
     <div class="label" style="margin-top:16px">Additional notes (optional)</div>
     <textarea class="review-textarea" id="rejectOptionalNote" placeholder="Any additional notes for this question?"></textarea>
     <div class="modal-footer"><button class="btn" onclick="closeReject()" style="background:var(--surface2);border:1px solid var(--border)">Cancel</button><button class="btn reject" onclick="submitReject()">Submit feedback</button></div>
@@ -471,13 +471,13 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 <div class="modal" id="regenerateModal">
   <div class="modal-box">
     <div style="display:flex;justify-content:space-between;align-items:center"><div class="modal-title">Regenerate this question</div><button class="btn" onclick="closeRegenerate()" style="background:var(--surface2);border:1px solid var(--border)">×</button></div>
-    <div class="label" style="margin-top:16px">Problem category</div>
-    <label class="issue"><input type="checkbox" value="answer_cue_stacking"><div><strong>Too many clues for the answer</strong><span>Multiple findings point directly to the correct answer.</span></div></label>
-    <label class="issue"><input type="checkbox" value="direct_answer_cue"><div><strong>Distractors ruled out too easily</strong><span>The vignette makes alternative diagnoses easy to exclude.</span></div></label>
-    <label class="issue"><input type="checkbox" value="explicit_negative_exclusion"><div><strong>Not enough diagnostic reasoning</strong><span>The case can be solved without meaningful differential diagnosis.</span></div></label>
+    <div class="label" style="margin-top:16px">Select issues</div>
+    <label class="issue"><input type="checkbox" value="clinically_inaccurate"><div><strong>Clinically inaccurate</strong><span>Incorrect, unrealistic, or contradictory vignette information.</span></div></label>
+    <label class="issue"><input type="checkbox" value="key_information_missing"><div><strong>Key information missing</strong><span>Essential diagnostic details are absent.</span></div></label>
+    <label class="issue"><input type="checkbox" value="answer_ambiguous"><div><strong>Answer ambiguous</strong><span>The correct answer is unclear or one or more distractors could reasonably be correct.</span></div></label>
+    <label class="issue"><input type="checkbox" value="question_too_easy"><div><strong>Question too easy</strong><span>The question is too easy because the answer cues or distractors make the correct option obvious.</span></div></label>
     <div class="label" style="margin-top:16px">Additional notes (optional)</div>
     <textarea class="review-textarea" id="regenerateFreeText" placeholder="Any additional notes for this question?"></textarea>
-    <div class="study-note" id="selectedClueSummary" style="margin-top:14px"></div>
     <div class="modal-footer"><button class="btn" onclick="closeRegenerate()" style="background:var(--surface2);border:1px solid var(--border)">Cancel</button><button class="btn accept" onclick="applyRegenerate()">Generate revised version</button></div>
   </div>
 </div>
@@ -718,7 +718,6 @@ function hydrateDomainRuntime(domain){
       originalTasks:deepClone(data.originalTasks||data.tasks),
       removedEvidenceByTask:{},
       revisedTaskIds:[],
-      task3SelectedCluesToRemove:[]
     };
   }
   return data.runtime;
@@ -733,7 +732,6 @@ function syncCurrentDomainState(){
   data.runtime.originalTasks=originalTasks;
   data.runtime.removedEvidenceByTask=removedEvidenceByTask;
   data.runtime.revisedTaskIds=Array.from(revisedTasks||[]);
-  data.runtime.task3SelectedCluesToRemove=Array.from(task3SelectedCluesToRemove||[]);
 }
 function activateDomain(domain,opts={}){
   const next=STUDY_DATA[domain]?domain:'neurology';
@@ -747,7 +745,6 @@ function activateDomain(domain,opts={}){
   if(domainStateReady){
     removedEvidenceByTask=runtime.removedEvidenceByTask||{};
     revisedTasks=new Set(runtime.revisedTaskIds||[]);
-    task3SelectedCluesToRemove=new Set(runtime.task3SelectedCluesToRemove||[]);
   }
   if(opts.resetPicker)selectedPickerTask=null;
   updateSetupForDomain();
@@ -1739,21 +1736,21 @@ const STUDY_DATA={
           "findings": [
             {
               "id": "f1",
-              "label": "Fluent paraphasic\nspeech pattern",
-              "nodeType": "pattern",
+              "label": "Fluent paraphasic\nspeech",
+              "nodeType": "sign",
               "from": [
                 "ev1"
               ],
-              "tooltip": "Fluent speech with paraphasic and incorrect words forms the language-output side of a Wernicke-type receptive aphasia pattern."
+              "tooltip": "Fluent speech with paraphasic and incorrect words is a clinical language sign supporting Wernicke-type receptive aphasia."
             },
             {
               "id": "f5",
               "label": "Impaired auditory\ncomprehension",
-              "nodeType": "pattern",
+              "nodeType": "sign",
               "from": [
                 "ev2"
               ],
-              "tooltip": "Impaired spoken-command comprehension with poor awareness forms the comprehension side of a Wernicke-type receptive aphasia pattern."
+              "tooltip": "Impaired spoken-command comprehension with poor awareness is a clinical language sign supporting Wernicke-type receptive aphasia."
             },
             {
               "id": "f6",
@@ -2021,21 +2018,21 @@ const STUDY_DATA={
         "findings": [
           {
             "id": "f1",
-            "label": "Wernicke-type\naphasia pattern",
-            "nodeType": "pattern",
+            "label": "Wernicke-type\naphasia signs",
+            "nodeType": "sign",
             "from": [
               "ev1"
             ],
-            "tooltip": "Fluent speech with paraphasias and neologisms supports a Wernicke-type receptive aphasia pattern."
+            "tooltip": "Fluent speech with paraphasias and neologisms are clinical language signs supporting Wernicke-type receptive aphasia."
           },
           {
             "id": "f2",
             "label": "Impaired auditory\ncomprehension",
-            "nodeType": "pattern",
+            "nodeType": "sign",
             "from": [
               "ev2"
             ],
-            "tooltip": "Failure to follow spoken commands despite intact hearing supports impaired auditory language comprehension."
+            "tooltip": "Failure to follow spoken commands despite intact hearing is a clinical sign of impaired auditory language comprehension."
           },
           {
             "id": "f3",
@@ -3006,21 +3003,21 @@ const STUDY_DATA={
           "findings": [
             {
               "id": "f1",
-              "label": "Fluent paraphasic\nspeech pattern",
-              "nodeType": "pattern",
+              "label": "Fluent paraphasic\nspeech",
+              "nodeType": "sign",
               "from": [
                 "ev1"
               ],
-              "tooltip": "Fluent speech with paraphasic and incorrect words forms the language-output side of a Wernicke-type receptive aphasia pattern."
+              "tooltip": "Fluent speech with paraphasic and incorrect words is a clinical language sign supporting Wernicke-type receptive aphasia."
             },
             {
               "id": "f5",
               "label": "Impaired auditory\ncomprehension",
-              "nodeType": "pattern",
+              "nodeType": "sign",
               "from": [
                 "ev2"
               ],
-              "tooltip": "Impaired spoken-command comprehension with poor awareness forms the comprehension side of a Wernicke-type receptive aphasia pattern."
+              "tooltip": "Impaired spoken-command comprehension with poor awareness is a clinical language sign supporting Wernicke-type receptive aphasia."
             },
             {
               "id": "f6",
@@ -5123,9 +5120,7 @@ let selectedGraphItem=null;
 let supportModeByTask={3:'kg',5:'kg'};
 let graphEditMode=false;
 let textExplanationDeleteMode=false;
-let task3SelectedCluesToRemove=new Set();
 let removedEvidenceByTask={};
-let task3ClueEditMode=false
 let explanationVisible=true;
 let revisedTasks=new Set();
 let reviewStore=JSON.parse(localStorage.getItem('resp_mcq_review_store')||'{}');
@@ -5203,7 +5198,6 @@ function renderRightSupportPanel({rerenderGraph=false}={}){
     setOpen(UI.rightTextBody,false);
     setOpen(UI.kgTextPanel,false);
     updateSupportHeader();
-    renderTask3CluePanel();
     return;
   }
 
@@ -5234,20 +5228,10 @@ function renderRightSupportPanel({rerenderGraph=false}={}){
   }
 
   updateTask3SupportSwitch();
-  renderTask3CluePanel();
   updateSupportHeader();
   renderGraphOverlayControls();
 }
 
-const TASK3_CLUE_CANDIDATES=[
-  {id:'ev1',label:'Postpartum day 5',tag:'core risk context',recommend:'keep'},
-  {id:'ev2',label:'Progressive postpartum headache',tag:'core clue',recommend:'keep'},
-  {id:'ev8',label:'Vomiting',tag:'ICP clue',recommend:'weaken'},
-  {id:'ev3',label:'Generalized tonic-clonic seizure',tag:'strong clue',recommend:'weaken'},
-  {id:'ev5',label:'Bilateral papilledema',tag:'over-explicit ICP sign',recommend:'remove'},
-  {id:'ev4',label:'No fever',tag:'exclusion clue',recommend:'weaken'},
-  {id:'ev6',label:'No clear focal deficit',tag:'exclusion clue',recommend:'weaken'}
-];
 
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function escReg(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
@@ -5449,7 +5433,6 @@ function renderCurrentVignette(){
     el.onmouseenter=()=>setLinkedEvidenceState(evid,true);
     el.onmouseleave=()=>setLinkedEvidenceState(evid,false);
   });
-  updateSelectedClueHighlights();
 }
 
 function setLinkedEvidenceState(evid,active){
@@ -5539,23 +5522,28 @@ function prettyTooltipTitle(title){
     risk:'Risk factor',
     syndrome:'Syndrome',
     finding:'Finding',
-    pattern:'Anatomy',
+    pattern:'Pattern',
     mech:'Mechanism',
     dx:'Diagnosis',
     maps_to:'Maps to',
-    manifestation_of:'Manifestation of',
+    manifestation_of:'Manifests',
     branch_of:'Branch of',
-    stenosis_produces:'Stenosis produces',
-    pathophysiology_of:'Pathophysiology of',
-    complication_of:'Complication of',
+    anatomical_branch_of:'Branch of',
+    stenosis_produces:'Site of',
+    pathophysiology_of:'Causes',
+    causes:'Causes',
+    complication_of:'Complication',
     sign_of:'Sign of',
-    finding_of:'Finding of',
-    risk_factor_for:'Risk factor for',
-    predisposes_to:'Predisposes to',
-    demonstrates:'Demonstrates',
-    explains:'Explains',
-    localizes_to:'Localizes to',
-    has_pathophysiology:'Has pathophysiology'
+    finding_of:'Finding in',
+    risk_factor_for:'Risk for',
+    predisposes_to:'Predisposes',
+    demonstrates:'Indicates',
+    indicates:'Indicates',
+    confirms:'Confirms',
+    explains:'Causes',
+    localizes_to:'Localizes',
+    supports_localization:'Localizes',
+    has_pathophysiology:'Mechanism'
   };
   const key=raw.toLowerCase();
   return map[key] || raw.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
@@ -5610,7 +5598,6 @@ function loadTask(n){
   textExplanationDeleteMode=false;
   graphEditMode=false;
   focusedKgNodeId=null;
-  task3ClueEditMode=false;
   editOpen=false;
   selectedGraphItem=null;
   const t=tasks[currentTask]||{};
@@ -6057,7 +6044,7 @@ function relatedKnowledgeForCurrentTask(nodeType,nodeLabel){
 function roleTextForNode(type,label){
   if(type==='evidence')return 'Raw phrase from the vignette. It should be traceable directly to the case text.';
   if(type==='finding')return 'Intermediate clinical abstraction. It groups one or more raw clues into a medically meaningful pattern.';
-  if(type==='mech')return 'Pathophysiological or anatomical explanation. It explains why the observed pattern supports the diagnosis.';
+  if(type==='mech')return 'Pathophysiological or anatomical mechanism node. It links the observed clinical pattern to the diagnosis.';
   if(type==='dx')return 'Final answer node. It should be supported by the full evidence-to-mechanism chain and should also contrast with distractors.';
   return 'Node in the reasoning graph.';
 }
@@ -6168,7 +6155,47 @@ function statusLabel(status){
   return {accepted:'Accepted',revise:'Needs revision',rejected:'Rejected'}[status]||'Unreviewed';
 }
 function edgeIdFor(fromId,toId,kind){return `${fromId}->${toId}:${kind}`;}
-function getEdgeLabel(edgeId,defaultLabel){return edgeLabelOverrides[`task${currentTask}:${edgeId}`]||defaultLabel;}
+function displayEdgeLabel(label){
+  const raw=String(label||'').trim();
+  const key=raw.toLowerCase().replace(/\s+/g,'_');
+  const map={
+    maps_to:'maps to',
+    manifestation_of:'manifests',
+    manifestation:'manifests',
+    branch_of:'branch of',
+    anatomical_branch_of:'branch of',
+    stenosis_produces:'site of',
+    pathophysiology_of:'causes',
+    explains:'causes',
+    cause:'causes',
+    causes:'causes',
+    complication_of:'complication',
+    sign_of:'sign of',
+    finding_of:'finding in',
+    risk_factor_for:'risk for',
+    predisposes_to:'predisposes',
+    demonstrates:'indicates',
+    indicates:'indicates',
+    finding_indicates:'indicates',
+    confirms:'confirms',
+    test_confirms:'confirms',
+    localizes_to:'localizes',
+    supports_localization:'localizes',
+    has_pathophysiology:'mechanism',
+    associated_with:'associated',
+    time_course_of:'course of',
+    helps_exclude:'excludes',
+    supports:'supports',
+    against:'against',
+    expected_in:'expected in',
+    expected:'expected in'
+  };
+  return map[key] || raw.replace(/_/g,' ');
+}
+function getEdgeLabel(edgeId,defaultLabel){
+  const stored=edgeLabelOverrides[`task${currentTask}:${edgeId}`];
+  return displayEdgeLabel(stored||defaultLabel);
+}
 function setEdgeLabel(edgeId,label){
   edgeLabelOverrides[`task${currentTask}:${edgeId}`]=label;
   persistReviewState();
@@ -6193,18 +6220,20 @@ function relationProvenance(edgeId,relation){
   if(relation==='maps_to')return 'Concept mapping from original vignette phrase to a base KG concept.';
   if(relation==='forms_pattern')return 'Grouping relation: multiple KG concepts converge into an anatomical concept node.';
   if(relation==='causes')return 'Base KG causal relation; expert should verify direction and strength.';
-  if(relation==='manifestation_of')return 'Base KG disease-phenotype relation from finding/mechanism to diagnosis.';
+  if(relation==='indicates')return 'Clinical finding relation: this sign or symptom points to the linked physiologic or localization concept.';
+  if(relation==='confirms')return 'Test-confirmation relation: this objective test finding confirms the linked physiologic pattern.';
+  if(relation==='manifestation_of')return 'Clinical manifestation relation from sign or symptom to the linked syndrome, mechanism, or diagnosis.';
   if(relation==='branch_of')return 'Anatomic branch relation: the upstream territory is supplied through the linked artery.';
   if(relation==='stenosis_produces')return 'Vascular lesion relation: narrowing of this artery produces the named stenosis syndrome.';
   if(relation==='sign_of')return 'Base KG clinical sign relation from an observed sign to the condition it indicates.';
   if(relation==='complication_of')return 'Base KG complication relation from a downstream complication to the underlying disease.';
-  if(relation==='pathophysiology_of')return 'Base KG mechanism-disease relation.';
+  if(relation==='pathophysiology_of')return 'Mechanism relation: the upstream mechanism causally accounts for the selected diagnosis in the graph.';
   if(relation==='risk_factor_for')return 'Base KG risk/epidemiology relation.';
   if(relation==='predisposes_to')return 'Interpretive epidemiology relation: this factor increases susceptibility to the linked concept.';
-  if(relation==='demonstrates')return 'Objective finding relation: this finding demonstrates the linked physiologic pattern.';
+  if(relation==='demonstrates')return 'Clinical finding relation: this finding indicates the linked physiologic pattern.';
   if(relation==='finding_of')return 'Base KG clinical finding relation.';
   if(relation==='supports')return 'Interpretive KG relation: this finding supports the linked concept without directly diagnosing the disease.';
-  if(relation==='supports_localization')return 'Localization support relation: a clinical context clue supports the anatomical side or dominance of the linked concept.';
+  if(relation==='supports_localization')return 'Localization relation: a clinical clue points to the linked anatomical side or territory.';
   if(relation==='has_pathophysiology')return 'Interpretive KG bridge from an anatomical concept to the underlying pathophysiology.';
   if(relation==='localizes_to')return 'Base KG relation: symptom/sign concepts localize to an anatomical finding.';
   if(relation==='helps_exclude')return 'Exclusion relation used only for hidden or distractor-specific reasoning.';
@@ -6214,10 +6243,10 @@ function relationProvenance(edgeId,relation){
 function defaultFindingToMechanismRelation(findingLabel,mechanismLabel){
   const f=cleanLabel(findingLabel).toLowerCase();
   const m=cleanLabel(mechanismLabel).toLowerCase();
-  if(f.includes('language dominance'))return 'supports_localization';
+  if(f.includes('language dominance'))return 'localizes_to';
   if(f.includes('risk')||f.includes('atrial fibrillation')||f.includes('anticoagulation')||f.includes('af off')||f.includes('high-risk'))return 'risk_factor_for';
-  if(m.includes('reversible obstructive physiology'))return 'demonstrates';
-  if(m.includes('atopic inflammatory')&&f.includes('atopic'))return 'predisposes_to';
+  if(m.includes('reversible obstructive physiology'))return 'confirms';
+  if((m.includes('atopic inflammatory')||m.includes('bronchial hyperresponsiveness'))&&f.includes('atopic'))return 'predisposes_to';
   if(f.includes('hypercoagul')||f.includes('atherosclerotic risk'))return 'risk_factor_for';
   if((f.includes('ophthalmic')||f.includes('mca territory'))&&m.includes('carotid'))return 'branch_of';
   if(f.includes('failure')&&m.includes('pancreatic'))return 'manifestation_of';
@@ -6226,8 +6255,10 @@ function defaultFindingToMechanismRelation(findingLabel,mechanismLabel){
   if(f.includes('productive cough')&&m.includes('mucociliary'))return 'manifestation_of';
   if(f.includes('digital clubbing')&&(m.includes('chronic lung')||m.includes('chronic hypoxia')))return 'sign_of';
   if(f.includes('bruit'))return 'sign_of';
+  if(f.includes('bronchodilator')||f.includes('fev1'))return 'confirms';
+  if(f.includes('wheeze')||f.includes('air trapping')||f.includes('hyperinflation'))return 'indicates';
   if(f.includes('sudden focal')||f.includes('abrupt'))return 'time_course_of';
-  if(f.includes('amaurosis')||f.includes('tia'))return 'manifestation_of';
+  if(f.includes('amaurosis')||f.includes('tia'))return 'localizes_to';
   if(f.includes('uri')&&m.includes('viral'))return 'manifestation_of';
   if(f.includes('subglottic airway')&&m.includes('subglottic oedema'))return 'has_pathophysiology';
   if(f.includes('subglottic')&&m.includes('subglottic'))return 'associated_with';
@@ -6271,19 +6302,19 @@ function relationSentence(sourceLabel,relation,targetLabel){
   const target=cleanLabel(targetLabel);
   const rel=String(relation||'').toLowerCase();
   if(rel==='maps_to')return `The vignette clue "${source}" is abstracted into the clinical concept "${target}".`;
-  if(rel==='localizes_to')return `${source} helps localize the syndrome to ${target}.`;
-  if(rel==='manifestation_of')return `${source} is being used as a clinical manifestation that supports ${target}.`;
-  if(rel==='branch_of')return `${source} is supplied through ${target}.`;
-  if(rel==='stenosis_produces')return `${source} is the artery whose stenosis produces ${target}.`;
-  if(rel==='sign_of')return `${source} is an objective sign pointing toward ${target}.`;
-  if(rel==='finding_of')return `${source} is a clinical finding that fits ${target}.`;
-  if(rel==='risk_factor_for')return `${source} increases the likelihood of ${target}.`;
+  if(rel==='localizes_to'||rel==='supports_localization')return `${source} localizes to ${target}.`;
+  if(rel==='manifestation_of')return `${source} manifests as part of ${target}.`;
+  if(rel==='branch_of'||rel==='anatomical_branch_of')return `${source} is anatomically linked to ${target}.`;
+  if(rel==='stenosis_produces')return `${source} is the lesion site for ${target}.`;
+  if(rel==='sign_of')return `${source} is an objective sign of ${target}.`;
+  if(rel==='finding_of')return `${source} is a clinical finding in ${target}.`;
+  if(rel==='risk_factor_for')return `${source} is a risk factor for ${target}.`;
   if(rel==='predisposes_to')return `${source} predisposes the patient to ${target}.`;
-  if(rel==='demonstrates')return `${source} objectively demonstrates ${target}.`;
-  if(rel==='pathophysiology_of')return `${source} is the mechanism or localization that explains ${target}.`;
-  if(rel==='has_pathophysiology')return `${source} is linked to the underlying mechanism ${target}.`;
-  if(rel==='complication_of')return `${source} can occur as a complication of ${target}.`;
-  if(rel==='explains')return `${source} explains why ${target} appears in this case.`;
+  if(rel==='demonstrates'||rel==='indicates'||rel==='finding_indicates')return `${source} indicates ${target}.`;
+  if(rel==='confirms'||rel==='test_confirms')return `${source} confirms ${target}.`;
+  if(rel==='pathophysiology_of'||rel==='causes'||rel==='explains')return `${source} causes ${target} in the reasoning chain.`;
+  if(rel==='has_pathophysiology')return `${source} links to the mechanism ${target}.`;
+  if(rel==='complication_of')return `${source} is a complication of ${target}.`;
   if(rel==='supports')return `${source} supports ${target} in the clinical reasoning chain.`;
   if(rel==='helps_exclude')return `${source} helps argue against ${target}.`;
   return `${source} is clinically linked to ${target}.`;
@@ -6313,7 +6344,7 @@ function mergedNodeTooltip(kg,id,baseTooltip){
       const srcLabel=cleanLabel(src?src.label:id).toLowerCase();
       const mechLabel=cleanLabel(m.label).toLowerCase();
       const relation=srcRecord?.type==='mech'
-        ? (srcLabel.includes('hypercoagul')&&mechLabel.includes('dural')?'predisposes_to':'explains')
+        ? (srcLabel.includes('hypercoagul')&&mechLabel.includes('dural')?'predisposes_to':'causes')
         : defaultFindingToMechanismRelation(src?src.label:id,m.label);
       add(relationTooltipLine(kg,id,m.id,relation));
     }
@@ -6453,7 +6484,6 @@ function deleteFocusedGraphNode(){
       const set=getRemovedEvidenceSet();
       ids.forEach(eid=>set.add(eid));
       setRemovedEvidenceSet(set);
-      if(currentTask===3) ids.forEach(eid=>task3SelectedCluesToRemove.add(eid));
       focusedKgNodeId=null;
       selectedGraphItem=null;
       renderCurrentVignette();
@@ -6471,7 +6501,6 @@ function restoreDeletedEvidenceForTask(){
     confirmText:'Restore',
     onConfirm:()=>{
       removedEvidenceByTask[currentTask]=[];
-      if(currentTask===3) task3SelectedCluesToRemove=new Set();
       focusedKgNodeId=null;
       renderCurrentVignette();
       renderRightSupportPanel({rerenderGraph:true});
@@ -6734,7 +6763,7 @@ function renderKG(){
       const srcLabel=cleanLabel(src?src.label:cfId).toLowerCase();
       const mechLabel=cleanLabel(m.label).toLowerCase();
       const defaultRelation=srcRecord?.type==='mech'
-        ? (srcLabel.includes('hypercoagul')&&mechLabel.includes('dural')?'predisposes_to':'explains')
+        ? (srcLabel.includes('hypercoagul')&&mechLabel.includes('dural')?'predisposes_to':'causes')
         : defaultFindingToMechanismRelation(src?src.label:cfId,m.label);
       const eid=edgeIdFor(cfId,m.id,defaultRelation);
       const weakContextEdge=false;
@@ -7277,53 +7306,13 @@ function handleExcludeClick(card,focus){
 
 
 
-function renderTask3CluePanel(){
-  const btn=document.getElementById('task3ClueEditBtn');
-  if(btn){
-    btn.textContent='Regenerate available';
-    btn.classList.toggle('active',task3ClueEditMode);
-  }
-  updateSelectedClueHighlights();
-}
-
-
-function toggleTask3ClueEditMode(force){
-  task3ClueEditMode=false;
-  renderTask3CluePanel();
-}
-
-function updateSelectedClueHighlights(){
-  document.querySelectorAll('.hl-core.remove-selected').forEach(el=>el.classList.remove('remove-selected'));
-  document.querySelectorAll('.kg-node.task3-clue-node,.kg-node.task3-remove-selected').forEach(el=>{
-    el.classList.remove('task3-clue-node','task3-remove-selected','task3-editable');
-  });
-}
-
-
-function updateSelectedClueSummary(){
-  const box=document.getElementById('selectedClueSummary');
-  if(!box)return;
-  const selected=TASK3_CLUE_CANDIDATES.filter(c=>task3SelectedCluesToRemove.has(c.id));
-  if(!selected.length){
-    box.style.display='none';
-    box.innerHTML='';
-    return;
-  }
-  box.style.display='block';
-  box.innerHTML=`Selected clues to remove/weaken:<br>${selected.map(c=>`• ${esc(c.label)}`).join('<br>')}`;
-}
 
 function updateRegenerationIssueDefaults(){
   const modal=document.getElementById('regenerateModal');
   if(!modal)return;
-  const selectedIds=[...task3SelectedCluesToRemove];
-  const checks=modal.querySelectorAll('input[type="checkbox"][value]');
-  checks.forEach(input=>{
-    if(input.value==='answer_cue_stacking') input.checked=selectedIds.length>=3;
-    if(input.value==='direct_answer_cue') input.checked=selectedIds.includes('ev5');
-    if(input.value==='explicit_negative_exclusion') input.checked=selectedIds.includes('ev4')||selectedIds.includes('ev6');
-  });
-  updateSelectedClueSummary();
+  modal.querySelectorAll('input[type="checkbox"][value]').forEach(input=>{ input.checked=false; });
+  const note=document.getElementById('regenerateFreeText');
+  if(note)note.value='';
 }
 
 
@@ -7372,9 +7361,9 @@ function renderActions(){
     `;
   } else if(isTask5 && isRegenerated){
     actions.innerHTML=`
-      <button class="btn edit-btn" onclick="toggleEdit()" id="editBtn">Revise this version</button>
       <button class="btn accept" onclick="acceptQuestion()">Accept &amp; Save</button>
       <button class="btn reject" onclick="openReject()">Reject</button>
+      <button class="btn edit-btn" onclick="toggleEdit()" id="editBtn">Revise</button>
     `;
   } else {
     actions.innerHTML=`
@@ -7401,8 +7390,6 @@ function resetCurrentTask(skipConfirm=false){
   removedEvidenceByTask[currentTask]=[];
   if(currentTask===3){
     supportModeByTask[3]='kg';
-    task3SelectedCluesToRemove=new Set();
-    task3ClueEditMode=false;
   }
   if(currentTask===5){
     supportModeByTask[5]='kg';
@@ -7415,30 +7402,22 @@ function resetCurrentTask(skipConfirm=false){
 }
 function applyRegenerate(){
   try{
-    const targetTask=currentTask===5?5:currentTask;
-    if(targetTask===5){
-      const revised=JSON.parse(JSON.stringify(regeneratedTaskTemplate));
-      revised.title='Task 5 — KG+Text regenerated question';
-      revised.chip='Explanation: KG+Text';
-      revised.condition='KG+Text · regenerated medium-difficulty item';
-      revised.mode='both';
-      revised.regenerated=true;
-      revised.tooEasy=false;
-      tasks[5]=revised;
-      supportModeByTask[5]='kg';
+    if(currentTask!==5){
       closeRegenerate();
-      loadTask(5);
-      showToast('Regenerated medium-difficulty version loaded.');
       return;
     }
-    const removedClues=[...new Set([...task3SelectedCluesToRemove,...getRemovedEvidenceSet(targetTask)])];
-    tasks[targetTask]=JSON.parse(JSON.stringify(regeneratedTaskTemplate));
-    tasks[targetTask].removed_clues=removedClues;
-    task3ClueEditMode=false;
+    const revised=JSON.parse(JSON.stringify(regeneratedTaskTemplate));
+    revised.title='Task 5 — KG+Text regenerated question';
+    revised.chip='Explanation: KG+Text';
+    revised.condition='KG+Text · regenerated medium-difficulty item';
+    revised.mode='both';
+    revised.regenerated=true;
+    revised.tooEasy=false;
+    tasks[5]=revised;
+    supportModeByTask[5]='kg';
     closeRegenerate();
-    loadTask(targetTask);
-    const n=removedClues.length;
-    showToast(n?`Regenerated version loaded with ${n} selected clue(s) removed or weakened.`:'Regenerated version loaded.');
+    loadTask(5);
+    showToast('Regenerated medium-difficulty version loaded.');
   }catch(err){
     console.error(err);
     alert('Regeneration failed: '+(err&&err.message?err.message:err));
