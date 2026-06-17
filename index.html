@@ -7123,8 +7123,6 @@ function renderExcludeCards(){
     if(!hasGraphEvidence){
       const allEvidence=((t.kgData&&t.kgData.evidence)||[]).filter(ev=>!ev.hiddenInMain).map(ev=>ev.id);
       base.against=allEvidence.slice(0,3);
-      base.expected=base.expected||'Expected pattern not shown';
-      base.expectedExplanation=base.expectedExplanation||('Compare the visible case clues with what would normally support '+(d.disease||'this option')+'.');
     }
     return base;
   });
