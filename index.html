@@ -1447,12 +1447,12 @@ const STUDY_DATA={
             },
             {
               "id": "f2",
-              "label": "Left MCA face/arm\npredominant pattern",
-              "nodeType": "localization",
+              "label": "Right face/arm > leg\nweakness pattern",
+              "nodeType": "sign",
               "from": [
                 "ev2"
               ],
-              "tooltip": "Right face and arm weakness greater than leg localizes to the contralateral MCA territory."
+              "tooltip": "Right face and arm weakness greater than leg is a motor sign pattern that localizes to the contralateral MCA territory."
             },
             {
               "id": "f3",
@@ -2714,12 +2714,12 @@ const STUDY_DATA={
             },
             {
               "id": "f2",
-              "label": "Left MCA face/arm\npredominant pattern",
-              "nodeType": "localization",
+              "label": "Right face/arm > leg\nweakness pattern",
+              "nodeType": "sign",
               "from": [
                 "ev2"
               ],
-              "tooltip": "Right face and arm weakness greater than leg localizes to the contralateral MCA territory."
+              "tooltip": "Right face and arm weakness greater than leg is a motor sign pattern that localizes to the contralateral MCA territory."
             },
             {
               "id": "f3",
@@ -6244,6 +6244,7 @@ function defaultFindingToMechanismRelation(findingLabel,mechanismLabel){
   const f=cleanLabel(findingLabel).toLowerCase();
   const m=cleanLabel(mechanismLabel).toLowerCase();
   if(f.includes('language dominance'))return 'localizes_to';
+  if((f.includes('face/arm')||f.includes('> leg')||f.includes('weakness pattern'))&&m.includes('mca'))return 'localizes_to';
   if(f.includes('risk')||f.includes('atrial fibrillation')||f.includes('anticoagulation')||f.includes('af off')||f.includes('high-risk'))return 'risk_factor_for';
   if(m.includes('reversible obstructive physiology'))return 'confirms';
   if((m.includes('atopic inflammatory')||m.includes('bronchial hyperresponsiveness'))&&f.includes('atopic'))return 'predisposes_to';
