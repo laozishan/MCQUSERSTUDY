@@ -399,12 +399,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
     <div class="setup-desc">Configure your medical education question parameters</div>
     <div class="field">
       <div class="field-label">Domain</div>
-      <select class="select-box" id="setupDomain" onchange="switchDomainPage()"><option value="neurology" selected>Neurology</option><option value="pediatrics">Pediatrics</option></select>
-    </div>
+      <select class="select-box" id="setupDomain" onchange="switchDomainPage()"><option value="pediatrics" selected>Pediatrics</option><option value="neurology">Neurology</option></select>    </div>
     <div class="field">
       <div class="field-label">Topic</div>
-      <select class="select-box" id="setupTopic"><option value="cerebral_hemispheres_vascular_supply" selected>Cerebral hemispheres and vascular supply</option></select>
-    </div>
+      <select class="select-box" id="setupTopic"><option value="cerebral_hemispheres_vascular_supply" selected>Cerebral hemispheres and vascular supply</option></select>    </div>
     <div class="field">
       <div class="field-label">Difficulty Level</div>
       <div class="diff-row">
@@ -528,7 +526,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 // SETUP LOGIC
 // ==============================================================
 let selectedPickerTask=null;
-let currentDomain='neurology';
+let currentDomain='pediatrics';
 var domainStateReady=false;
 
 const DOMAIN_TOPICS = {
@@ -3646,7 +3644,7 @@ const STUDY_DATA={
   }
 };
 
-activateDomain('neurology',{resetPicker:false});
+activateDomain('pediatrics',{resetPicker:false});
 
 
 
