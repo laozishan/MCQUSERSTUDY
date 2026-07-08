@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -402,7 +402,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
       <select class="select-box" id="setupDomain" onchange="switchDomainPage()"><option value="pediatrics" selected>Pediatrics</option><option value="neurology">Neurology</option></select>    </div>
     <div class="field">
       <div class="field-label">Topic</div>
-      <select class="select-box" id="setupTopic"><option value="cerebral_hemispheres_vascular_supply" selected>Cerebral hemispheres and vascular supply</option></select>    </div>
+      <select class="select-box" id="setupTopic" onchange="switchTopicPage()"><option value="pediatric_cardiovascular_system" selected>Pediatric cardiovascular system</option></select>
+    </div>
     <div class="field">
       <div class="field-label">Difficulty Level</div>
       <div class="diff-row">
@@ -526,12 +527,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
 // SETUP LOGIC
 // ==============================================================
 let selectedPickerTask=null;
-let currentDomain='pediatrics';
+let currentDomain='pediatric_cardiovascular_system';
 var domainStateReady=false;
 
 const DOMAIN_TOPICS = {
   neurology: [{value: 'cerebral_hemispheres_vascular_supply', label: 'Cerebral hemispheres and vascular supply'}],
-  pediatrics: [{value: 'pediatric_respiratory_system', label: 'Pediatric respiratory system'}]
+  pediatrics: [
+    {value: 'pediatric_cardiovascular_system', label: 'Pediatric cardiovascular system'},
+    {value: 'pediatric_respiratory_system', label: 'Pediatric respiratory system'}
+  ]
 };
 
 const DOMAIN_COPY = {
@@ -573,6 +577,15 @@ function syncCurrentDomainState(){
   data.runtime.revisedTaskIds=Array.from(revisedTasks||[]);
   data.runtime.task5PreviousVersion=task5PreviousVersion;
 }
+function baseDomainForDataset(key){
+  if(String(key||'').startsWith('pediatric_'))return 'pediatrics';
+  return key;
+}
+function datasetFromSetup(){
+  const domain=document.getElementById('setupDomain')?.value||'neurology';
+  const topic=document.getElementById('setupTopic')?.value||'';
+  return STUDY_DATA[topic]?topic:domain;
+}
 function activateDomain(domain,opts={}){
   const next=STUDY_DATA[domain]?domain:'neurology';
   if(domainStateReady)syncCurrentDomainState();
@@ -591,14 +604,18 @@ function activateDomain(domain,opts={}){
   updateSetupForDomain();
 }
 function updateSetupForDomain(){
+  const baseDomain=baseDomainForDataset(currentDomain);
   const domainEl=document.getElementById('setupDomain');
-  if(domainEl)domainEl.value=currentDomain;
+  if(domainEl)domainEl.value=baseDomain;
   const topicEl=document.getElementById('setupTopic');
   if(topicEl){
-    topicEl.innerHTML=(DOMAIN_TOPICS[currentDomain]||DOMAIN_TOPICS.neurology)
+    const topics=DOMAIN_TOPICS[baseDomain]||DOMAIN_TOPICS.neurology;
+    topicEl.innerHTML=topics
       .map(t=>`<option value="${t.value}">${t.label}</option>`).join('');
+    const selected=topics.some(t=>t.value===currentDomain)?currentDomain:(topics[0]?.value||'');
+    if(selected)topicEl.value=selected;
   }
-  const copy=DOMAIN_COPY[currentDomain]||DOMAIN_COPY.neurology;
+  const copy=DOMAIN_COPY[baseDomain]||DOMAIN_COPY.neurology;
   const sub=document.querySelector('#setupPage .setup-sub');
   const desc=document.querySelector('#setupPage .setup-desc');
   if(sub)sub.textContent=copy.sub;
@@ -607,6 +624,10 @@ function updateSetupForDomain(){
 function switchDomainPage(){
   const domain=document.getElementById('setupDomain')?.value||'neurology';
   activateDomain(domain,{resetPicker:true});
+  return false;
+}
+function switchTopicPage(){
+  activateDomain(datasetFromSetup(),{resetPicker:true});
   return false;
 }
 function selectDiff(d){['easy','medium','hard'].forEach(x=>document.getElementById('diff-'+x).classList.remove('active'));document.getElementById('diff-'+d).classList.add('active');}
@@ -664,7 +685,7 @@ function confirmPicker(){
 }
 
 function startStudy(){
-  switchDomainPage();
+  activateDomain(datasetFromSetup(),{resetPicker:false});
   document.getElementById('setupPage').style.display='none';
   document.getElementById('appPage').style.display='block';
   loadTask(selectedPickerTask||1);
@@ -2413,7 +2434,7 @@ const STUDY_DATA={
             },
             {
               "id": "f3",
-              "label": "Persistent cough",
+              "label": "Persistent cough\n& wheeze",
               "nodeType": "finding",
               "tooltip": "Persistent cough and noisy breathing after the choking episode support ongoing airway symptoms.",
               "kind": "finding"
@@ -3223,7 +3244,7 @@ const STUDY_DATA={
             }
           ],
           "layout": {
-            "minH": 560,
+            "minH": 500,
             "nodeY": {
               "f1": 88,
               "f2": 176,
@@ -3641,7 +3662,1665 @@ const STUDY_DATA={
         ]
       }
     }
-  }
+  },
+  "pediatric_cardiovascular_system": {
+    "pickerQuestions": [
+        {
+            "id": 1,
+            "title": "Patent ductus arteriosus KG-correct baseline",
+            "domain": "Pediatrics",
+            "date": "2026-07-07",
+            "vignette": "Premature infant with continuous murmur, bounding pulses, wide pulse pressure, tachypnea, and poor growth.",
+            "stem": "What is the most likely diagnosis?"
+        },
+        {
+            "id": 2,
+            "title": "Kawasaki disease text-correct baseline",
+            "domain": "Pediatrics",
+            "date": "2026-07-07",
+            "vignette": "Child with prolonged fever and four principal Kawasaki mucocutaneous criteria.",
+            "stem": "What is the most likely diagnosis?"
+        },
+        {
+            "id": 3,
+            "title": "Coarctation KG subtle flaw",
+            "domain": "Pediatrics",
+            "date": "2026-07-07",
+            "vignette": "Neonatal coarctation vignette includes one course-mismatched imaging clue: rib notching.",
+            "stem": "What is the most likely diagnosis?"
+        },
+        {
+            "id": 4,
+            "title": "Acute rheumatic fever text subtle flaw",
+            "domain": "Pediatrics",
+            "date": "2026-07-07",
+            "vignette": "Acute rheumatic fever explanation includes one course-mismatched Sydenham chorea timing clue.",
+            "stem": "What is the most likely diagnosis?"
+        },
+        {
+            "id": 5,
+            "title": "Tetralogy of Fallot too-easy baseline",
+            "domain": "Pediatrics",
+            "date": "2026-07-07",
+            "vignette": "Too-easy cyanotic heart disease item with KG+Text and a regenerated harder version.",
+            "stem": "What is the most likely diagnosis?"
+        }
+    ],
+    "tasks": {
+        "1": {
+            "title": "Task 1 - KG correct item",
+            "chip": "Explanation: KG",
+            "condition": "Prestudy Task 1 - Knowledge graph correct explanation",
+            "mode": "kg",
+            "difficulty": "Medium",
+            "target": "Patent ductus arteriosus",
+            "source": "Pediatrics - Cardiovascular - Patent ductus arteriosus",
+            "correct": "A",
+            "question_stem": "What is the most likely diagnosis?",
+            "vignette": "A 3-week-old premature girl is evaluated for persistent tachypnea and difficulty gaining weight. She was born at 29 weeks of gestation and required oxygen for respiratory distress after birth. On examination, she has bounding peripheral pulses and a hyperdynamic precordium. Blood pressure is 78/32 mmHg. A continuous machinery-like murmur is heard best at the left infraclavicular area. Oxygen saturation is 97% in room air.",
+            "options": {
+                "A": "Patent ductus arteriosus",
+                "B": "Atrial septal defect",
+                "C": "Pulmonary valve stenosis",
+                "D": "Tetralogy of Fallot",
+                "E": "Coarctation of aorta"
+            },
+            "supporting": [
+                {
+                    "phrase": "premature",
+                    "why": "Prematurity is a major risk factor for persistent patency of the ductus arteriosus."
+                },
+                {
+                    "phrase": "persistent tachypnea and difficulty gaining weight",
+                    "why": "Tachypnea and poor growth suggest pulmonary overcirculation and cardiac volume load."
+                },
+                {
+                    "phrase": "bounding peripheral pulses",
+                    "why": "Bounding pulses reflect increased stroke volume and diastolic runoff through the ductus."
+                },
+                {
+                    "phrase": "78/32 mmHg",
+                    "why": "This wide pulse pressure supports runoff physiology, classically seen in patent ductus arteriosus."
+                },
+                {
+                    "phrase": "continuous machinery-like murmur",
+                    "why": "A continuous infraclavicular machinery-like murmur is the classic auscultatory finding of patent ductus arteriosus."
+                }
+            ],
+            "distractors": [
+                {
+                    "letter": "B",
+                    "disease": "Atrial septal defect",
+                    "plausible": "An acyanotic infant with tachypnea may have a left-to-right shunt.",
+                    "incorrect": "Atrial septal defect usually causes a systolic flow murmur with fixed split second heart sound, not a continuous machinery murmur or bounding pulses."
+                },
+                {
+                    "letter": "C",
+                    "disease": "Pulmonary valve stenosis",
+                    "plausible": "A murmur in a young infant can suggest an outflow tract lesion.",
+                    "incorrect": "Pulmonary valve stenosis causes a systolic ejection murmur and may have an ejection click, not wide pulse pressure or continuous ductal murmur."
+                },
+                {
+                    "letter": "D",
+                    "disease": "Tetralogy of Fallot",
+                    "plausible": "A congenital heart lesion can present in infancy.",
+                    "incorrect": "Tetralogy of Fallot is a cyanotic right-to-left shunt lesion; this infant is well saturated and has bounding pulses with a continuous murmur."
+                },
+                {
+                    "letter": "E",
+                    "disease": "Coarctation of aorta",
+                    "plausible": "Coarctation can present in early infancy with poor feeding and tachypnea.",
+                    "incorrect": "Coarctation causes diminished femoral pulses and arm-leg pressure gradient rather than bounding pulses and wide pulse pressure."
+                }
+            ],
+            "kgData": {
+                "nodes": [
+                    {
+                        "id": "ev1",
+                        "label": "Prematurity",
+                        "short": "Prematurity",
+                        "phrase": [
+                            "premature",
+                            "29 weeks of gestation"
+                        ],
+                        "nodeType": "risk",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev2",
+                        "label": "Tachypnea",
+                        "short": "Tachypnea",
+                        "phrase": "persistent tachypnea",
+                        "nodeType": "symptom",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev3",
+                        "label": "Poor weight\ngain",
+                        "short": "Poor weight gain",
+                        "phrase": "difficulty gaining weight",
+                        "nodeType": "symptom",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev4",
+                        "label": "Bounding\npulse",
+                        "short": "Bounding pulse",
+                        "phrase": "bounding peripheral pulses",
+                        "nodeType": "sign",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev5",
+                        "label": "Wide pulse\npressure",
+                        "short": "Wide pulse pressure",
+                        "phrase": "78/32 mmHg",
+                        "nodeType": "sign",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev6",
+                        "label": "Continuous\nmurmur",
+                        "short": "Continuous murmur",
+                        "phrase": "continuous machinery-like murmur",
+                        "nodeType": "sign",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev7",
+                        "label": "Normal oxygen\nsaturation",
+                        "short": "Normal oxygen saturation",
+                        "phrase": "Oxygen saturation is 97% in room air",
+                        "nodeType": "sign",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "f1",
+                        "label": "Prematurity",
+                        "nodeType": "risk",
+                        "kind": "finding",
+                        "tooltip": "Prematurity is a major risk factor for persistent ductus arteriosus patency after birth."
+                    },
+                    {
+                        "id": "f2",
+                        "label": "Wide pulse\npressure",
+                        "nodeType": "sign",
+                        "kind": "finding",
+                        "tooltip": "Low diastolic pressure with wide pulse pressure reflects diastolic runoff from the aorta into the pulmonary artery."
+                    },
+                    {
+                        "id": "f3",
+                        "label": "Tachypnea\npoor growth",
+                        "nodeType": "syndrome",
+                        "kind": "finding",
+                        "tooltip": "Persistent tachypnea and poor weight gain are clinical consequences of pulmonary overcirculation."
+                    },
+                    {
+                        "id": "f4",
+                        "label": "Machinery\nmurmur",
+                        "nodeType": "sign",
+                        "kind": "finding",
+                        "tooltip": "A continuous machinery-like murmur at the left infraclavicular area is the classic auscultatory clue to patent ductus arteriosus."
+                    },
+                    {
+                        "id": "f5",
+                        "label": "Preserved\noxygenation",
+                        "nodeType": "sign",
+                        "kind": "finding",
+                        "tooltip": "Normal room-air oxygen saturation supports an acyanotic left-to-right shunt rather than a cyanotic congenital heart lesion."
+                    },
+                    {
+                        "id": "m1",
+                        "label": "Ductus\npatency",
+                        "nodeType": "mechanism",
+                        "kind": "mechanism",
+                        "layer": "proximal",
+                        "tooltip": "A patent ductus arteriosus leaves the fetal aortopulmonary connection open after birth."
+                    },
+                    {
+                        "id": "m2",
+                        "label": "Left-to-right\nshunt",
+                        "nodeType": "mechanism",
+                        "kind": "mechanism",
+                        "layer": "consequence",
+                        "tooltip": "Blood flows from the higher-pressure aorta into the pulmonary artery, causing pulmonary overcirculation and diastolic runoff."
+                    },
+                    {
+                        "id": "dx",
+                        "label": "Patent ductus\narteriosus",
+                        "nodeType": "diagnosis",
+                        "kind": "diagnosis",
+                        "tooltip": "Patent ductus arteriosus unifies prematurity, continuous murmur, bounding pulses, wide pulse pressure, pulmonary overcirculation, and preserved oxygen saturation."
+                    }
+                ],
+                "edges": [
+                    {
+                        "from": "ev1",
+                        "to": "f1",
+                        "relation": "risk_factor_for"
+                    },
+                    {
+                        "from": "ev4",
+                        "to": "f2",
+                        "relation": "sign_of"
+                    },
+                    {
+                        "from": "ev5",
+                        "to": "f2",
+                        "relation": "indicates"
+                    },
+                    {
+                        "from": "ev2",
+                        "to": "f3",
+                        "relation": "presents_as"
+                    },
+                    {
+                        "from": "ev3",
+                        "to": "f3",
+                        "relation": "presents_as"
+                    },
+                    {
+                        "from": "ev6",
+                        "to": "f4",
+                        "relation": "sign_of"
+                    },
+                    {
+                        "from": "f1",
+                        "to": "m1",
+                        "relation": "risk_factor_for"
+                    },
+                    {
+                        "from": "f4",
+                        "to": "m1",
+                        "relation": "indicates"
+                    },
+                    {
+                        "from": "m1",
+                        "to": "m2",
+                        "relation": "causes_shunt"
+                    },
+                    {
+                        "from": "f2",
+                        "to": "m2",
+                        "relation": "indicates"
+                    },
+                    {
+                        "from": "f3",
+                        "to": "m2",
+                        "relation": "indicates"
+                    },
+                    {
+                        "from": "m2",
+                        "to": "dx",
+                        "relation": "supports_diagnosis"
+                    },
+                    {
+                        "from": "ev7",
+                        "to": "f5",
+                        "relation": "sign_of"
+                    },
+                    {
+                        "from": "f5",
+                        "to": "m2",
+                        "relation": "indicates"
+                    }
+                ],
+                "layout": {
+                    "minH": 600,
+                    "autoLayeredMechanisms": true,
+                    "nodeY": {
+                        "f1": 100,
+                        "f4": 200,
+                        "f2": 300,
+                        "f3": 400,
+                        "m1": 200,
+                        "m2": 360,
+                        "dx": 360,
+                        "f5": 500
+                    },
+                    "nodeX": {
+                        "f1": 150,
+                        "f4": 150,
+                        "f2": 150,
+                        "f3": 150,
+                        "m1": 610,
+                        "m2": 610,
+                        "dx": 1040,
+                        "f5": 150
+                    }
+                },
+                "excludeCards": [
+                    {
+                        "target": "Atrial septal defect",
+                        "supports": [
+                            "ev2"
+                        ],
+                        "against": [
+                            "ev6",
+                            "ev5"
+                        ],
+                        "expected": "Fixed split second sound\nsystolic flow murmur",
+                        "expectedExplanation": "Atrial septal defect classically causes a fixed split second heart sound and systolic flow murmur rather than a continuous ductal murmur.",
+                        "explanation": "Acyanotic shunt physiology overlaps, but bounding pulses, wide pulse pressure, and continuous murmur favor patent ductus arteriosus.",
+                        "rationales": {
+                            "supports": {
+                                "ev2": "Tachypnea can occur with significant left-to-right shunts."
+                            },
+                            "against": {
+                                "ev5": "Wide pulse pressure is not a typical atrial septal defect finding.",
+                                "ev6": "A continuous machinery murmur points to ductal flow rather than atrial-level shunting."
+                            }
+                        }
+                    },
+                    {
+                        "target": "Pulmonary valve stenosis",
+                        "supports": [],
+                        "against": [
+                            "ev6",
+                            "ev5"
+                        ],
+                        "expected": "Systolic ejection murmur\nejection click",
+                        "expectedExplanation": "Pulmonary valve stenosis produces a systolic ejection murmur at the left upper sternal border, often with an ejection click.",
+                        "explanation": "The murmur is continuous and accompanied by runoff physiology, which is not the expected pattern for pulmonary valve stenosis.",
+                        "rationales": {
+                            "against": {
+                                "ev5": "Pulmonary valve stenosis does not cause wide pulse pressure from diastolic runoff.",
+                                "ev6": "Pulmonary valve stenosis produces a systolic ejection murmur, often with an ejection click, not a continuous ductal machinery murmur."
+                            }
+                        }
+                    },
+                    {
+                        "target": "Tetralogy of Fallot",
+                        "supports": [],
+                        "against": [
+                            "ev7",
+                            "ev6"
+                        ],
+                        "expected": "Central cyanosis\nright ventricular outflow obstruction",
+                        "expectedExplanation": "Tetralogy of Fallot is a cyanotic lesion with right ventricular outflow obstruction and reduced pulmonary blood flow.",
+                        "explanation": "Normal oxygen saturation, bounding pulses, and a continuous murmur fit patent ductus arteriosus better than tetralogy of Fallot.",
+                        "rationales": {
+                            "against": {
+                                "ev7": "Normal oxygen saturation argues against a cyanotic right-to-left shunt lesion.",
+                                "ev6": "The classic murmur in tetralogy of Fallot is systolic from right ventricular outflow obstruction, not continuous ductal machinery murmur."
+                            }
+                        }
+                    },
+                    {
+                        "target": "Coarctation of aorta",
+                        "supports": [
+                            "ev3"
+                        ],
+                        "against": [
+                            "ev4",
+                            "ev5"
+                        ],
+                        "expected": "Femoral pulse deficit\narm-leg pressure gradient",
+                        "expectedExplanation": "Coarctation should produce reduced lower-extremity pulses or pressure, especially in a symptomatic neonate.",
+                        "explanation": "Poor feeding and tachypnea can overlap, but bounding pulses and wide pulse pressure point away from coarctation.",
+                        "rationales": {
+                            "supports": {
+                                "ev3": "Poor growth or poor feeding can be seen in coarctation."
+                            },
+                            "against": {
+                                "ev4": "Bounding pulses are the opposite of the femoral pulse deficit expected in coarctation.",
+                                "ev5": "Wide pulse pressure suggests ductal runoff, not aortic obstruction."
+                            }
+                        }
+                    }
+                ]
+            },
+            "researcherNote": "KG-correct baseline. No intentional flaw."
+        },
+        "2": {
+            "title": "Task 2 - Text correct item",
+            "chip": "Explanation: Text",
+            "condition": "Prestudy Task 2 - Text correct explanation",
+            "mode": "text",
+            "difficulty": "Medium",
+            "target": "Kawasaki disease",
+            "source": "Pediatrics - Cardiovascular - Kawasaki disease",
+            "correct": "A",
+            "question_stem": "What is the most likely diagnosis?",
+            "vignette": "A 4-year-old boy is brought to clinic because of fever for 7 days. His parents report that he has been irritable and has not improved despite acetaminophen. Examination shows bilateral nonpurulent conjunctival injection, cracked red lips, a strawberry tongue, swelling and redness of both hands, and a polymorphous rash over the trunk. Cardiac examination is normal. Laboratory testing shows thrombocytosis.",
+            "options": {
+                "A": "Kawasaki disease",
+                "B": "Scarlet fever",
+                "C": "Adenovirus infection",
+                "D": "Juvenile idiopathic arthritis",
+                "E": "Acute rheumatic fever"
+            },
+            "supporting": [
+                {
+                    "phrase": "fever for 7 days",
+                    "why": "Fever lasting at least 5 days is the required temporal anchor for classic Kawasaki disease."
+                },
+                {
+                    "phrase": "bilateral nonpurulent conjunctival injection",
+                    "why": "Bilateral nonexudative conjunctivitis is one of the principal Kawasaki disease criteria."
+                },
+                {
+                    "phrase": "cracked red lips, a strawberry tongue",
+                    "why": "Oral mucous membrane changes are a core Kawasaki disease feature."
+                },
+                {
+                    "phrase": "swelling and redness of both hands",
+                    "why": "Peripheral extremity changes support Kawasaki disease and may later progress to periungual desquamation."
+                },
+                {
+                    "phrase": "polymorphous rash over the trunk",
+                    "why": "A polymorphous rash is another principal clinical criterion."
+                },
+                {
+                    "phrase": "thrombocytosis",
+                    "why": "Thrombocytosis is common in the subacute inflammatory phase of Kawasaki disease."
+                }
+            ],
+            "distractors": [
+                {
+                    "letter": "B",
+                    "disease": "Scarlet fever",
+                    "plausible": "Fever, strawberry tongue, and rash can initially suggest group A streptococcal scarlet fever.",
+                    "incorrect": "Bilateral nonpurulent conjunctivitis and extremity swelling are more characteristic of Kawasaki disease than scarlet fever."
+                },
+                {
+                    "letter": "C",
+                    "disease": "Adenovirus infection",
+                    "plausible": "Adenovirus can cause prolonged fever and conjunctivitis.",
+                    "incorrect": "Adenovirus does not usually produce the Kawasaki pattern of conjunctivitis, mucosal changes, extremity changes, polymorphous rash, and thrombocytosis."
+                },
+                {
+                    "letter": "D",
+                    "disease": "Juvenile idiopathic arthritis",
+                    "plausible": "Persistent fever and rash can occur in systemic inflammatory disease.",
+                    "incorrect": "The vignette lacks arthritis and instead shows classic mucocutaneous Kawasaki criteria."
+                },
+                {
+                    "letter": "E",
+                    "disease": "Acute rheumatic fever",
+                    "plausible": "Fever and possible cardiac risk may bring acute rheumatic fever into the differential.",
+                    "incorrect": "Rheumatic fever is defined by Jones criteria such as migratory polyarthritis, carditis, chorea, erythema marginatum, or subcutaneous nodules, not conjunctivitis and extremity swelling."
+                }
+            ],
+            "researcherNote": "Text-correct baseline. No intentional flaw."
+        },
+        "3": {
+            "title": "Task 3 - KG subtle flaw item",
+            "chip": "Explanation: KG",
+            "condition": "Prestudy Task 3 - Knowledge graph explanation with subtle flaw",
+            "mode": "kg",
+            "difficulty": "Medium",
+            "target": "Coarctation of aorta",
+            "source": "Pediatrics - Cardiovascular - Coarctation of aorta",
+            "correct": "A",
+            "question_stem": "What is the most likely diagnosis?",
+            "vignette": "A 7-day-old boy is brought to the emergency department because he has become increasingly sleepy and feeds poorly. His parents report that he sweats with feeds and breathes rapidly. He was born at term and was discharged on day 2 after a normal newborn examination. On examination, he is pale and tachypneic. His feet are cool. Femoral pulses are weak compared with brachial pulses. Blood pressure is 86/52 mmHg in the right arm and 54/38 mmHg in the right leg. A soft systolic murmur is heard over the left upper sternal border and back. The liver edge is palpable 3 cm below the costal margin. Chest radiograph shows inferior rib notching.",
+            "options": {
+                "A": "Coarctation of aorta",
+                "B": "Ventricular septal defect",
+                "C": "Patent ductus arteriosus",
+                "D": "Gastroesophageal reflux disease",
+                "E": "Hypertrophic pyloric stenosis"
+            },
+            "supporting": [
+                {
+                    "phrase": "7-day-old",
+                    "why": "A neonate who deteriorates during the first week after an initially normal discharge raises concern for a duct-dependent cardiac lesion becoming symptomatic as the ductus arteriosus constricts."
+                },
+                {
+                    "phrase": "sweats with feeds and breathes rapidly",
+                    "why": "Feeding diaphoresis and tachypnea are typical infant heart failure manifestations."
+                },
+                {
+                    "phrase": "feet are cool",
+                    "why": "Cool lower extremities indicate impaired lower-body systemic perfusion."
+                },
+                {
+                    "phrase": "Femoral pulses are weak compared with brachial pulses",
+                    "why": "A femoral pulse deficit compared with upper-extremity pulses localizes obstruction to the aorta distal to the great vessels supplying the arms."
+                },
+                {
+                    "phrase": "86/52 mmHg in the right arm and 54/38 mmHg in the right leg",
+                    "why": "A higher arm pressure than leg pressure is a classic pressure gradient across coarctation."
+                }
+            ],
+            "distractors": [
+                {
+                    "letter": "B",
+                    "disease": "Ventricular septal defect",
+                    "plausible": "Feeding diaphoresis, tachypnea, poor growth, hepatomegaly, and a systolic murmur can occur with a large left-to-right shunt.",
+                    "incorrect": "Ventricular septal defect does not explain the femoral pulse deficit, cool lower extremities, or arm-leg pressure gradient."
+                },
+                {
+                    "letter": "C",
+                    "disease": "Patent ductus arteriosus",
+                    "plausible": "A murmur with tachypnea and poor feeding can suggest pulmonary overcirculation from patent ductus arteriosus.",
+                    "incorrect": "Patent ductus arteriosus usually causes bounding pulses and wide pulse pressure rather than lower-extremity hypoperfusion and weak femoral pulses."
+                },
+                {
+                    "letter": "D",
+                    "disease": "Gastroesophageal reflux disease",
+                    "plausible": "Poor feeding in a neonate can initially suggest a feeding or reflux problem.",
+                    "incorrect": "Gastroesophageal reflux disease does not cause tachypnea with hepatomegaly, a pulse deficit, or an arm-leg pressure gradient."
+                },
+                {
+                    "letter": "E",
+                    "disease": "Hypertrophic pyloric stenosis",
+                    "plausible": "Progressive feeding difficulty in early infancy can initially raise a gastrointestinal diagnosis.",
+                    "incorrect": "Pyloric stenosis causes projectile nonbilious vomiting and dehydration, not weak femoral pulses, lower-body hypoperfusion, or a cardiac murmur."
+                }
+            ],
+            "kgData": {
+                "nodes": [
+                    {
+                        "id": "ev1",
+                        "label": "Term\nneonate",
+                        "short": "Term neonate",
+                        "phrase": [
+                            "7-day-old",
+                            "born at term"
+                        ],
+                        "nodeType": "risk",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev2",
+                        "label": "Feeding\nfatigue",
+                        "short": "Feeding fatigue",
+                        "phrase": "feeds poorly",
+                        "nodeType": "symptom",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev3",
+                        "label": "Feeding\ndiaphoresis",
+                        "short": "Feeding diaphoresis",
+                        "phrase": "sweats with feeds",
+                        "nodeType": "symptom",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev4",
+                        "label": "Tachypnea",
+                        "short": "Tachypnea",
+                        "phrase": "breathes rapidly",
+                        "nodeType": "sign",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev5",
+                        "label": "Cool lower\nextremities",
+                        "short": "Cool lower extremities",
+                        "phrase": "feet are cool",
+                        "nodeType": "sign",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev6",
+                        "label": "Femoral pulse\ndeficit",
+                        "short": "Femoral pulse deficit",
+                        "phrase": "Femoral pulses are weak compared with brachial pulses",
+                        "nodeType": "sign",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev7",
+                        "label": "Arm-leg pressure\ngradient",
+                        "short": "Arm-leg pressure gradient",
+                        "phrase": "86/52 mmHg in the right arm and 54/38 mmHg in the right leg",
+                        "nodeType": "sign",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev8",
+                        "label": "Hepatomegaly",
+                        "short": "Hepatomegaly",
+                        "phrase": "liver edge is palpable 3 cm below the costal margin",
+                        "nodeType": "sign",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev9",
+                        "label": "Rib\nnotching",
+                        "short": "Rib notching",
+                        "phrase": "inferior rib notching",
+                        "nodeType": "imaging",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "f1",
+                        "label": "Ductal\nclosure",
+                        "nodeType": "mechanism",
+                        "kind": "finding",
+                        "tooltip": "Symptoms emerging in the first week after normal newborn discharge fit the timing of ductus arteriosus constriction. In duct-dependent systemic lesions, distal perfusion can worsen when ductal flow falls."
+                    },
+                    {
+                        "id": "f2",
+                        "label": "Infant heart\nfailure",
+                        "nodeType": "syndrome",
+                        "kind": "finding",
+                        "tooltip": "Poor feeding, diaphoresis during feeds, tachypnea, and hepatomegaly are infant heart failure findings that can occur in severe neonatal coarctation but are not specific by themselves."
+                    },
+                    {
+                        "id": "f3",
+                        "label": "Weak femoral\npulses/cool feet",
+                        "nodeType": "sign",
+                        "kind": "finding",
+                        "tooltip": "Weak femoral pulses and cool feet are direct bedside evidence of lower-body hypoperfusion."
+                    },
+                    {
+                        "id": "f4",
+                        "label": "Upper > lower\nblood pressure",
+                        "nodeType": "sign",
+                        "kind": "finding",
+                        "tooltip": "Right arm pressure higher than right leg pressure is a specific hemodynamic clue to obstruction distal to the arch vessels."
+                    },
+                    {
+                        "id": "m1",
+                        "label": "Aortic\nobstruction",
+                        "nodeType": "mechanism",
+                        "kind": "mechanism",
+                        "layer": "proximal",
+                        "tooltip": "Coarctation narrows the aortic arch or proximal descending aorta, limiting flow to the lower body and increasing afterload."
+                    },
+                    {
+                        "id": "m2",
+                        "label": "Lower-body\nhypoperfusion",
+                        "nodeType": "mechanism",
+                        "kind": "mechanism",
+                        "layer": "consequence",
+                        "tooltip": "As ductal-dependent systemic flow falls, aortic obstruction produces lower-body hypoperfusion with cool feet, weak femoral pulses, and lower leg blood pressure."
+                    },
+                    {
+                        "id": "f5",
+                        "label": "Rib\nnotching",
+                        "nodeType": "imaging",
+                        "kind": "finding",
+                        "tooltip": "Rib notching is a radiographic sign of collateral intercostal artery enlargement in long-standing coarctation of the aorta."
+                    },
+                    {
+                        "id": "dx",
+                        "label": "Coarctation\nof aorta",
+                        "nodeType": "diagnosis",
+                        "kind": "diagnosis",
+                        "tooltip": "Coarctation of aorta unifies neonatal deterioration after discharge, infant heart failure, lower-extremity hypoperfusion, femoral pulse deficit, and an arm-leg pressure gradient."
+                    }
+                ],
+                "edges": [
+                    {
+                        "from": "ev1",
+                        "to": "f1",
+                        "relation": "risk_factor_for"
+                    },
+                    {
+                        "from": "ev2",
+                        "to": "f2",
+                        "relation": "presents_as"
+                    },
+                    {
+                        "from": "ev3",
+                        "to": "f2",
+                        "relation": "presents_as"
+                    },
+                    {
+                        "from": "ev4",
+                        "to": "f2",
+                        "relation": "presents_as"
+                    },
+                    {
+                        "from": "ev8",
+                        "to": "f2",
+                        "relation": "sign_of"
+                    },
+                    {
+                        "from": "ev5",
+                        "to": "f3",
+                        "relation": "sign_of"
+                    },
+                    {
+                        "from": "ev6",
+                        "to": "f3",
+                        "relation": "sign_of"
+                    },
+                    {
+                        "from": "ev7",
+                        "to": "f4",
+                        "relation": "indicates_pressure_gradient"
+                    },
+                    {
+                        "from": "f4",
+                        "to": "m1",
+                        "relation": "indicates_pressure_gradient"
+                    },
+                    {
+                        "from": "f1",
+                        "to": "m2",
+                        "relation": "unmasks"
+                    },
+                    {
+                        "from": "f3",
+                        "to": "m2",
+                        "relation": "indicates"
+                    },
+                    {
+                        "from": "m1",
+                        "to": "m2",
+                        "relation": "causes_hypoperfusion"
+                    },
+                    {
+                        "from": "m2",
+                        "to": "dx",
+                        "relation": "supports_diagnosis"
+                    },
+                    {
+                        "from": "ev9",
+                        "to": "f5",
+                        "relation": "sign_of"
+                    },
+                    {
+                        "from": "f5",
+                        "to": "dx",
+                        "relation": "sign_of"
+                    },
+                    {
+                        "from": "f2",
+                        "to": "dx",
+                        "relation": "finding_of"
+                    }
+                ],
+                "layout": {
+                    "minH": 620,
+                    "autoLayeredMechanisms": true,
+                    "nodeY": {
+                        "f4": 90,
+                        "f2": 510,
+                        "f1": 190,
+                        "f3": 290,
+                        "f5": 400,
+                        "m1": 160,
+                        "m2": 260,
+                        "dx": 300
+                    },
+                    "nodeX": {
+                        "f1": 150,
+                        "f2": 150,
+                        "f3": 150,
+                        "f4": 150,
+                        "f5": 150,
+                        "m1": 610,
+                        "m2": 610,
+                        "dx": 1040
+                    }
+                },
+                "excludeCards": [
+                    {
+                        "target": "Ventricular septal defect",
+                        "supports": [
+                            "ev2",
+                            "ev8"
+                        ],
+                        "against": [
+                            "ev6",
+                            "ev7"
+                        ],
+                        "expected": "Holosystolic murmur\nlower left sternal border",
+                        "expectedExplanation": "A large ventricular septal defect usually presents after pulmonary vascular resistance falls, with a holosystolic lower-left-sternal-border murmur and pulmonary overcirculation rather than lower-body obstruction.",
+                        "explanation": "Heart failure clues overlap with ventricular septal defect, but femoral pulse deficit and arm-leg pressure gradient point to coarctation.",
+                        "rationales": {
+                            "supports": {
+                                "ev2": "Poor feeding can occur in both large left-to-right shunts and coarctation-related heart failure.",
+                                "ev8": "Hepatomegaly supports systemic venous congestion but does not identify the specific lesion."
+                            },
+                            "against": {
+                                "ev6": "A femoral pulse deficit is not expected in isolated ventricular septal defect.",
+                                "ev7": "An arm-leg pressure gradient localizes an obstructive aortic lesion rather than an intracardiac septal defect."
+                            }
+                        }
+                    },
+                    {
+                        "target": "Patent ductus arteriosus",
+                        "supports": [
+                            "ev4"
+                        ],
+                        "against": [
+                            "ev6",
+                            "ev7"
+                        ],
+                        "expected": "Bounding pulse\nwide pulse pressure",
+                        "expectedExplanation": "Patent ductus arteriosus typically produces a continuous murmur with bounding pulses and wide pulse pressure from diastolic runoff.",
+                        "explanation": "This vignette has lower-body hypoperfusion and pulse deficit rather than the bounding-pulse physiology of patent ductus arteriosus.",
+                        "rationales": {
+                            "supports": {
+                                "ev4": "Tachypnea can occur with pulmonary overcirculation from patent ductus arteriosus."
+                            },
+                            "against": {
+                                "ev6": "Weak femoral pulses are the opposite of the bounding pulses expected in patent ductus arteriosus.",
+                                "ev7": "An arm-leg pressure gradient points to coarctation rather than an isolated ductal shunt."
+                            }
+                        }
+                    },
+                    {
+                        "target": "Gastroesophageal reflux disease",
+                        "supports": [
+                            "ev2"
+                        ],
+                        "against": [
+                            "ev6",
+                            "ev7"
+                        ],
+                        "expected": "Regurgitation\nfeeding discomfort",
+                        "expectedExplanation": "Reflux should center on regurgitation, arching, feeding discomfort, or aspiration symptoms, not obstructive cardiovascular findings.",
+                        "explanation": "Poor feeding alone is nonspecific; the cardiovascular perfusion findings make reflux an inadequate diagnosis.",
+                        "rationales": {
+                            "supports": {
+                                "ev2": "Poor feeding can superficially resemble a gastrointestinal feeding disorder."
+                            },
+                            "against": {
+                                "ev6": "Reflux does not cause a femoral pulse deficit.",
+                                "ev7": "Reflux does not produce an arm-leg pressure gradient."
+                            }
+                        }
+                    },
+                    {
+                        "target": "Hypertrophic pyloric stenosis",
+                        "supports": [
+                            "ev2"
+                        ],
+                        "against": [
+                            "ev6",
+                            "ev7"
+                        ],
+                        "expected": "Projectile vomiting\nmetabolic alkalosis",
+                        "expectedExplanation": "Pyloric stenosis presents with progressive nonbilious projectile vomiting and dehydration, usually without cardiac pulse abnormalities.",
+                        "explanation": "The case lacks vomiting and instead shows obstructive cardiovascular findings.",
+                        "rationales": {
+                            "supports": {
+                                "ev2": "Feeding difficulty in early infancy can initially suggest a gastrointestinal cause."
+                            },
+                            "against": {
+                                "ev6": "Pyloric stenosis does not cause weak femoral pulses.",
+                                "ev7": "Pyloric stenosis does not cause upper-lower extremity pressure differences."
+                            }
+                        }
+                    }
+                ]
+            },
+            "researcherNote": "KG subtle flaw. The correct diagnosis remains coarctation; the vignette includes one real but course-mismatched imaging clue.",
+            "subtleFlaw": {
+                "type": "vignette_course_mismatch",
+                "targetClue": "inferior rib notching",
+                "targetNode": "Rib notching",
+                "flawedClaim": "Inferior rib notching is presented as a clue in a 7-day-old with acute neonatal coarctation.",
+                "whySubtle": "Rib notching is a real imaging sign of long-standing untreated coarctation caused by collateral intercostal artery enlargement. It does not fit a 7-day-old neonate with acute ductal-closure decompensation.",
+                "repair": "Delete the rib-notching sentence from the vignette and remove the Rib notching KG node/edge."
+            }
+        },
+        "4": {
+            "title": "Task 4 - Text subtle flaw item",
+            "chip": "Explanation: Text",
+            "condition": "Prestudy Task 4 - Text explanation with subtle flaw",
+            "mode": "text",
+            "difficulty": "Medium",
+            "target": "Acute rheumatic fever",
+            "source": "Pediatrics - Cardiovascular - Acute rheumatic fever",
+            "correct": "A",
+            "question_stem": "What is the most likely diagnosis?",
+            "vignette": "A 10-year-old boy is brought to clinic because of fever and joint pain. Two weeks ago, he had a sore throat that resolved without antibiotics. Over the past 3 days, he has had migratory pain and swelling that began in the right knee, then moved to the left ankle and wrist. His mother also reports brief, purposeless jerking movements of both hands that began 3 days after the sore throat. On examination, temperature is 38.4 C. A new holosystolic murmur is heard at the apex. The right knee is warm but not erythematous. Erythrocyte sedimentation rate is elevated, and antistreptolysin O titer is positive.",
+            "options": {
+                "A": "Acute rheumatic fever",
+                "B": "Juvenile idiopathic arthritis",
+                "C": "Septic arthritis",
+                "D": "Viral myocarditis",
+                "E": "Kawasaki disease"
+            },
+            "supporting": [
+                {
+                    "phrase": "sore throat that resolved without antibiotics",
+                    "why": "A preceding untreated pharyngitis provides the poststreptococcal context for acute rheumatic fever."
+                },
+                {
+                    "phrase": "migratory pain and swelling",
+                    "why": "Migratory polyarthritis is a major Jones criterion and is a classic musculoskeletal manifestation of acute rheumatic fever."
+                },
+                {
+                    "phrase": "brief, purposeless jerking movements of both hands",
+                    "why": "Suggestive of Sydenham chorea, a major Jones criterion for acute rheumatic fever."
+                },
+                {
+                    "phrase": "new holosystolic murmur is heard at the apex",
+                    "why": "A new apical holosystolic murmur suggests mitral regurgitation from rheumatic carditis."
+                },
+                {
+                    "phrase": "Erythrocyte sedimentation rate is elevated",
+                    "why": "An elevated inflammatory marker is a minor Jones criterion and supports active systemic inflammation."
+                },
+                {
+                    "phrase": "antistreptolysin O titer is positive",
+                    "why": "A positive antistreptolysin O titer provides evidence of recent group A streptococcal infection."
+                }
+            ],
+            "distractors": [
+                {
+                    "letter": "B",
+                    "disease": "Juvenile idiopathic arthritis",
+                    "plausible": "Fever and joint swelling in a school-aged child can suggest an inflammatory arthritis.",
+                    "incorrect": "The migratory pattern, positive antistreptolysin O titer, and new murmur after pharyngitis favor acute rheumatic fever rather than juvenile idiopathic arthritis."
+                },
+                {
+                    "letter": "C",
+                    "disease": "Septic arthritis",
+                    "plausible": "A febrile child with a warm swollen knee could have bacterial joint infection.",
+                    "incorrect": "Septic arthritis is usually an acutely painful monoarthritis; this vignette has migratory arthritis plus poststreptococcal evidence and carditis."
+                },
+                {
+                    "letter": "D",
+                    "disease": "Viral myocarditis",
+                    "plausible": "Fever with a new murmur or cardiac symptoms can raise concern for myocarditis.",
+                    "incorrect": "Viral myocarditis does not explain migratory polyarthritis or evidence of recent group A streptococcal infection."
+                },
+                {
+                    "letter": "E",
+                    "disease": "Kawasaki disease",
+                    "plausible": "Kawasaki disease is an important pediatric inflammatory condition with cardiac complications.",
+                    "incorrect": "This child lacks the mucocutaneous findings of Kawasaki disease, and the poststreptococcal arthritis-carditis pattern favors acute rheumatic fever."
+                }
+            ],
+            "researcherNote": "Text subtle flaw. The correct diagnosis remains acute rheumatic fever; one explanation card treats Sydenham chorea as straightforward support while ignoring the impossible timing.",
+            "subtleFlaw": {
+                "type": "vignette_course_mismatch",
+                "unit": "supporting card",
+                "targetPhrase": "brief, purposeless jerking movements of both hands that began 3 days after the sore throat",
+                "flawedClaim": "Sydenham chorea is used as supporting evidence for acute rheumatic fever without acknowledging that it began only 3 days after the sore throat.",
+                "whySubtle": "Sydenham chorea is a real major Jones criterion for acute rheumatic fever, so the symptom-disease link is textbook-correct. The flaw is the patient-context timeline: chorea typically appears later after group A streptococcal infection, not within a few days.",
+                "repair": "Delete the chorea sentence or revise the timing so the movements begin weeks to months after the sore throat."
+            }
+        },
+        "5": {
+            "title": "Task 5 - Too easy baseline item",
+            "chip": "Explanation: KG+Text",
+            "condition": "Prestudy Task 5 - Too easy baseline with KG + Text explanation",
+            "mode": "both",
+            "difficulty": "Easy",
+            "regenerated": false,
+            "tooEasy": true,
+            "target": "Tetralogy of Fallot",
+            "source": "Pediatrics - Cardiovascular - Tetralogy of Fallot",
+            "correct": "A",
+            "question_stem": "What is the most likely diagnosis?",
+            "vignette": "A 10-month-old boy is brought to the emergency department after suddenly becoming deeply blue while crying. His mother says he improves when she holds his knees to his chest. He has poor weight gain. Oxygen saturation is 83% in room air. A harsh systolic ejection murmur is heard at the left upper sternal border. Chest radiograph shows a boot-shaped heart.",
+            "options": {
+                "A": "Tetralogy of Fallot",
+                "B": "Transposition of the great arteries",
+                "C": "Patent ductus arteriosus",
+                "D": "Ventricular septal defect",
+                "E": "Viral myocarditis"
+            },
+            "supporting": [
+                {
+                    "phrase": "deeply blue while crying",
+                    "why": "Cyanotic spell during crying is a classic tetralogy of Fallot clue."
+                },
+                {
+                    "phrase": "knees to his chest",
+                    "why": "Knee-chest positioning increases systemic vascular resistance and can reduce right-to-left shunting during a tet spell."
+                },
+                {
+                    "phrase": "Oxygen saturation is 83%",
+                    "why": "Low oxygen saturation is fixed hypoxemia from cyanotic right-to-left shunt physiology."
+                },
+                {
+                    "phrase": "harsh systolic ejection murmur",
+                    "why": "A systolic ejection murmur reflects right ventricular outflow obstruction."
+                },
+                {
+                    "phrase": "boot-shaped heart",
+                    "why": "A boot-shaped heart is a classic radiographic sign of tetralogy of Fallot."
+                }
+            ],
+            "distractors": [
+                {
+                    "letter": "B",
+                    "disease": "Transposition of the great arteries",
+                    "plausible": "Both conditions are cyanotic congenital heart diseases.",
+                    "incorrect": "Transposition usually causes severe cyanosis in the neonatal period rather than later hypercyanotic spells improved by knee-chest positioning."
+                },
+                {
+                    "letter": "C",
+                    "disease": "Patent ductus arteriosus",
+                    "plausible": "Patent ductus arteriosus is a common congenital cardiac lesion with a murmur.",
+                    "incorrect": "Patent ductus arteriosus is usually acyanotic and causes a continuous murmur with bounding pulses."
+                },
+                {
+                    "letter": "D",
+                    "disease": "Ventricular septal defect",
+                    "plausible": "A ventricular septal defect is part of tetralogy of Fallot and can cause a murmur.",
+                    "incorrect": "Isolated ventricular septal defect causes acyanotic pulmonary overcirculation rather than tet spells and a boot-shaped heart."
+                },
+                {
+                    "letter": "E",
+                    "disease": "Viral myocarditis",
+                    "plausible": "Poor weight gain and acute presentation could raise concern for heart failure.",
+                    "incorrect": "Myocarditis does not cause classic cyanotic spells, knee-chest improvement, or a boot-shaped cardiac silhouette."
+                }
+            ],
+            "kgData": {
+                "nodes": [
+                    {
+                        "id": "ev1",
+                        "label": "Cyanotic\nspell",
+                        "short": "Cyanotic spell",
+                        "phrase": "deeply blue while crying",
+                        "nodeType": "symptom",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev2",
+                        "label": "Knee-chest\nimprovement",
+                        "short": "Knee-chest improvement",
+                        "phrase": "knees to his chest",
+                        "nodeType": "history",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev3",
+                        "label": "Fixed\nhypoxemia",
+                        "short": "Fixed hypoxemia",
+                        "phrase": "Oxygen saturation is 83%",
+                        "nodeType": "sign",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev4",
+                        "label": "Systolic ejection\nmurmur",
+                        "short": "Systolic ejection murmur",
+                        "phrase": "harsh systolic ejection murmur",
+                        "nodeType": "sign",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "ev5",
+                        "label": "Boot-shaped\nheart",
+                        "short": "Boot-shaped heart",
+                        "phrase": "boot-shaped heart",
+                        "nodeType": "imaging",
+                        "kind": "evidence"
+                    },
+                    {
+                        "id": "f1",
+                        "label": "Cyanotic\nspell",
+                        "nodeType": "syndrome",
+                        "kind": "finding",
+                        "tooltip": "Deep cyanosis while crying is the visible episode of a tet spell."
+                    },
+                    {
+                        "id": "f2",
+                        "label": "Knee-chest\nimprovement",
+                        "nodeType": "pattern",
+                        "kind": "finding",
+                        "tooltip": "Knee-chest positioning increases systemic vascular resistance and can reduce right-to-left shunting during tetralogy of Fallot spells."
+                    },
+                    {
+                        "id": "f3",
+                        "label": "Fixed\nhypoxemia",
+                        "nodeType": "sign",
+                        "kind": "finding",
+                        "tooltip": "Oxygen saturation of 83% indicates clinically significant hypoxemia from cyanotic shunt physiology."
+                    },
+                    {
+                        "id": "f4",
+                        "label": "Systolic ejection\nmurmur",
+                        "nodeType": "sign",
+                        "kind": "finding",
+                        "tooltip": "A harsh systolic ejection murmur at the left upper sternal border reflects right ventricular outflow obstruction."
+                    },
+                    {
+                        "id": "f5",
+                        "label": "Boot-shaped\nheart",
+                        "nodeType": "imaging",
+                        "kind": "finding",
+                        "tooltip": "A boot-shaped heart on chest radiograph is a classic imaging sign of tetralogy of Fallot."
+                    },
+                    {
+                        "id": "dx",
+                        "label": "Tetralogy\nof Fallot",
+                        "nodeType": "diagnosis",
+                        "kind": "diagnosis",
+                        "tooltip": "Tetralogy of Fallot is strongly suggested by cyanotic spell, knee-chest improvement, fixed hypoxemia, systolic ejection murmur, and boot-shaped heart."
+                    }
+                ],
+                "edges": [
+                    {
+                        "from": "ev1",
+                        "to": "f1",
+                        "relation": "presents_as"
+                    },
+                    {
+                        "from": "ev2",
+                        "to": "f2",
+                        "relation": "physiologic_response_of"
+                    },
+                    {
+                        "from": "ev3",
+                        "to": "f3",
+                        "relation": "sign_of"
+                    },
+                    {
+                        "from": "ev4",
+                        "to": "f4",
+                        "relation": "sign_of"
+                    },
+                    {
+                        "from": "ev5",
+                        "to": "f5",
+                        "relation": "sign_of"
+                    },
+                    {
+                        "from": "f1",
+                        "to": "dx",
+                        "relation": "sign_of"
+                    },
+                    {
+                        "from": "f2",
+                        "to": "dx",
+                        "relation": "sign_of"
+                    },
+                    {
+                        "from": "f3",
+                        "to": "dx",
+                        "relation": "sign_of"
+                    },
+                    {
+                        "from": "f4",
+                        "to": "dx",
+                        "relation": "sign_of"
+                    },
+                    {
+                        "from": "f5",
+                        "to": "dx",
+                        "relation": "sign_of"
+                    }
+                ],
+                "layout": {
+                    "minH": 520,
+                    "nodeY": {
+                        "f1": 70,
+                        "f2": 160,
+                        "f3": 250,
+                        "f4": 340,
+                        "f5": 430,
+                        "dx": 250
+                    },
+                    "nodeX": {
+                        "f1": 190,
+                        "f2": 190,
+                        "f3": 190,
+                        "f4": 190,
+                        "f5": 190,
+                        "dx": 900
+                    }
+                },
+                "excludeCards": [
+                    {
+                        "target": "Transposition of the great arteries",
+                        "supports": [
+                            "ev3"
+                        ],
+                        "against": [
+                            "ev2",
+                            "ev5"
+                        ],
+                        "expected": "Neonatal cyanosis\nparallel circulation",
+                        "expectedExplanation": "Transposition usually presents with severe cyanosis in the newborn period and depends on mixing between circulations.",
+                        "explanation": "Fixed hypoxemia overlaps, but knee-chest improvement and boot-shaped heart favor tetralogy of Fallot.",
+                        "rationales": {
+                            "supports": {
+                                "ev3": "Fixed hypoxemia can occur in cyanotic congenital heart disease."
+                            },
+                            "against": {
+                                "ev2": "Knee-chest improvement is a tet spell clue, not a typical transposition feature.",
+                                "ev5": "Boot-shaped heart is a classic imaging clue for tetralogy of Fallot."
+                            }
+                        }
+                    },
+                    {
+                        "target": "Patent ductus arteriosus",
+                        "supports": [],
+                        "against": [
+                            "ev3",
+                            "ev4"
+                        ],
+                        "expected": "Continuous murmur\nbounding pulse",
+                        "expectedExplanation": "Patent ductus arteriosus usually causes an acyanotic continuous murmur with bounding pulses and wide pulse pressure.",
+                        "explanation": "Fixed hypoxemia and a systolic ejection murmur do not fit isolated patent ductus arteriosus.",
+                        "rationales": {
+                            "against": {
+                                "ev3": "Fixed hypoxemia is not typical of isolated patent ductus arteriosus.",
+                                "ev4": "The murmur is systolic ejection rather than continuous machinery-like."
+                            }
+                        }
+                    },
+                    {
+                        "target": "Ventricular septal defect",
+                        "supports": [],
+                        "against": [
+                            "ev1",
+                            "ev5"
+                        ],
+                        "expected": "Holosystolic murmur\npulmonary overcirculation",
+                        "expectedExplanation": "An isolated ventricular septal defect typically causes a holosystolic murmur and acyanotic pulmonary overcirculation.",
+                        "explanation": "Cyanotic spell and boot-shaped heart point beyond isolated ventricular septal defect.",
+                        "rationales": {
+                            "against": {
+                                "ev1": "Cyanotic spell is not expected in an uncomplicated isolated ventricular septal defect.",
+                                "ev5": "Boot-shaped heart points toward tetralogy of Fallot."
+                            }
+                        }
+                    },
+                    {
+                        "target": "Viral myocarditis",
+                        "supports": [],
+                        "against": [
+                            "ev2",
+                            "ev5"
+                        ],
+                        "expected": "Viral prodrome\nmyocardial dysfunction",
+                        "expectedExplanation": "Viral myocarditis presents with myocardial dysfunction, heart failure, or arrhythmia, often after a viral illness.",
+                        "explanation": "Knee-chest improvement and boot-shaped heart point to structural cyanotic congenital heart disease.",
+                        "rationales": {
+                            "against": {
+                                "ev2": "Knee-chest improvement indicates shunt physiology, not myocarditis.",
+                                "ev5": "Boot-shaped heart is a congenital lesion clue, not a myocarditis finding."
+                            }
+                        }
+                    }
+                ]
+            },
+            "researcherNote": "Too-easy baseline. No intentional flaw; used to observe behavior when the diagnosis and explanation are obvious."
+        }
+    },
+    "regeneratedTaskTemplate": {
+        "title": "Task 5 - Regenerated higher-difficulty item",
+        "chip": "Explanation: KG+Text",
+        "condition": "Prestudy Task 5 - Regenerated higher-difficulty item",
+        "mode": "both",
+        "difficulty": "Medium",
+        "regenerated": true,
+        "tooEasy": false,
+        "target": "Tetralogy of Fallot",
+        "source": "Pediatrics - Cardiovascular - Tetralogy of Fallot",
+        "correct": "A",
+        "question_stem": "What is the most likely diagnosis?",
+        "vignette": "A 4-month-old boy is evaluated for recurrent episodes of perioral cyanosis and rapid breathing during feeding and crying. The episodes last several minutes and improve when he is calmed and flexed at the hips. He was born at term and passed the newborn pulse oximetry screen. His weight has fallen from the 35th percentile at birth to the 8th percentile. On examination, oxygen saturation is 88% in room air and does not normalize with supplemental oxygen. The second heart sound is single. A harsh systolic ejection murmur is heard at the left upper sternal border. The lungs are clear, and the liver edge is not enlarged.",
+        "options": {
+            "A": "Tetralogy of Fallot",
+            "B": "Transposition of the great arteries",
+            "C": "Patent ductus arteriosus with pulmonary overcirculation",
+            "D": "Large ventricular septal defect",
+            "E": "Viral myocarditis"
+        },
+        "supporting": [
+            {
+                "phrase": "recurrent episodes of perioral cyanosis and rapid breathing during feeding and crying",
+                "why": "Episodic cyanosis during feeding or crying suggests dynamic cyanotic physiology rather than a constant pulmonary process."
+            },
+            {
+                "phrase": "improve when he is calmed and flexed at the hips",
+                "why": "Hip flexion resembles squatting: it increases systemic vascular resistance and can reduce right-to-left shunting during a cyanotic spell."
+            },
+            {
+                "phrase": "oxygen saturation is 88% in room air and does not normalize with supplemental oxygen",
+                "why": "Persistent hypoxemia despite oxygen supports intracardiac right-to-left shunting."
+            },
+            {
+                "phrase": "second heart sound is single",
+                "why": "A single second heart sound can occur when pulmonary valve closure is reduced by right ventricular outflow obstruction."
+            },
+            {
+                "phrase": "harsh systolic ejection murmur is heard at the left upper sternal border",
+                "why": "A left upper sternal border systolic ejection murmur localizes the lesion to the right ventricular outflow tract."
+            }
+        ],
+        "distractors": [
+            {
+                "letter": "B",
+                "disease": "Transposition of the great arteries",
+                "plausible": "Persistent cyanosis makes a cyanotic congenital lesion plausible.",
+                "incorrect": "Later episodic cyanosis with hip-flexion improvement and a right ventricular outflow murmur favors tetralogy of Fallot over neonatal transposition."
+            },
+            {
+                "letter": "C",
+                "disease": "Patent ductus arteriosus with pulmonary overcirculation",
+                "plausible": "Tachypnea and poor growth can occur with pulmonary overcirculation.",
+                "incorrect": "A patent ductus arteriosus should produce a continuous murmur and pulmonary overcirculation, not fixed cyanosis with a single second heart sound."
+            },
+            {
+                "letter": "D",
+                "disease": "Large ventricular septal defect",
+                "plausible": "Poor growth and a cardiac murmur can occur with a large ventricular septal defect.",
+                "incorrect": "A large isolated ventricular septal defect usually causes pulmonary overcirculation with a holosystolic murmur, not cyanotic spells with a systolic ejection murmur."
+            },
+            {
+                "letter": "E",
+                "disease": "Viral myocarditis",
+                "plausible": "Poor growth and tachypnea can raise concern for myocardial dysfunction.",
+                "incorrect": "Fixed hypoxemia and focal right ventricular outflow findings favor cyanotic congenital heart disease rather than myocarditis."
+            }
+        ],
+        "kgData": {
+            "nodes": [
+                {
+                    "id": "ev1",
+                    "label": "Episodic\ncyanosis",
+                    "short": "Episodic cyanosis",
+                    "phrase": "recurrent episodes of perioral cyanosis and rapid breathing during feeding and crying",
+                    "nodeType": "symptom",
+                    "kind": "evidence"
+                },
+                {
+                    "id": "ev2",
+                    "label": "Hip flexion\nrelief",
+                    "short": "Hip flexion relief",
+                    "phrase": "improve when he is calmed and flexed at the hips",
+                    "nodeType": "history",
+                    "kind": "evidence"
+                },
+                {
+                    "id": "ev3",
+                    "label": "Normal newborn\nscreen",
+                    "short": "Normal newborn screen",
+                    "phrase": "passed the newborn pulse oximetry screen",
+                    "nodeType": "history",
+                    "kind": "evidence",
+                    "hiddenInMain": true
+                },
+                {
+                    "id": "ev4",
+                    "label": "Fixed\nhypoxemia",
+                    "short": "Fixed hypoxemia",
+                    "phrase": "oxygen saturation is 88% in room air and does not normalize with supplemental oxygen",
+                    "nodeType": "sign",
+                    "kind": "evidence"
+                },
+                {
+                    "id": "ev5",
+                    "label": "Single second\nsound",
+                    "short": "Single second sound",
+                    "phrase": "second heart sound is single",
+                    "nodeType": "sign",
+                    "kind": "evidence"
+                },
+                {
+                    "id": "ev6",
+                    "label": "LUSB ejection\nmurmur",
+                    "short": "LUSB ejection murmur",
+                    "phrase": "harsh systolic ejection murmur is heard at the left upper sternal border",
+                    "nodeType": "sign",
+                    "kind": "evidence"
+                },
+                {
+                    "id": "ev7",
+                    "label": "Clear lungs",
+                    "short": "Clear lungs",
+                    "phrase": "lungs are clear",
+                    "nodeType": "sign",
+                    "kind": "evidence"
+                },
+                {
+                    "id": "ev8",
+                    "label": "No\nhepatomegaly",
+                    "short": "No hepatomegaly",
+                    "phrase": "liver edge is not enlarged",
+                    "nodeType": "sign",
+                    "kind": "evidence"
+                },
+                {
+                    "id": "f1",
+                    "label": "Dynamic\ncyanosis",
+                    "nodeType": "syndrome",
+                    "kind": "finding",
+                    "tooltip": "Dynamic cyanosis during feeding or crying is a clinical sign of cyanotic physiology."
+                },
+                {
+                    "id": "f5",
+                    "label": "Fixed\nhypoxemia",
+                    "nodeType": "sign",
+                    "kind": "finding",
+                    "tooltip": "Fixed hypoxemia is a sign of right-to-left shunting because supplemental oxygen cannot fully correct intracardiac mixing."
+                },
+                {
+                    "id": "f6",
+                    "label": "Single second\nsound",
+                    "nodeType": "sign",
+                    "kind": "finding",
+                    "tooltip": "A single second heart sound is a sign of right ventricular outflow obstruction when pulmonary valve closure is diminished."
+                },
+                {
+                    "id": "f7",
+                    "label": "LUSB ejection\nmurmur",
+                    "nodeType": "sign",
+                    "kind": "finding",
+                    "tooltip": "A left upper sternal border systolic ejection murmur is a sign of right ventricular outflow obstruction."
+                },
+                {
+                    "id": "f4",
+                    "label": "Knee-chest\nimprovement",
+                    "nodeType": "pattern",
+                    "kind": "finding",
+                    "tooltip": "Knee-chest or hip-flexion improvement is a sign of cyanotic physiology because increased systemic vascular resistance can reduce right-to-left shunting."
+                },
+                {
+                    "id": "f3",
+                    "label": "Right-to-left\nshunt",
+                    "nodeType": "mechanism",
+                    "kind": "finding",
+                    "tooltip": "Persistent hypoxemia despite oxygen is best explained by deoxygenated blood entering systemic circulation through a right-to-left shunt."
+                },
+                {
+                    "id": "f2",
+                    "label": "Right ventricular\noutflow obstruction",
+                    "nodeType": "mechanism",
+                    "kind": "finding",
+                    "tooltip": "The single second heart sound and left upper sternal border ejection murmur point to right ventricular outflow obstruction."
+                },
+                {
+                    "id": "m2",
+                    "label": "Cyanotic\nphysiology",
+                    "nodeType": "mechanism",
+                    "kind": "mechanism",
+                    "layer": "consequence",
+                    "tooltip": "Cyanotic physiology is produced by right-to-left shunting and right ventricular outflow obstruction."
+                },
+                {
+                    "id": "dx",
+                    "label": "Tetralogy\nof Fallot",
+                    "nodeType": "diagnosis",
+                    "kind": "diagnosis",
+                    "tooltip": "Tetralogy of Fallot is supported by dynamic cyanosis, fixed hypoxemia, right-to-left shunt physiology, right ventricular outflow obstruction, and knee-chest improvement."
+                }
+            ],
+            "edges": [
+                {
+                    "from": "ev1",
+                    "to": "f1",
+                    "relation": "presents_as"
+                },
+                {
+                    "from": "ev2",
+                    "to": "f4",
+                    "relation": "physiologic_response_of"
+                },
+                {
+                    "from": "ev4",
+                    "to": "f5",
+                    "relation": "sign_of"
+                },
+                {
+                    "from": "ev5",
+                    "to": "f6",
+                    "relation": "sign_of"
+                },
+                {
+                    "from": "ev6",
+                    "to": "f7",
+                    "relation": "sign_of"
+                },
+                {
+                    "from": "f1",
+                    "to": "m2",
+                    "relation": "sign_of"
+                },
+                {
+                    "from": "f5",
+                    "to": "f3",
+                    "relation": "sign_of"
+                },
+                {
+                    "from": "f3",
+                    "to": "m2",
+                    "relation": "causes"
+                },
+                {
+                    "from": "f6",
+                    "to": "f2",
+                    "relation": "sign_of"
+                },
+                {
+                    "from": "f7",
+                    "to": "f2",
+                    "relation": "sign_of"
+                },
+                {
+                    "from": "f2",
+                    "to": "m2",
+                    "relation": "causes"
+                },
+                {
+                    "from": "f4",
+                    "to": "m2",
+                    "relation": "sign_of"
+                },
+                {
+                    "from": "m2",
+                    "to": "dx",
+                    "relation": "supports_diagnosis"
+                }
+            ],
+            "layout": {
+                "minH": 500,
+                "fitHeightToNodes": true,
+                "fitHeightBottomPadding": 64,
+                "autoLayeredMechanisms": true,
+                "nodeY": {
+                    "f5": 72,
+                    "f1": 180,
+                    "f4": 288,
+                    "f6": 396,
+                    "f7": 504,
+                    "f3": 88,
+                    "m2": 292,
+                    "f2": 450,
+                    "dx": 292
+                },
+                "leftColumnOrder": [
+                    "f5",
+                    "f1",
+                    "f4",
+                    "f6",
+                    "f7"
+                ],
+                "leftColumnTop": 72,
+                "leftColumnRowHeight": 108,
+                "nodeX": {
+                    "f5": 180,
+                    "f1": 180,
+                    "f4": 180,
+                    "f6": 180,
+                    "f7": 180,
+                    "f3": 475,
+                    "f2": 475,
+                    "m2": 760,
+                    "dx": 1050
+                }
+            },
+            "excludeCards": [
+                {
+                    "target": "Transposition of the great arteries",
+                    "supports": [
+                        "ev4"
+                    ],
+                    "against": [
+                        "ev3",
+                        "ev6"
+                    ],
+                    "expected": "Severe neonatal cyanosis",
+                    "expectedExplanation": "Transposition usually causes marked cyanosis shortly after birth and requires mixing for survival.",
+                    "explanation": "Cyanosis overlaps, but normal newborn screening followed by later episodic cyanosis and a right ventricular outflow murmur favors tetralogy of Fallot.",
+                    "rationales": {
+                        "supports": {
+                            "ev4": "Fixed hypoxemia supports a cyanotic congenital heart lesion."
+                        },
+                        "against": {
+                            "ev3": "Passing the newborn screen makes severe neonatal transposition less likely.",
+                            "ev6": "A focal right ventricular outflow murmur is more characteristic of tetralogy of Fallot."
+                        }
+                    }
+                },
+                {
+                    "target": "Patent ductus arteriosus with pulmonary overcirculation",
+                    "supports": [],
+                    "against": [
+                        "ev6",
+                        "ev7"
+                    ],
+                    "expected": "Continuous murmur\nbounding pulse",
+                    "expectedExplanation": "Patent ductus arteriosus with overcirculation should produce a continuous machinery-like murmur, bounding pulses, and pulmonary overcirculation.",
+                    "explanation": "The ejection murmur and clear lungs do not fit ductal pulmonary overcirculation.",
+                    "rationales": {
+                        "against": {
+                            "ev6": "A systolic ejection murmur is not the continuous machinery-like murmur expected in patent ductus arteriosus.",
+                            "ev7": "Clear lungs argue against pulmonary overcirculation."
+                        }
+                    }
+                },
+                {
+                    "target": "Large ventricular septal defect",
+                    "supports": [],
+                    "against": [
+                        "ev4",
+                        "ev6"
+                    ],
+                    "expected": "Holosystolic murmur\npulmonary overcirculation",
+                    "expectedExplanation": "A large isolated ventricular septal defect usually causes acyanotic pulmonary overcirculation with a holosystolic murmur.",
+                    "explanation": "Fixed cyanosis and a systolic ejection murmur point away from isolated ventricular septal defect.",
+                    "rationales": {
+                        "against": {
+                            "ev4": "Persistent hypoxemia is not expected in an uncomplicated early large ventricular septal defect.",
+                            "ev6": "The murmur is ejection type rather than holosystolic."
+                        }
+                    }
+                },
+                {
+                    "target": "Viral myocarditis",
+                    "supports": [],
+                    "against": [
+                        "ev4",
+                        "ev8"
+                    ],
+                    "expected": "Viral prodrome\nventricular dysfunction",
+                    "expectedExplanation": "Myocarditis usually presents with myocardial dysfunction, hepatomegaly, poor perfusion, or arrhythmia after a viral prodrome.",
+                    "explanation": "Fixed hypoxemia and lack of hepatomegaly favor cyanotic congenital heart disease rather than myocarditis.",
+                    "rationales": {
+                        "against": {
+                            "ev4": "Fixed hypoxemia despite oxygen suggests shunt physiology rather than pump failure.",
+                            "ev8": "No hepatomegaly makes overt myocarditis-related heart failure less likely."
+                        }
+                    }
+                }
+            ]
+        },
+        "researcherNote": "Regenerated version for Task 5. No intentional flaw."
+    }
+}
 };
 
 activateDomain('pediatrics',{resetPicker:false});
@@ -4085,6 +5764,7 @@ function prettyTooltipTitle(title){
     demographic:'Demographic',
     symptom:'Symptom',
     sign:'Sign',
+    imaging:'Imaging',
     history:'History',
     course:'Course',
     anatomy:'Anatomy',
@@ -4105,7 +5785,7 @@ function prettyTooltipTitle(title){
     complication_of:'Complication',
     sign_of:'Sign of',
     finding_of:'Finding in',
-    risk_factor_for:'Risk for',
+    risk_factor_for:'Risk factor',
     predisposes_to:'Predisposes',
     demonstrates:'Indicates',
     indicates:'Indicates',
@@ -4113,7 +5793,24 @@ function prettyTooltipTitle(title){
     explains:'Causes',
     localizes_to:'Localizes',
     supports_localization:'Localizes',
-    has_pathophysiology:'Mechanism'
+    has_pathophysiology:'Pathophysiology',
+    presents_as:'Manifests as',
+    manifests_as:'Manifests as',
+    results_in:'Results in',
+    caused_by:'Caused by',
+    physiologic_response_of:'Response of',
+    unmasks:'Unmasks',
+    causes_shunt:'Causes',
+    causes_obstruction:'Causes',
+    causes_hypoperfusion:'Causes',
+    causes_overcirculation:'Results in',
+    causes_cyanosis:'Causes',
+    indicates_pressure_gradient:'Indicates',
+    indicates_volume_load:'Indicates',
+    indicates_outflow_obstruction:'Indicates',
+    produces:'Produces',
+    classic_feature_of:'Classic feature of',
+    supports_diagnosis:'Supports diagnosis'
   };
   const key=raw.toLowerCase();
   return map[key] || raw.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
@@ -4378,7 +6075,7 @@ const NODE_COLORS={
   disorder:{fill:'#f1f5f9',stroke:'#475569'},
   diagnosis:{fill:'#dbeafe',stroke:'#2563eb'},
   finding:{fill:'#fef3c7',stroke:'#d97706'},
-  pattern:{fill:'#f3e8ff',stroke:'#9333ea'},
+  pattern:{fill:'#ccfbf1',stroke:'#0f766e'},
   risk:{fill:'#fdf2f8',stroke:'#db2777'},
   syndrome:{fill:'#f3e8ff',stroke:'#9333ea'},
   localization:{fill:'#e0f2fe',stroke:'#0284c7'},
@@ -4393,6 +6090,10 @@ function semanticTypeFor(node,fallback){
 }
 function semanticTypeLabel(node,fallback){
   return NODE_TYPE_LABELS[semanticTypeFor(node,fallback)]||'KG node';
+}
+
+function formatRelationLabel(relation){
+  return prettyTooltipTitle(relation);
 }
 
 
@@ -4445,36 +6146,65 @@ function makeNode(id,type,label,cx,cy,meta={}){
 
 function makeEdge(from,to,label,color,meta={}){
   if(!from||!to)return'';
-  // Smart connection: use right→left if nodes are roughly on same row,
-  // otherwise pick the closer edge (top/bottom) to reduce visual clutter
+  // Main KG graphs read left-to-right: evidence/pattern -> mechanism -> diagnosis.
+  // Keep ports horizontal and let cubic curves do the visual separation so
+  // mechanism edges do not look like vertical symptom arrows.
   const dx=to.cx-from.cx;
   const dy=to.cy-from.cy;
   let ax,ay,bx,by;
-  if(Math.abs(dx)>Math.abs(dy)*0.7){
-    // Mostly horizontal — right edge to left edge
+  if(dx>=0){
     ax=from.right; ay=from.cy;
     bx=to.left;    by=to.cy;
-  } else if(dy>0){
-    // Mostly going down — bottom to top
-    ax=from.cx; ay=from.cy+from.h/2;
-    bx=to.cx;   by=to.cy-to.h/2;
-  } else {
-    // Mostly going up — top to bottom
-    ax=from.cx; ay=from.cy-from.h/2;
-    bx=to.cx;   by=to.cy+to.h/2;
+  }else{
+    ax=from.left;  ay=from.cy;
+    bx=to.right;   by=to.cy;
   }
-  const cpx=(ax+bx)/2;
-  const cpy=(ay+by)/2;
   const classes=['kg-edge'];
   if(meta.focused)classes.push('focus-edge');
   if(meta.neighbor)classes.push('neighbor-edge');
   if(meta.context)classes.push('context-edge');
   
   const edgeAttr=meta.edgeId?` data-edge="${esc(meta.edgeId)}" data-from="${esc(meta.fromId||'')}" data-to="${esc(meta.toId||'')}" data-relation="${esc(label||'')}"`:'';
+  const targetOffsetY=Number(meta.targetOffsetY);
+  if(Number.isFinite(targetOffsetY) && Math.abs(dx)>Math.abs(dy)*0.7){
+    const minY=to.cy-to.h/2+12;
+    const maxY=to.cy+to.h/2-12;
+    by=Math.max(minY,Math.min(maxY,to.cy+targetOffsetY));
+  }
+  const spread=Number(meta.curveSpread)||0;
+  const leadLength=Math.max(0,Number(meta.leadLength)||0);
+  const direction=dx>=0?1:-1;
+  let pathD;
+
+  if(leadLength>0){
+    const availableWidth=Math.max(0,Math.abs(bx-ax)-100);
+    const actualLead=Math.min(leadLength,availableWidth);
+    const kneeX=ax+direction*actualLead;
+    const kneeY=ay;
+    const remainingWidth=Math.abs(bx-kneeX);
+    const bend=Math.max(45,Math.min(180,remainingWidth*0.42));
+    const c1x=kneeX+direction*bend;
+    const c2x=bx-direction*bend;
+    const control1OffsetY=Number.isFinite(Number(meta.control1OffsetY))?Number(meta.control1OffsetY):0;
+    const control2OffsetY=Number.isFinite(Number(meta.control2OffsetY))?Number(meta.control2OffsetY):spread;
+    const c1y=kneeY+control1OffsetY;
+    const c2y=by+control2OffsetY;
+    pathD=`M${ax},${ay} L${kneeX},${kneeY} C${c1x},${c1y} ${c2x},${c2y} ${bx},${by}`;
+  }else{
+    const bend=Math.max(72,Math.min(190,Math.abs(bx-ax)*0.45));
+    const c1x=ax+direction*bend;
+    const c2x=bx-direction*bend;
+    const control1OffsetY=Number.isFinite(Number(meta.control1OffsetY))?Number(meta.control1OffsetY):spread;
+    const control2OffsetY=Number.isFinite(Number(meta.control2OffsetY))?Number(meta.control2OffsetY):-spread;
+    const c1y=ay+control1OffsetY;
+    const c2y=by+control2OffsetY;
+    pathD=`M${ax},${ay} C${c1x},${c1y} ${c2x},${c2y} ${bx},${by}`;
+  }
+
   let s=`<g class="${classes.join(' ').trim()}" style="cursor:default"${edgeAttr}>`;
-  s+=`<path d="M${ax},${ay} C${cpx},${ay} ${cpx},${by} ${bx},${by}" fill="none" stroke="transparent" stroke-width="12"/>`;
+  s+=`<path d="${pathD}" fill="none" stroke="transparent" stroke-width="12"/>`;
   const dashedAttr=meta.dashed?' stroke-dasharray="7 5" opacity="0.68"':'';
-  s+=`<path d="M${ax},${ay} C${cpx},${ay} ${cpx},${by} ${bx},${by}" fill="none" stroke="${color}" stroke-width="1.8"${dashedAttr} marker-end="url(#karrow)"/>`;
+  s+=`<path d="${pathD}" fill="none" stroke="${color}" stroke-width="1.8"${dashedAttr} marker-end="url(#karrow)"/>`;
   if(label){
     const mx=(ax+bx)/2,my=(ay+by)/2;
     const lw=label.length*6.4+14;
@@ -4490,8 +6220,8 @@ function makeEdge(from,to,label,color,meta={}){
 }
 
 function makeLegend(W,H,usedTypes=[]){
-  const normalizeLegendType=t=>({finding:'symptom',pattern:'pattern',mechanism:'mechanism',diagnosis:'diagnosis',risk:'risk',localization:'localization',context:'demographic',cognitive:'symptom',imaging:'sign'}[t]||t);
-  const ordered=['evidence','demographic','symptom','sign','history','risk','course','syndrome','pattern','localization','anatomy','mechanism','disorder','diagnosis','treatment'];
+  const normalizeLegendType=t=>({finding:'symptom',pattern:'pattern',mechanism:'mechanism',diagnosis:'diagnosis',risk:'risk',localization:'localization',context:'demographic',cognitive:'symptom',imaging:'imaging'}[t]||t);
+  const ordered=['evidence','demographic','symptom','sign','imaging','history','risk','course','syndrome','pattern','localization','anatomy','mechanism','disorder','diagnosis','treatment'];
   usedTypes=Array.from(new Set((usedTypes||[]).map(normalizeLegendType)));
   const active=ordered.filter(key=>usedTypes.includes(key));
   if(!active.length)return '';
@@ -4515,6 +6245,7 @@ function makeLegend(W,H,usedTypes=[]){
 function cleanLabel(label){return String(label||'').replace(/\n/g,' ').replace(/\s+/g,' ').trim();}
 function kgNodes(kg){return (kg&&Array.isArray(kg.nodes))?kg.nodes:[];}
 function kgEdges(kg){return (kg&&Array.isArray(kg.edges))?kg.edges:[];}
+function edgeRecordFor(kg,fromId,toId){return kgEdges(kg).find(edge=>edge.from===fromId && edge.to===toId)||null;}
 function kgNodesByKind(kg,kind){return kgNodes(kg).filter(node=>node.kind===kind);}
 function kgEvidenceNodes(kg){return kgNodesByKind(kg,'evidence');}
 function kgFindingNodes(kg){return kgNodesByKind(kg,'finding');}
@@ -4537,7 +6268,7 @@ function directNeighborIdsForFocus(kg,id){
 
 function edgeIdFor(fromId,toId,kind){return `${fromId}->${toId}:${kind}`;}
 function getEdgeLabel(edgeId,defaultLabel){
-  return defaultLabel;
+  return formatRelationLabel(defaultLabel);
 }
 function currentKg(){return tasks[currentTask]&&tasks[currentTask].kgData;}
 function defaultFindingToMechanismRelation(findingLabel,mechanismLabel){
@@ -4606,6 +6337,22 @@ function relationSentence(sourceLabel,relation,targetLabel){
   if(rel==='risk_factor_for')return `${source} is a risk factor for ${target}.`;
   if(rel==='predisposes_to')return `${source} predisposes the patient to ${target}.`;
   if(rel==='demonstrates'||rel==='indicates'||rel==='finding_indicates')return `${source} indicates ${target}.`;
+  if(rel==='presents_as'||rel==='manifests_as')return `${source} manifests as ${target}.`;
+  if(rel==='results_in')return `${source} results in ${target}.`;
+  if(rel==='caused_by')return `${source} is caused by ${target}.`;
+  if(rel==='physiologic_response_of')return `${source} is a physiologic response of ${target}.`;
+  if(rel==='unmasks')return `${source} unmasks ${target}.`;
+  if(rel==='causes_shunt')return `${source} creates ${target}.`;
+  if(rel==='causes_obstruction')return `${source} obstructs ${target}.`;
+  if(rel==='causes_hypoperfusion')return `${source} causes ${target}.`;
+  if(rel==='causes_overcirculation')return `${source} causes ${target}.`;
+  if(rel==='causes_cyanosis')return `${source} causes ${target}.`;
+  if(rel==='indicates_pressure_gradient')return `${source} indicates ${target}.`;
+  if(rel==='indicates_volume_load')return `${source} indicates ${target}.`;
+  if(rel==='indicates_outflow_obstruction')return `${source} indicates ${target}.`;
+  if(rel==='produces')return `${source} produces ${target}.`;
+  if(rel==='classic_feature_of')return `${source} is a classic feature of ${target}.`;
+  if(rel==='supports_diagnosis')return `${source} supports ${target}.`;
   if(rel==='confirms'||rel==='test_confirms')return `${source} confirms ${target}.`;
   if(rel==='pathophysiology_of'||rel==='causes'||rel==='explains')return `${source} causes ${target} in the reasoning chain.`;
   if(rel==='has_pathophysiology')return `${source} links to the mechanism ${target}.`;
@@ -4622,7 +6369,8 @@ function relationTooltipLine(kg,fromId,toId,relation){
   return relationSentence(from.node.label||fromId,relation,to.node.label||toId);
 }
 function resolveEdgeRelation(kg,edge){
-  if(edge&&edge.relation)return edge.relation;
+  const storedEdge=edge&&edge.relation?edge:edgeRecordFor(kg,edge.from,edge.to);
+  if(storedEdge&&storedEdge.relation)return storedEdge.relation;
   const fromRec=getNodeRecord(kg,edge.from);
   const toRec=getNodeRecord(kg,edge.to);
   const fromNode=fromRec?.node;
@@ -4812,7 +6560,17 @@ function renderKG(){
   const NODE_H=52, GROUP_GAP=34;
   const totalBandH=Math.max(cfCount,1)*NODE_H + Math.max(cfCount-1,0)*GROUP_GAP;
   const layoutMinH=Number.isFinite(Number(kgLayout.minH)) ? Number(kgLayout.minH) : 360;
-  const graphH=Math.max(totalBandH+120, layoutMinH);
+  const layoutNodeYValues=Object.values(kgLayout.nodeY||{}).map(Number).filter(Number.isFinite);
+  if(Array.isArray(kgLayout.leftColumnOrder) && kgLayout.leftColumnOrder.length){
+    const leftTop=Number.isFinite(Number(kgLayout.leftColumnTop))?Number(kgLayout.leftColumnTop):80;
+    const leftRowHeight=Number.isFinite(Number(kgLayout.leftColumnRowHeight))?Number(kgLayout.leftColumnRowHeight):92;
+    layoutNodeYValues.push(leftTop+(kgLayout.leftColumnOrder.length-1)*leftRowHeight);
+  }
+  const fitBottomPadding=Number.isFinite(Number(kgLayout.fitHeightBottomPadding))?Number(kgLayout.fitHeightBottomPadding):82;
+  const fitHeight=(kgLayout.fitHeightToNodes && layoutNodeYValues.length)?Math.max(...layoutNodeYValues)+fitBottomPadding:0;
+  const graphH=kgLayout.fitHeightToNodes
+    ? Math.max(layoutMinH, fitHeight)
+    : Math.max(totalBandH+120, layoutMinH);
   const H=graphH+LEGEND_H;
 
   const SIDE_PAD=130;
@@ -4921,6 +6679,30 @@ function renderKG(){
   relaxLayerCollisions(visibleFindings,cfYMap,{minGap:88,top:72,bottom:graphH-76});
   relaxLayerCollisions(visiblePatterns,pYMap,{minGap:88,top:72,bottom:graphH-76});
   relaxLayerCollisions(visibleMechanisms,mechanismYMap,{minGap:90,top:72,bottom:graphH-76});
+
+  // Explicit data-driven y coordinates are deliberate authoring choices.
+  // Re-apply them after collision relaxation so hand-tuned mechanism placement
+  // remains stable when a graph provides nodeY.
+  applyYLayout(kgLayout.nodeY,cfYMap);
+  applyYLayout(kgLayout.nodeY,pYMap);
+  applyYLayout(kgLayout.nodeY,mechanismYMap);
+
+  // Some graphs intentionally place findings and patterns in the same visual
+  // evidence column. Apply this after collision relaxation so separate semantic
+  // groups do not break the apparent row rhythm.
+  function applyLeftColumnOrder(){
+    const order=Array.isArray(kgLayout.leftColumnOrder)?kgLayout.leftColumnOrder:[];
+    if(!order.length)return;
+    const top=Number.isFinite(Number(kgLayout.leftColumnTop))?Number(kgLayout.leftColumnTop):80;
+    const rowHeight=Number.isFinite(Number(kgLayout.leftColumnRowHeight))?Number(kgLayout.leftColumnRowHeight):92;
+    order.forEach((id,i)=>{
+      const y=top+i*rowHeight;
+      if(cfYMap[id]!==undefined)cfYMap[id]=y;
+      if(pYMap[id]!==undefined)pYMap[id]=y;
+      if(mechanismYMap[id]!==undefined)mechanismYMap[id]=y;
+    });
+  }
+  applyLeftColumnOrder();
   diagnosisY[0]=clampY(diagnosisY[0],76);
 
   function nodePos(id,x,y){
@@ -4948,13 +6730,13 @@ function renderKG(){
   visibleFindings.forEach((cf)=>{
     const evidIds=incomingNodeIds(kg,cf.id).filter(id=>!!getEvidenceById(kg,id));
     const mergedMeta=evidIds.length?{evid:evidIds.join('|')}:{evid:cf.mergedEvidence||undefined};
-    const pos=nodePos(cf.id,COL.cf,cfYMap[cf.id]);
+    const pos=nodePos(cf.id,layoutX(kgLayout.nodeX,cf.id,COL.cf),cfYMap[cf.id]);
     const nodeMeta=isInteractive?{interactive:true,tooltip:mergedNodeTooltip(kg,cf.id,cf.tooltip),tooltipTitle:semanticTypeLabel(cf,'finding'),...mergedMeta,...focusMeta(cf.id)}:{...mergedMeta,...focusMeta(cf.id)};
     const n=makeNode(cf.id,semanticTypeFor(cf,'finding'),cf.label,pos.cx,pos.cy,nodeMeta);
     nodeMap[cf.id]=n;nodesSvg+=n.svg;
   });
   visiblePatterns.forEach((p,i)=>{
-    const pos=nodePos(p.id,COL.pattern,pYMap[p.id]);
+    const pos=nodePos(p.id,layoutX(kgLayout.nodeX,p.id,COL.pattern),pYMap[p.id]);
     const canEditDelete=nodeHasDeletableEvidence(p.id);
     const n=makeNode(p.id,semanticTypeFor(p,'pattern'),p.label,pos.cx,pos.cy,
       isInteractive?{interactive:true,tooltip:mergedNodeTooltip(kg,p.id,p.tooltip),tooltipTitle:semanticTypeLabel(p,'pattern'),...focusMeta(p.id)}:{...focusMeta(p.id)});
@@ -4968,13 +6750,14 @@ function renderKG(){
     ? COL[m.layer==='consequence'?'mechanismDown':'mechanismUp']
     : COL.mechanism;
   visibleMechanisms.forEach((m,i)=>{
-    const pos=nodePos(m.id,layoutX(kgLayout.nodeX,m.id,mechanismXFor(m)),mechanismYMap[m.id]);
+    const mechanismXMap=kgLayout.autoLayeredMechanisms ? {} : kgLayout.nodeX;
+    const pos=nodePos(m.id,layoutX(mechanismXMap,m.id,mechanismXFor(m)),mechanismYMap[m.id]);
     const canEditDelete=nodeHasDeletableEvidence(m.id);
     const n=makeNode(m.id,semanticTypeFor(m,'mechanism'),m.label,pos.cx,pos.cy,
       isInteractive?{interactive:true,tooltip:mergedNodeTooltip(kg,m.id,m.tooltip),tooltipTitle:semanticTypeLabel(m,'mechanism'),...focusMeta(m.id)}:{...focusMeta(m.id)});
     nodeMap[m.id]=n;nodesSvg+=n.svg;
   });
-  const diagnosisPos=nodePos(diagnosisNode.id,COL.diagnosis,diagnosisY[0]);
+  const diagnosisPos=nodePos(diagnosisNode.id,layoutX(kgLayout.nodeX,diagnosisNode.id,COL.diagnosis),diagnosisY[0]);
   const diagnosisSvgNode=makeNode(diagnosisNode.id,semanticTypeFor(diagnosisNode,'diagnosis'),diagnosisNode.label,diagnosisPos.cx,diagnosisPos.cy,
     isInteractive?{interactive:true,tooltip:mergedNodeTooltip(kg,diagnosisNode.id,diagnosisNode.tooltip),tooltipTitle:semanticTypeLabel(diagnosisNode,'diagnosis'),...focusMeta(diagnosisNode.id)}:focusMeta(diagnosisNode.id));
   nodeMap[diagnosisNode.id]=diagnosisSvgNode;nodesSvg+=diagnosisSvgNode.svg;
@@ -5000,17 +6783,30 @@ function renderKG(){
         isInteractive?edgeMeta(cfId,m.id,relation,{dashed:weakContextEdge}):edgeMeta(cfId,m.id,relation,{dashed:weakContextEdge}));
     });
   });
-  // mechanism/finding → dx
-  incomingNodeIds(kg,diagnosisNode.id).forEach(srcId=>{
+  // mechanism/finding -> dx. Fan these edges into separate entry points on
+  // the diagnosis node so the graph reads as convergent reasoning rather than
+  // a stack of overlapping lines.
+  const dxEdges=incomingEdgesForNode(kg,diagnosisNode.id)
+    .filter(edge=>!!nodeMap[edge.from])
+    .sort((a,b)=>(nodeMap[a.from]?.cy||0)-(nodeMap[b.from]?.cy||0));
+  dxEdges.forEach((edge,idx)=>{
+    const srcId=edge.from;
     const src=nodeMap[srcId];
     if(!src)return;
     const record=getNodeRecord(kg,srcId);
-    const node=record?.node;
-    const defaultDxRelation=defaultDiagnosisRelation(record,diagnosisNode.label);
-    const eid=edgeIdFor(srcId,diagnosisNode.id,defaultDxRelation);
+    const relation=edge.relation||defaultDiagnosisRelation(record,diagnosisNode.label);
+    const eid=edgeIdFor(srcId,diagnosisNode.id,relation);
     const weakContextDxEdge=false;
-    edgesSvg+=makeEdge(src,nodeMap[diagnosisNode.id],getEdgeLabel(eid,defaultDxRelation),'#2d5f8a',
-      isInteractive?edgeMeta(srcId,diagnosisNode.id,defaultDxRelation,{labelOffsetY:defaultDxRelation==='pathophysiology_of'?-12:null,dashed:weakContextDxEdge}):edgeMeta(srcId,diagnosisNode.id,defaultDxRelation,{labelOffsetY:defaultDxRelation==='pathophysiology_of'?-12:null,dashed:weakContextDxEdge}));
+    const defaultFanOffset=(idx-(dxEdges.length-1)/2)*16;
+    const defaultCurveSpread=(idx-(dxEdges.length-1)/2)*10;
+    const fanOffset=Number.isFinite(Number(edge.targetOffsetY))?Number(edge.targetOffsetY):defaultFanOffset;
+    const curveSpread=Number.isFinite(Number(edge.curveSpread))?Number(edge.curveSpread):defaultCurveSpread;
+    const leadLength=Number.isFinite(Number(edge.leadLength))?Number(edge.leadLength):0;
+    const control1OffsetY=Number.isFinite(Number(edge.control1OffsetY))?Number(edge.control1OffsetY):0;
+    const control2OffsetY=Number.isFinite(Number(edge.control2OffsetY))?Number(edge.control2OffsetY):null;
+    const edgeLayout={labelOffsetY:edge.labelOffsetY ?? (relation==='pathophysiology_of'?-12:null),dashed:weakContextDxEdge,targetOffsetY:fanOffset,curveSpread,leadLength,control1OffsetY,control2OffsetY};
+    edgesSvg+=makeEdge(src,nodeMap[diagnosisNode.id],getEdgeLabel(eid,relation),'#2d5f8a',
+      isInteractive?edgeMeta(srcId,diagnosisNode.id,relation,edgeLayout):edgeMeta(srcId,diagnosisNode.id,relation,edgeLayout));
   });
   // Optional KG-internal edges, used when one mapped concept modifies another
   // rather than feeding directly into mechanism or diagnosis.
@@ -5434,9 +7230,9 @@ function applyRegenerate(){
       supportMode:task5SupportMode
     };
     const revised=JSON.parse(JSON.stringify(regeneratedTaskTemplate));
-    revised.title='Task 5 — KG+Text regenerated question';
+    revised.title=revised.title||'Task 5 - KG+Text regenerated question';
     revised.chip='Explanation: KG+Text';
-    revised.condition='KG+Text · regenerated medium-difficulty item';
+    revised.condition=revised.condition||'KG+Text - regenerated higher-difficulty item';
     revised.mode='both';
     revised.regenerated=true;
     revised.tooEasy=false;
@@ -5444,7 +7240,7 @@ function applyRegenerate(){
     task5SupportMode='kg';
     closeRegenerate();
     loadTask(5);
-    showToast('Regenerated medium-difficulty version loaded.');
+    showToast('Regenerated higher-difficulty version loaded.');
   }catch(err){
     console.error(err);
     alert('Regeneration failed: '+(err&&err.message?err.message:err));
