@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
@@ -399,10 +399,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
     <div class="setup-desc">Configure your medical education question parameters</div>
     <div class="field">
       <div class="field-label">Domain</div>
-      <select class="select-box" id="setupDomain" onchange="switchDomainPage()"><option value="pediatrics" selected>Pediatrics</option><option value="neurology">Neurology</option></select>    </div>
+      <select class="select-box" id="setupDomain" onchange="switchDomainPage()"><option value="pediatrics" selected>Pediatric digestive system</option><option value="respiratory">Pediatric respiratory system</option><option value="neurology">Neurology</option></select>    </div>
     <div class="field">
       <div class="field-label">Topic</div>
-      <select class="select-box" id="setupTopic"><option value="pediatric_respiratory_system" selected>Pediatric respiratory system</option></select>    </div>
+      <select class="select-box" id="setupTopic"><option value="pediatric_digestive_system" selected>Pediatric digestive system</option></select>    </div>
     <div class="field">
       <div class="field-label">Difficulty Level</div>
       <div class="diff-row">
@@ -531,7 +531,8 @@ var domainStateReady=false;
 
 const DOMAIN_TOPICS = {
   neurology: [{value: 'cerebral_hemispheres_vascular_supply', label: 'Cerebral hemispheres and vascular supply'}],
-  pediatrics: [{value: 'pediatric_respiratory_system', label: 'Pediatric respiratory system'}]
+  pediatrics: [{value: 'pediatric_digestive_system', label: 'Pediatric digestive system'}],
+  respiratory: [{value: 'pediatric_respiratory_system', label: 'Pediatric respiratory system'}]
 };
 
 const DOMAIN_COPY = {
@@ -540,8 +541,12 @@ const DOMAIN_COPY = {
     desc: 'Configure neurology MCQ review materials'
   },
   pediatrics: {
-    sub: 'Pediatrics prototype - Question Setup',
-    desc: 'Configure pediatrics MCQ review materials'
+    sub: 'Pediatric digestive system - Question Setup',
+    desc: 'Configure pediatric digestive-system MCQ review materials'
+  },
+  respiratory: {
+    sub: 'Pediatric respiratory system - Question Setup',
+    desc: 'Configure pediatric respiratory-system MCQ review materials'
   }
 };
 
@@ -2239,8 +2244,1640 @@ const STUDY_DATA={
     "pickerQuestions": [
       {
         "id": 1,
+        "title": "Biliary atresia neonatal cholestasis",
+        "domain": "Pediatrics - Digestive system",
+        "date": "2026-07-09",
+        "vignette": "Six-week-old with persistent jaundice, pale stools, dark urine, hepatomegaly, and direct hyperbilirubinemia.",
+        "stem": "What is the most likely diagnosis?"
+      },
+      {
+        "id": 2,
+        "title": "Celiac disease text explanation",
+        "domain": "Pediatrics - Digestive system",
+        "date": "2026-07-09",
+        "vignette": "Toddler with chronic loose stools, abdominal distention, growth faltering, reduced subcutaneous fat, and microcytic anemia.",
+        "stem": "What is the most likely diagnosis?"
+      },
+      {
+        "id": 3,
+        "title": "Eosinophilic esophagitis feeding presentation",
+        "domain": "Pediatrics - Digestive system",
+        "date": "2026-07-09",
+        "vignette": "Eighteen-month-old with vomiting, feeding refusal, texture aversion, poor growth, atopy, and food bolus impaction.",
+        "stem": "What is the most likely diagnosis?"
+      },
+      {
+        "id": 4,
+        "title": "Functional constipation in a young child",
+        "domain": "Pediatrics - Digestive system",
+        "date": "2026-07-09",
+        "vignette": "Fourteen-month-old with infrequent painful stools, withholding behavior, fecal retention, and underwear soiling.",
+        "stem": "What is the most likely diagnosis?"
+      },
+      {
+        "id": 5,
+        "title": "Intussusception regeneration task",
+        "domain": "Pediatrics - Digestive system",
+        "date": "2026-07-09",
+        "vignette": "Too-easy intussusception item with KG+Text and a regenerated medium-difficulty version.",
+        "stem": "What is the most likely diagnosis?"
+      }
+    ],
+    "tasks": {
+      "1": {
+        "title": "Task 1 - Expert review item",
+        "chip": "Explanation: KG",
+        "condition": "Review item 1 - Knowledge graph explanation",
+        "mode": "kg",
+        "difficulty": "Medium",
+        "target": "Biliary atresia",
+        "source": "Pediatrics - Digestive system - Nelson Essentials of Pediatrics, 8th ed. - neonatal cholestasis and biliary atresia",
+        "correct": "B",
+        "question_stem": "What is the most likely diagnosis?",
+        "vignette": "A 6-week-old girl is brought to clinic because of persistent jaundice. She was born at term and initially fed well. Over the past 2 weeks, her stools have become pale. Her urine has become dark. She has no fever, vomiting, or poor feeding. On examination, she is alert but visibly jaundiced, with mild hepatomegaly. Laboratory testing shows total bilirubin 8.1 mg/dL and direct bilirubin 5.4 mg/dL.",
+        "options": {
+          "A": "Breast milk jaundice",
+          "B": "Biliary atresia",
+          "C": "Physiologic jaundice of the newborn",
+          "D": "Hemolytic disease of the newborn",
+          "E": "Neonatal hepatitis"
+        },
+        "supporting": [
+          {
+            "phrase": "6-week-old girl",
+            "why": "Biliary atresia often becomes apparent after the first week or two of life, and persistence to 6 weeks is outside the expected window for physiologic jaundice."
+          },
+          {
+            "phrase": "persistent jaundice",
+            "why": "Persistent jaundice at this age requires fractionated bilirubin testing because direct hyperbilirubinemia indicates cholestasis rather than benign unconjugated jaundice."
+          },
+          {
+            "phrase": "stools have become pale",
+            "why": "Pale stools indicate reduced bile pigment reaching the intestine, a key clinical sign of impaired bile flow."
+          },
+          {
+            "phrase": "urine has become dark",
+            "why": "Dark urine fits conjugated hyperbilirubinemia because conjugated bilirubin is water soluble and can be excreted in urine."
+          },
+          {
+            "phrase": "direct bilirubin 5.4 mg/dL",
+            "why": "An elevated direct fraction confirms a cholestatic pattern; neonatal cholestasis includes urgent treatable causes such as biliary atresia."
+          },
+          {
+            "phrase": "mild hepatomegaly",
+            "why": "Hepatomegaly supports hepatobiliary disease in a jaundiced infant and fits progressive cholestatic liver injury."
+          }
+        ],
+        "distractors": [
+          {
+            "letter": "A",
+            "disease": "Breast milk jaundice",
+            "plausible": "A thriving infant with persistent jaundice can initially suggest breast milk jaundice.",
+            "incorrect": "Breast milk jaundice is unconjugated; pale stools, dark urine, and a high direct bilirubin fraction point to cholestasis."
+          },
+          {
+            "letter": "C",
+            "disease": "Physiologic jaundice of the newborn",
+            "plausible": "The infant was born at term and has no fever or toxic appearance, which can make benign neonatal jaundice tempting.",
+            "incorrect": "Physiologic jaundice should not persist as direct hyperbilirubinemia at 6 weeks and does not cause pale stools."
+          },
+          {
+            "letter": "D",
+            "disease": "Hemolytic disease of the newborn",
+            "plausible": "Hemolysis is an important neonatal jaundice cause.",
+            "incorrect": "Hemolysis produces predominantly unconjugated hyperbilirubinemia and does not explain pale stools from impaired bile flow."
+          },
+          {
+            "letter": "E",
+            "disease": "Neonatal hepatitis",
+            "plausible": "Neonatal hepatitis can cause cholestatic jaundice and hepatomegaly.",
+            "incorrect": "The alert, initially well infant with pale stools and dark urine strongly raises concern for extrahepatic obstruction; biliary atresia must be prioritized because early surgical drainage is time sensitive."
+          }
+        ],
+        "kgData": {
+          "nodes": [
+            {
+              "id": "ev1",
+              "label": "6-week-old",
+              "short": "6 weeks old",
+              "phrase": "6-week-old girl",
+              "nodeType": "history",
+              "kind": "evidence"
+            },
+            {
+              "id": "ev2",
+              "label": "Persistent\njaundice",
+              "short": "Persistent jaundice",
+              "phrase": "persistent jaundice",
+              "nodeType": "symptom",
+              "kind": "evidence"
+            },
+            {
+              "id": "ev3",
+              "label": "Pale stools",
+              "short": "Pale stools",
+              "phrase": "stools have become pale",
+              "nodeType": "sign",
+              "kind": "evidence"
+            },
+            {
+              "id": "ev4",
+              "label": "Dark urine",
+              "short": "Dark urine",
+              "phrase": "urine has become dark",
+              "nodeType": "sign",
+              "kind": "evidence"
+            },
+            {
+              "id": "ev5",
+              "label": "Direct bilirubin\n5.4 mg/dL",
+              "short": "Direct hyperbilirubinemia",
+              "phrase": "direct bilirubin 5.4 mg/dL",
+              "nodeType": "sign",
+              "kind": "evidence"
+            },
+            {
+              "id": "ev6",
+              "label": "Mild\nhepatomegaly",
+              "short": "Hepatomegaly",
+              "phrase": "mild hepatomegaly",
+              "nodeType": "sign",
+              "kind": "evidence"
+            },
+            {
+              "id": "p1",
+              "label": "Persistent jaundice beyond\nphysiologic period",
+              "nodeType": "pattern",
+              "kind": "pattern",
+              "deleteEvidenceIds": [
+                "ev1",
+                "ev2"
+              ],
+              "tooltip": "Jaundice persisting to 6 weeks is outside the physiologic newborn period and requires evaluation for cholestasis."
+            },
+            {
+              "id": "p2",
+              "label": "Conjugated\nhyperbilirubinemia",
+              "nodeType": "pattern",
+              "kind": "pattern",
+              "deleteEvidenceIds": [
+                "ev4",
+                "ev5"
+              ],
+              "tooltip": "Dark urine together with a high direct bilirubin fraction identifies a conjugated hyperbilirubinemia pattern."
+            },
+            {
+              "id": "f1",
+              "label": "Hepatobiliary\ninvolvement",
+              "nodeType": "sign",
+              "kind": "pattern",
+              "deleteEvidenceIds": [
+                "ev6"
+              ],
+              "tooltip": "Hepatomegaly in a jaundiced infant supports involvement of the liver or biliary tract."
+            },
+            {
+              "id": "p3",
+              "label": "Pale/acholic stool\npattern",
+              "nodeType": "pattern",
+              "kind": "pattern",
+              "deleteEvidenceIds": [
+                "ev3"
+              ],
+              "tooltip": "Pale or acholic stool indicates that little bile pigment is reaching the intestine."
+            },
+            {
+              "id": "m1",
+              "label": "Extrahepatic bile-flow\nobstruction",
+              "nodeType": "mechanism",
+              "deleteEvidenceIds": [
+                "ev3"
+              ],
+              "tooltip": "An acholic stool pattern points to obstruction preventing bile from reaching the intestine.",
+              "kind": "mechanism"
+            },
+            {
+              "id": "m2",
+              "label": "Neonatal\ncholestasis",
+              "nodeType": "mechanism",
+              "deleteEvidenceIds": [
+                "ev1",
+                "ev2",
+                "ev4",
+                "ev5",
+                "ev6"
+              ],
+              "tooltip": "Neonatal cholestasis is the syndrome created by reduced bile flow with direct hyperbilirubinemia. Nelson stresses rapid diagnosis because biliary atresia and selected metabolic disorders are treatable but time sensitive.",
+              "kind": "mechanism"
+            },
+            {
+              "id": "dx",
+              "label": "Biliary\natresia",
+              "nodeType": "diagnosis",
+              "tooltip": "Persistent conjugated jaundice with pale stools, dark urine, and hepatomegaly strongly supports biliary atresia.",
+              "kind": "diagnosis"
+            }
+          ],
+          "edges": [
+            {
+              "from": "ev1",
+              "to": "p1",
+              "relation": "indicates"
+            },
+            {
+              "from": "ev2",
+              "to": "p1",
+              "relation": "indicates"
+            },
+            {
+              "from": "ev4",
+              "to": "p2",
+              "relation": "indicates"
+            },
+            {
+              "from": "ev5",
+              "to": "p2",
+              "relation": "indicates"
+            },
+            {
+              "from": "ev6",
+              "to": "f1",
+              "relation": "indicates"
+            },
+            {
+              "from": "ev3",
+              "to": "p3",
+              "relation": "sign_of"
+            },
+            {
+              "from": "p1",
+              "to": "m2",
+              "relation": "supports"
+            },
+            {
+              "from": "p2",
+              "to": "m2",
+              "relation": "indicates"
+            },
+            {
+              "from": "f1",
+              "to": "m2",
+              "relation": "supports"
+            },
+            {
+              "from": "p3",
+              "to": "m1",
+              "relation": "sign_of"
+            },
+            {
+              "from": "m1",
+              "to": "dx",
+              "relation": "supports"
+            },
+            {
+              "from": "m2",
+              "to": "dx",
+              "relation": "supports"
+            }
+          ],
+          "layout": {
+            "minH": 560,
+            "nodeY": {
+              "p1": 90,
+              "p2": 220,
+              "f1": 350,
+              "p3": 490,
+              "m2": 220,
+              "m1": 490,
+              "dx": 335
+            }
+          },
+          "excludeCards": [
+            {
+              "target": "Breast milk jaundice",
+              "supports": [
+                "ev2"
+              ],
+              "against": [
+                "ev3",
+                "ev5"
+              ],
+              "expected": "Unconjugated bilirubin, normal stool color",
+              "expectedExplanation": "Breast milk jaundice should not produce direct hyperbilirubinemia or acholic stools.",
+              "explanation": "Persistent jaundice can make breast milk jaundice plausible, but pale stools and direct hyperbilirubinemia require cholestasis.",
+              "rationales": {
+                "supports": {
+                  "ev2": "Persistence of jaundice alone can initially raise benign prolonged jaundice in the differential."
+                },
+                "against": {
+                  "ev3": "Pale stool implies reduced intestinal bile pigment, which breast milk jaundice does not explain.",
+                  "ev5": "A high direct bilirubin fraction is cholestatic, not the unconjugated pattern expected in breast milk jaundice."
+                }
+              }
+            },
+            {
+              "target": "Physiologic jaundice of the newborn",
+              "supports": [],
+              "against": [
+                "ev1",
+                "ev5"
+              ],
+              "expected": "Early newborn onset with unconjugated bilirubin",
+              "expectedExplanation": "Physiologic jaundice belongs to the early newborn period and is not a direct hyperbilirubinemia disorder.",
+              "explanation": "Six weeks of jaundice plus direct hyperbilirubinemia is not physiologic newborn jaundice.",
+              "rationales": {
+                "against": {
+                  "ev1": "At 6 weeks, persistent jaundice is outside the expected physiologic window.",
+                  "ev5": "Physiologic jaundice is not a direct bilirubin process."
+                }
+              }
+            },
+            {
+              "target": "Hemolytic disease of the newborn",
+              "supports": [],
+              "against": [
+                "ev3",
+                "ev5"
+              ],
+              "expected": "Unconjugated jaundice with hemolysis",
+              "expectedExplanation": "Hemolysis increases bilirubin production but does not obstruct bile delivery to the gut.",
+              "explanation": "Hemolysis cannot account for pale stools and a direct hyperbilirubinemia pattern.",
+              "rationales": {
+                "against": {
+                  "ev3": "Pale stool points to impaired bile flow rather than increased bilirubin production.",
+                  "ev5": "Direct hyperbilirubinemia is not the classic isolated hemolytic pattern."
+                }
+              }
+            },
+            {
+              "target": "Neonatal hepatitis",
+              "supports": [
+                "ev5",
+                "ev6"
+              ],
+              "against": [
+                "ev3"
+              ],
+              "expected": "Ill-appearing infant or later evidence of intrahepatic hepatitis",
+              "expectedExplanation": "Neonatal hepatitis can mimic cholestasis, but pale stools keep extrahepatic obstruction high on the list.",
+              "explanation": "Neonatal hepatitis is plausible in cholestasis, but the obstructive stool pattern and the need for urgent surgically treatable diagnosis favor biliary atresia.",
+              "rationales": {
+                "supports": {
+                  "ev5": "Neonatal hepatitis can present with direct hyperbilirubinemia.",
+                  "ev6": "Hepatomegaly can occur in intrahepatic inflammatory disease."
+                },
+                "against": {
+                  "ev3": "Pale stools strongly emphasize impaired bile delivery to the intestine and make biliary obstruction urgent to exclude."
+                }
+              }
+            }
+          ]
+        }
+      },
+      "2": {
+        "title": "Task 2 - Expert review item",
+        "chip": "Explanation: Text",
+        "condition": "Review item 2 - Text explanation",
+        "mode": "text",
+        "difficulty": "Medium",
+        "target": "Celiac disease",
+        "source": "Pediatrics - Digestive system - Nelson Essentials of Pediatrics, 8th ed. - celiac disease",
+        "correct": "D",
+        "question_stem": "What is the most likely diagnosis?",
+        "vignette": "A 3-year-old boy is brought to clinic because of poor weight gain and intermittent loose stools for several months. His parents say his abdomen often looks distended after meals, and he has become more irritable and less interested in eating. He was previously growing along the 40th percentile for weight but is now below the 10th percentile. Examination shows abdominal distention and reduced subcutaneous fat. His hemoglobin is 10.2 g/dL with a low mean corpuscular volume.",
+        "options": {
+          "A": "Toddler diarrhea",
+          "B": "Lactose intolerance",
+          "C": "Crohn disease",
+          "D": "Celiac disease",
+          "E": "Giardiasis"
+        },
+        "supporting": [
+          {
+            "phrase": "40th percentile for weight but is now below the 10th percentile",
+            "why": "A clear fall across weight percentiles indicates clinically important chronic malabsorption or undernutrition and strongly supports pediatric celiac disease."
+          },
+          {
+            "phrase": "intermittent loose stools for several months",
+            "why": "Chronic loose stools fit celiac disease because gluten-driven small-intestinal mucosal injury can cause malabsorption. The several-month course makes acute infection less likely."
+          },
+          {
+            "phrase": "abdomen often looks distended after meals",
+            "why": "Postprandial abdominal bloating and distention are characteristic gastrointestinal manifestations of pediatric celiac disease."
+          },
+          {
+            "phrase": "reduced subcutaneous fat",
+            "why": "Reduced fat stores support chronic malnutrition rather than a benign functional diarrhea pattern."
+          },
+          {
+            "phrase": "hemoglobin is 10.2 g/dL with a low mean corpuscular volume",
+            "why": "Anemia with a low mean corpuscular volume supports iron deficiency, which can result from impaired proximal small-intestinal iron absorption in celiac disease."
+          }
+        ],
+        "distractors": [
+          {
+            "letter": "A",
+            "disease": "Toddler diarrhea",
+            "plausible": "A 3-year-old with intermittent loose stools can initially resemble toddler diarrhea.",
+            "incorrect": "Toddler diarrhea should not cause a marked fall in weight percentile, reduced subcutaneous fat, or microcytic anemia."
+          },
+          {
+            "letter": "B",
+            "disease": "Lactose intolerance",
+            "plausible": "Postprandial bloating and loose stools can occur with lactose intolerance.",
+            "incorrect": "Lactose intolerance alone does not explain chronic growth faltering, reduced fat stores, and microcytic anemia as well as celiac disease."
+          },
+          {
+            "letter": "C",
+            "disease": "Crohn disease",
+            "plausible": "Crohn disease can cause poor growth, abdominal symptoms, and anemia.",
+            "incorrect": "The vignette lacks inflammatory features such as fever, persistent focal abdominal pain, blood in stool, perianal disease, or mouth ulcers."
+          },
+          {
+            "letter": "E",
+            "disease": "Giardiasis",
+            "plausible": "Giardia can cause chronic loose stools, bloating, and poor weight gain.",
+            "incorrect": "The falling growth percentile, reduced fat stores, and microcytic anemia form a broader chronic malabsorptive pattern that favors celiac disease; Giardia testing would still be appropriate if exposure risk were identified."
+          }
+        ]
+      },
+      "3": {
+        "title": "Task 3 - Expert review item",
+        "chip": "Explanation: KG",
+        "condition": "Review item 3 - Knowledge graph explanation",
+        "mode": "kg",
+        "difficulty": "Medium",
+        "target": "Eosinophilic esophagitis",
+        "source": "Pediatrics - Digestive system - Nelson Essentials of Pediatrics, 8th ed. - eosinophilic esophagitis and age-dependent presentation",
+        "correct": "A",
+        "question_stem": "What is the most likely diagnosis?",
+        "vignette": "An 18-month-old boy is evaluated for recurrent vomiting, progressive feeding refusal, and poor weight gain over the past 3 months. His parents report that he accepts liquids but frequently turns away from textured solid foods. He has a history of eczema and cow’s milk allergy. Last week, he had an episode of solid-food bolus impaction that required urgent endoscopic removal. Examination shows reduced subcutaneous fat but no abdominal distention or organomegaly.",
+        "options": {
+          "A": "Eosinophilic esophagitis",
+          "B": "Gastroesophageal reflux disease",
+          "C": "Celiac disease",
+          "D": "Achalasia",
+          "E": "Behavioral feeding disorder"
+        },
+        "supporting": [
+          {
+            "phrase": "18-month-old boy",
+            "why": "Young children with eosinophilic esophagitis commonly present with feeding dysfunction, vomiting, and impaired growth."
+          },
+          {
+            "phrase": [
+              "recurrent vomiting",
+              "progressive feeding refusal"
+            ],
+            "why": "Vomiting and progressive feeding refusal indicate chronic esophageal dysfunction in a young child."
+          },
+          {
+            "phrase": "turns away from textured solid foods",
+            "why": "Texture aversion is an age-appropriate manifestation of feeding difficulty associated with eosinophilic esophagitis."
+          },
+          {
+            "phrase": [
+              "poor weight gain",
+              "reduced subcutaneous fat"
+            ],
+            "why": "Growth faltering supports clinically significant chronic feeding and esophageal dysfunction."
+          },
+          {
+            "phrase": [
+              "eczema",
+              "cow’s milk allergy"
+            ],
+            "why": "An atopic background increases the likelihood of eosinophilic esophageal inflammation."
+          },
+          {
+            "phrase": "solid-food bolus impaction",
+            "why": "Food bolus impaction is a characteristic manifestation of esophageal narrowing in eosinophilic esophagitis."
+          }
+        ],
+        "distractors": [
+          {
+            "letter": "B",
+            "disease": "Gastroesophageal reflux disease",
+            "plausible": "Reflux can cause vomiting and feeding refusal in a young child.",
+            "incorrect": "The atopic background, texture aversion, growth faltering, and impaction pattern more strongly suggest eosinophilic esophageal disease."
+          },
+          {
+            "letter": "C",
+            "disease": "Celiac disease",
+            "plausible": "Celiac disease can cause poor growth and reduced subcutaneous fat.",
+            "incorrect": "The vignette emphasizes esophageal feeding dysfunction and atopy rather than diarrhea, abdominal distention, or a malabsorptive stool pattern."
+          },
+          {
+            "letter": "D",
+            "disease": "Achalasia",
+            "plausible": "Achalasia can produce dysphagia, regurgitation, poor growth, and food retention.",
+            "incorrect": "Achalasia is less consistent with the strong atopic background and typical young-child EoE feeding phenotype."
+          },
+          {
+            "letter": "E",
+            "disease": "Behavioral feeding disorder",
+            "plausible": "A behavioral feeding disorder can cause texture refusal and poor weight gain.",
+            "incorrect": "Recurrent vomiting, atopy, and esophageal food impaction indicate an organic esophageal process."
+          }
+        ],
+        "kgData": {
+          "nodes": [
+            {
+              "id": "ev1",
+              "label": "18-month-old\nboy",
+              "short": "18-month-old boy",
+              "phrase": "18-month-old boy",
+              "nodeType": "history",
+              "kind": "evidence"
+            },
+            {
+              "id": "ev2",
+              "label": "Recurrent vomiting and\nfeeding refusal",
+              "short": "Vomiting and feeding refusal",
+              "phrase": [
+                "recurrent vomiting",
+                "progressive feeding refusal"
+              ],
+              "nodeType": "symptom",
+              "kind": "evidence"
+            },
+            {
+              "id": "ev3",
+              "label": "Texture aversion",
+              "short": "Texture aversion",
+              "phrase": "turns away from textured solid foods",
+              "nodeType": "symptom",
+              "kind": "evidence"
+            },
+            {
+              "id": "ev4",
+              "label": "Growth faltering",
+              "short": "Growth faltering",
+              "phrase": [
+                "poor weight gain",
+                "reduced subcutaneous fat"
+              ],
+              "nodeType": "sign",
+              "kind": "evidence"
+            },
+            {
+              "id": "ev5",
+              "label": "Atopic background",
+              "short": "Atopic background",
+              "phrase": [
+                "eczema",
+                "cow’s milk allergy"
+              ],
+              "nodeType": "history",
+              "kind": "evidence"
+            },
+            {
+              "id": "ev6",
+              "label": "Solid-food bolus\nimpaction",
+              "short": "Food bolus impaction",
+              "phrase": "solid-food bolus impaction",
+              "nodeType": "symptom",
+              "kind": "evidence"
+            },
+            {
+              "id": "p1",
+              "label": "Toddler feeding\ndysfunction",
+              "nodeType": "pattern",
+              "kind": "pattern",
+              "deleteEvidenceIds": [
+                "ev2",
+                "ev3"
+              ],
+              "tooltip": "Vomiting, feeding refusal, and texture aversion form the typical young-child presentation of eosinophilic esophagitis."
+            },
+            {
+              "id": "p2",
+              "label": "Growth\nfaltering",
+              "nodeType": "pattern",
+              "kind": "pattern",
+              "deleteEvidenceIds": [
+                "ev4"
+              ],
+              "tooltip": "Poor weight gain with reduced subcutaneous fat shows that the feeding disorder has nutritional consequences."
+            },
+            {
+              "id": "p3",
+              "label": "Food bolus\nimpaction",
+              "nodeType": "pattern",
+              "kind": "pattern",
+              "deleteEvidenceIds": [
+                "ev6"
+              ],
+              "tooltip": "Food bolus impaction is a characteristic manifestation of clinically significant esophageal narrowing."
+            },
+            {
+              "id": "m1",
+              "label": "Chronic esophageal\ndysfunction",
+              "nodeType": "mechanism",
+              "kind": "mechanism",
+              "deleteEvidenceIds": [
+                "ev2",
+                "ev3",
+                "ev4"
+              ],
+              "tooltip": "Persistent feeding dysfunction with vomiting and impaired growth indicates clinically significant esophageal disease."
+            },
+            {
+              "id": "m2",
+              "label": "Atopic\npredisposition",
+              "nodeType": "risk",
+              "kind": "pattern",
+              "deleteEvidenceIds": [
+                "ev5"
+              ],
+              "tooltip": "Eczema and food allergy indicate an atopic predisposition that increases the likelihood of eosinophilic esophagitis."
+            },
+            {
+              "id": "m3",
+              "label": "Esophageal narrowing\npattern",
+              "nodeType": "mechanism",
+              "kind": "mechanism",
+              "deleteEvidenceIds": [
+                "ev6"
+              ],
+              "tooltip": "Food impaction can result from reduced esophageal caliber associated with chronic inflammatory remodeling."
+            },
+            {
+              "id": "dx",
+              "label": "Eosinophilic\nesophagitis",
+              "nodeType": "diagnosis",
+              "kind": "diagnosis",
+              "tooltip": "Feeding dysfunction, growth faltering, an atopic background, and food impaction support eosinophilic esophagitis."
+            }
+          ],
+          "edges": [
+            {
+              "from": "ev2",
+              "to": "p1",
+              "relation": "indicates"
+            },
+            {
+              "from": "ev3",
+              "to": "p1",
+              "relation": "indicates"
+            },
+            {
+              "from": "ev4",
+              "to": "p2",
+              "relation": "indicates"
+            },
+            {
+              "from": "ev5",
+              "to": "m2",
+              "relation": "supports"
+            },
+            {
+              "from": "ev6",
+              "to": "p3",
+              "relation": "indicates"
+            },
+            {
+              "from": "p1",
+              "to": "m1",
+              "relation": "indicates"
+            },
+            {
+              "from": "p2",
+              "to": "m1",
+              "relation": "supports"
+            },
+            {
+              "from": "p3",
+              "to": "m3",
+              "relation": "sign_of"
+            },
+            {
+              "from": "m1",
+              "to": "dx",
+              "relation": "supports"
+            },
+            {
+              "from": "m2",
+              "to": "dx",
+              "relation": "supports"
+            },
+            {
+              "from": "m3",
+              "to": "dx",
+              "relation": "supports"
+            }
+          ],
+          "layout": {
+            "minH": 620,
+            "nodeY": {
+              "p1": 130,
+              "p2": 310,
+              "p3": 500,
+              "m1": 220,
+              "m2": 390,
+              "m3": 500,
+              "dx": 330
+            }
+          },
+          "excludeCards": [
+            {
+              "target": "Gastroesophageal reflux disease",
+              "supports": [
+                "ev2",
+                "ev3"
+              ],
+              "against": [
+                "ev5",
+                "ev6"
+              ],
+              "expected": "Reflux symptoms without an atopic impaction phenotype",
+              "expectedExplanation": "GERD may cause vomiting and feeding refusal, but it does not explain the combined atopic background and food impaction pattern as well as EoE.",
+              "explanation": "Vomiting and feeding refusal overlap with GERD, whereas atopy and food impaction shift the diagnosis toward EoE.",
+              "rationales": {
+                "supports": {
+                  "ev2": "GERD can cause vomiting and feeding refusal.",
+                  "ev3": "Children with reflux may avoid feeds or textures that provoke symptoms."
+                },
+                "against": {
+                  "ev5": "An atopic background raises suspicion for EoE.",
+                  "ev6": "Food impaction suggests structural inflammatory esophageal disease rather than uncomplicated reflux."
+                }
+              }
+            },
+            {
+              "target": "Celiac disease",
+              "supports": [
+                "ev4"
+              ],
+              "against": [
+                "ev3",
+                "ev5",
+                "ev6"
+              ],
+              "expected": "Small-bowel malabsorption with gastrointestinal or laboratory clues",
+              "expectedExplanation": "Celiac disease can impair growth but does not primarily produce an atopic esophageal feeding-and-impaction phenotype.",
+              "explanation": "Growth faltering overlaps, but the localization of symptoms to feeding and the atopic background favor EoE.",
+              "rationales": {
+                "supports": {
+                  "ev4": "Celiac disease can cause poor weight gain and depleted fat stores."
+                },
+                "against": {
+                  "ev3": "Texture-specific refusal localizes the difficulty to feeding or swallowing.",
+                  "ev5": "Atopy is more closely associated with EoE.",
+                  "ev6": "Food impaction is an esophageal rather than malabsorptive clue."
+                }
+              }
+            },
+            {
+              "target": "Achalasia",
+              "supports": [
+                "ev3",
+                "ev6"
+              ],
+              "against": [
+                "ev5"
+              ],
+              "expected": "Esophageal dysphagia and retention without a strong atopic phenotype",
+              "expectedExplanation": "Achalasia can retain solid food, but the associated atopic history favors eosinophilic inflammation.",
+              "explanation": "Solid-food difficulty overlaps with achalasia, while eczema and food allergy make EoE more likely.",
+              "rationales": {
+                "supports": {
+                  "ev3": "Texture-specific solid-food difficulty can occur with impaired esophageal emptying.",
+                  "ev6": "Retained solid food may mimic impaction."
+                },
+                "against": {
+                  "ev5": "The atopic background is characteristic of EoE rather than achalasia."
+                }
+              }
+            },
+            {
+              "target": "Behavioral feeding disorder",
+              "supports": [
+                "ev3"
+              ],
+              "against": [
+                "ev2",
+                "ev5",
+                "ev6"
+              ],
+              "expected": "Feeding refusal without evidence of organic esophageal disease",
+              "expectedExplanation": "A behavioral disorder does not adequately explain recurrent vomiting, an atopic disease context, and food impaction.",
+              "explanation": "Texture aversion may look behavioral, but the accompanying organic features favor EoE.",
+              "rationales": {
+                "supports": {
+                  "ev3": "Texture refusal can occur in a behavioral feeding disorder."
+                },
+                "against": {
+                  "ev2": "Recurrent vomiting suggests an organic process.",
+                  "ev5": "Atopy raises suspicion for eosinophilic disease.",
+                  "ev6": "Food impaction is an objective esophageal event."
+                }
+              }
+            }
+          ]
+        }
+      },
+      "4": {
+        "title": "Task 4 - Expert review item",
+        "chip": "Explanation: Text",
+        "condition": "Review item 4 - Text explanation",
+        "mode": "text",
+        "difficulty": "Medium",
+        "target": "Functional constipation",
+        "source": "Pediatrics - Digestive system - Nelson Essentials of Pediatrics, 8th ed. - functional constipation and developmental toileting context",
+        "correct": "E",
+        "question_stem": "What is the most likely diagnosis?",
+        "vignette": "A 14-month-old boy has had constipation for 4 months. He passes approximately two stools per week, and the stools are large-caliber, hard, and occasionally painful. His parents report that he sometimes cries and stiffens his body when attempting to avoid a bowel movement. He also has recurrent fecal soiling of his underwear between bowel movements. He passed meconium within the first 12 hours of life and has grown normally. Examination reveals a palpable fecal mass in the left lower quadrant and normal anal sphincter tone.",
+        "options": {
+          "A": "Hirschsprung disease",
+          "B": "Hypothyroidism",
+          "C": "Anorectal malformation",
+          "D": "Celiac disease",
+          "E": "Functional constipation"
+        },
+        "supporting": [
+          {
+            "phrase": "two stools per week",
+            "why": "Infrequent stooling is a diagnostic feature of functional constipation."
+          },
+          {
+            "phrase": "large-caliber, hard, and occasionally painful",
+            "why": "Painful hard stools and progressive stool accumulation are consistent with functional fecal retention."
+          },
+          {
+            "phrase": "cries and stiffens his body",
+            "why": "Crying and body stiffening can represent an age-appropriate early withholding response to painful defecation."
+          },
+          {
+            "phrase": "fecal soiling of his underwear",
+            "why": "Chronic rectal stool retention can cause overflow fecal soiling between bowel movements."
+          },
+          {
+            "phrase": [
+              "passed meconium within the first 12 hours",
+              "palpable fecal mass",
+              "normal anal sphincter tone"
+            ],
+            "why": "Normal early meconium passage, normal sphincter tone, and a retained fecal mass support functional constipation rather than congenital distal aganglionosis."
+          }
+        ],
+        "distractors": [
+          {
+            "letter": "A",
+            "disease": "Hirschsprung disease",
+            "plausible": "Constipation in a young child can raise concern for congenital distal obstruction.",
+            "incorrect": "Normal early meconium passage, normal growth, large-caliber stools, withholding behavior, and retained stool favor functional constipation over Hirschsprung disease."
+          },
+          {
+            "letter": "B",
+            "disease": "Hypothyroidism",
+            "plausible": "Hypothyroidism can cause constipation in children.",
+            "incorrect": "The vignette does not describe poor linear growth, lethargy, bradycardia, dry skin, or other systemic features of hypothyroidism."
+          },
+          {
+            "letter": "C",
+            "disease": "Anorectal malformation",
+            "plausible": "An anatomic outlet abnormality can cause constipation from infancy.",
+            "incorrect": "No abnormal anal position or structural perineal finding is described."
+          },
+          {
+            "letter": "D",
+            "disease": "Celiac disease",
+            "plausible": "Celiac disease can occasionally present with constipation rather than diarrhea.",
+            "incorrect": "The large-caliber painful stools, withholding behavior, palpable fecal mass, and normal growth are more consistent with functional constipation than celiac disease."
+          }
+        ]
+      },
+      "5": {
+        "title": "Task 5 - Expert review item",
+        "chip": "Explanation: KG+Text",
+        "condition": "Review item 5 - Knowledge graph + text explanation",
+        "mode": "both",
+        "regenerated": false,
+        "tooEasy": true,
+        "difficulty": "Easy",
+        "target": "Intussusception",
+        "source": "Pediatrics - Digestive system - Nelson Essentials of Pediatrics, 8th ed. - intussusception original over-cued version",
+        "correct": "C",
+        "question_stem": "What is the most likely diagnosis?",
+        "vignette": "A 10-month-old boy is brought to the emergency department because of repeated episodes of severe abdominal pain. During each episode, he cries suddenly, becomes pale, and draws his knees toward his chest. He has vomited three times. Examination reveals a sausage-shaped mass in the right upper abdomen. His diaper contains currant-jelly stool.",
+        "options": {
+          "A": "Viral gastroenteritis",
+          "B": "Malrotation with volvulus",
+          "C": "Intussusception",
+          "D": "Functional constipation",
+          "E": "Acute appendicitis"
+        },
+        "supporting": [
+          {
+            "phrase": "10-month-old boy",
+            "why": "The infant age is typical for intussusception and raises its prior probability."
+          },
+          {
+            "phrase": [
+              "repeated episodes of severe abdominal pain",
+              "becomes pale",
+              "draws his knees toward his chest"
+            ],
+            "why": "Stereotyped attacks of severe pain with pallor and knee drawing indicate intermittent intestinal obstruction."
+          },
+          {
+            "phrase": "vomited three times",
+            "why": "Vomiting provides additional support for an intestinal obstructive process."
+          },
+          {
+            "phrase": "sausage-shaped mass",
+            "why": "A sausage-shaped abdominal mass represents the swollen telescoped bowel."
+          },
+          {
+            "phrase": "currant-jelly stool",
+            "why": "Currant-jelly stool reflects venous congestion and mucosal bleeding. Together with intermittent obstruction and the bowel mass, it supports a telescoping-bowel process and intussusception."
+          }
+        ],
+        "distractors": [
+          {
+            "letter": "A",
+            "disease": "Viral gastroenteritis",
+            "plausible": "Vomiting and abdominal discomfort can occur with gastroenteritis.",
+            "incorrect": "Stereotyped pain attacks, a palpable abdominal mass, and currant-jelly stool indicate intussusception."
+          },
+          {
+            "letter": "B",
+            "disease": "Malrotation with volvulus",
+            "plausible": "Vomiting and acute abdominal pain in an infant can indicate volvulus.",
+            "incorrect": "The recurrent colicky pattern with a sausage-shaped mass and currant-jelly stool is more characteristic of intussusception."
+          },
+          {
+            "letter": "D",
+            "disease": "Functional constipation",
+            "plausible": "Constipation can cause episodic abdominal discomfort.",
+            "incorrect": "The acute attacks, vomiting, mass, and bloody mucoid stool are not a functional retention pattern."
+          },
+          {
+            "letter": "E",
+            "disease": "Acute appendicitis",
+            "plausible": "Appendicitis can cause abdominal pain and vomiting.",
+            "incorrect": "The infant age and recurrent attacks with knee drawing, a sausage-shaped mass, and currant-jelly stool favor intussusception."
+          }
+        ],
+        "kgData": {
+          "nodes": [
+            {
+              "id": "ev1",
+              "label": "10-month-old\nboy",
+              "short": "10-month-old boy",
+              "phrase": "10-month-old boy",
+              "nodeType": "risk",
+              "kind": "evidence"
+            },
+            {
+              "id": "ev2",
+              "label": "Stereotyped pain\nwith knee drawing",
+              "short": "Colicky pain with knee drawing",
+              "phrase": [
+                "repeated episodes of severe abdominal pain",
+                "draws his knees toward his chest"
+              ],
+              "nodeType": "symptom",
+              "kind": "evidence"
+            },
+            {
+              "id": "ev3",
+              "label": "Vomiting",
+              "short": "Vomiting",
+              "phrase": "vomited three times",
+              "nodeType": "symptom",
+              "kind": "evidence"
+            },
+            {
+              "id": "ev4",
+              "label": "Pallor during\nepisodes",
+              "short": "Pallor during attacks",
+              "phrase": "becomes pale",
+              "nodeType": "symptom",
+              "kind": "evidence"
+            },
+            {
+              "id": "ev5",
+              "label": "Sausage-shaped\nmass",
+              "short": "Sausage-shaped mass",
+              "phrase": "sausage-shaped mass",
+              "nodeType": "sign",
+              "kind": "evidence"
+            },
+            {
+              "id": "ev6",
+              "label": "Currant-jelly\nstool",
+              "short": "Currant-jelly stool",
+              "phrase": "currant-jelly stool",
+              "nodeType": "sign",
+              "kind": "evidence"
+            },
+            {
+              "id": "f1",
+              "label": "Typical infant\nage",
+              "nodeType": "risk",
+              "deleteEvidenceIds": [
+                "ev1"
+              ],
+              "tooltip": "The infant age is typical for intussusception and raises its prior probability.",
+              "kind": "pattern"
+            },
+            {
+              "id": "f2",
+              "label": "Stereotyped colicky\nepisodes",
+              "nodeType": "symptom",
+              "deleteEvidenceIds": [
+                "ev2",
+                "ev4"
+              ],
+              "tooltip": "Repeated severe pain with knee drawing and pallor forms a stereotyped colicky pattern.",
+              "kind": "pattern"
+            },
+            {
+              "id": "f3",
+              "label": "Vomiting",
+              "nodeType": "symptom",
+              "deleteEvidenceIds": [
+                "ev3"
+              ],
+              "tooltip": "Vomiting provides additional support for an intestinal obstructive process.",
+              "kind": "pattern"
+            },
+            {
+              "id": "f5",
+              "label": "Telescoped bowel\nmass",
+              "nodeType": "sign",
+              "deleteEvidenceIds": [
+                "ev5"
+              ],
+              "tooltip": "A sausage-shaped mass represents swollen telescoped bowel.",
+              "kind": "pattern"
+            },
+            {
+              "id": "f6",
+              "label": "Ischemic mucosal\nbleeding",
+              "nodeType": "sign",
+              "deleteEvidenceIds": [
+                "ev6"
+              ],
+              "tooltip": "Currant-jelly stool reflects venous congestion and mucosal bleeding.",
+              "kind": "pattern"
+            },
+            {
+              "id": "m1",
+              "label": "Intermittent intestinal\nobstruction",
+              "nodeType": "mechanism",
+              "deleteEvidenceIds": [
+                "ev2",
+                "ev3",
+                "ev4"
+              ],
+              "tooltip": "Colicky attacks and vomiting indicate intermittent intestinal obstruction.",
+              "kind": "mechanism"
+            },
+            {
+              "id": "m2",
+              "label": "Bowel telescoping\nprocess",
+              "nodeType": "mechanism",
+              "deleteEvidenceIds": [
+                "ev2",
+                "ev4",
+                "ev5",
+                "ev6"
+              ],
+              "tooltip": "A telescoped bowel mass together with ischemic mucosal bleeding identifies a bowel telescoping process.",
+              "kind": "mechanism"
+            },
+            {
+              "id": "dx",
+              "label": "Intussusception",
+              "nodeType": "diagnosis",
+              "tooltip": "Episodic colicky pain, a sausage-shaped abdominal mass, and currant-jelly stool strongly support intussusception.",
+              "kind": "diagnosis"
+            }
+          ],
+          "edges": [
+            {
+              "from": "ev1",
+              "to": "f1",
+              "relation": "indicates"
+            },
+            {
+              "from": "ev2",
+              "to": "f2",
+              "relation": "indicates"
+            },
+            {
+              "from": "ev4",
+              "to": "f2",
+              "relation": "indicates"
+            },
+            {
+              "from": "ev3",
+              "to": "f3",
+              "relation": "indicates"
+            },
+            {
+              "from": "ev5",
+              "to": "f5",
+              "relation": "sign_of"
+            },
+            {
+              "from": "ev6",
+              "to": "f6",
+              "relation": "indicates"
+            },
+            {
+              "from": "f2",
+              "to": "m1",
+              "relation": "indicates"
+            },
+            {
+              "from": "f3",
+              "to": "m1",
+              "relation": "supports"
+            },
+            {
+              "from": "f5",
+              "to": "m2",
+              "relation": "indicates"
+            },
+            {
+              "from": "f6",
+              "to": "m2",
+              "relation": "indicates"
+            },
+            {
+              "from": "f1",
+              "to": "dx",
+              "relation": "supports",
+              "curve": "gentle_down"
+            },
+            {
+              "from": "m1",
+              "to": "dx",
+              "relation": "supports"
+            },
+            {
+              "from": "m2",
+              "to": "dx",
+              "relation": "supports"
+            }
+          ],
+          "layout": {
+            "minH": 620,
+            "nodeY": {
+              "f1": 80,
+              "f2": 170,
+              "f3": 280,
+              "f5": 430,
+              "f6": 540,
+              "m1": 225,
+              "m2": 485,
+              "dx": 350
+            }
+          },
+          "excludeCards": [
+            {
+              "target": "Viral gastroenteritis",
+              "supports": [
+                "ev3"
+              ],
+              "against": [
+                "ev5",
+                "ev6"
+              ],
+              "expected": "Fever, diarrhea, diffuse infectious symptoms",
+              "expectedExplanation": "Gastroenteritis does not produce a telescoped bowel mass or ischemic mucoid bleeding.",
+              "explanation": "Vomiting overlaps, but a sausage-shaped mass and currant-jelly stool indicate intussusception.",
+              "rationales": {
+                "supports": {
+                  "ev3": "Vomiting can occur in gastroenteritis."
+                },
+                "against": {
+                  "ev5": "A sausage-shaped mass suggests telescoped bowel.",
+                  "ev6": "Currant-jelly stool reflects mucosal bleeding rather than uncomplicated infection."
+                }
+              }
+            },
+            {
+              "target": "Malrotation with volvulus",
+              "supports": [
+                "ev3"
+              ],
+              "against": [
+                "ev6",
+                "ev5"
+              ],
+              "expected": "Acute bilious obstructive emesis",
+              "expectedExplanation": "Volvulus is classically feared with bilious emesis and acute obstructive toxicity.",
+              "explanation": "Vomiting overlaps, but the recurrent colicky pattern, mass, and currant-jelly stool favor intussusception.",
+              "rationales": {
+                "supports": {
+                  "ev3": "Vomiting can occur with volvulus."
+                },
+                "against": {
+                  "ev6": "Currant-jelly stool is characteristic of congested intussuscepted bowel.",
+                  "ev5": "The sausage-shaped mass fits intussusception."
+                }
+              }
+            },
+            {
+              "target": "Functional constipation",
+              "supports": [
+                "ev2"
+              ],
+              "against": [
+                "ev5",
+                "ev6"
+              ],
+              "expected": "Chronic hard stools and withholding behavior",
+              "expectedExplanation": "Functional constipation does not produce an acute bowel mass or bloody mucoid stool.",
+              "explanation": "Pain can overlap, but the acute colicky attacks, mass, and currant-jelly stool are not a functional retention pattern.",
+              "rationales": {
+                "supports": {
+                  "ev2": "Abdominal pain can occur with constipation."
+                },
+                "against": {
+                  "ev5": "A sausage-shaped bowel mass is not retained stool in this acute pattern.",
+                  "ev6": "Currant-jelly stool suggests mucosal ischemia."
+                }
+              }
+            },
+            {
+              "target": "Acute appendicitis",
+              "supports": [],
+              "against": [
+                "ev5",
+                "ev6"
+              ],
+              "expected": "Persistent right-lower-quadrant pain and peritoneal irritation",
+              "expectedExplanation": "Appendicitis is less likely in this infant and does not usually produce stereotyped attacks with a sausage-shaped mass.",
+              "explanation": "The infant age, episodic knee-drawing attacks, bowel mass, and currant-jelly stool favor intussusception.",
+              "rationales": {
+                "against": {
+                  "ev5": "A sausage-shaped mass suggests telescoped bowel rather than appendiceal inflammation.",
+                  "ev6": "Currant-jelly stool is not a typical appendicitis finding."
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "regeneratedTaskTemplate": {
+      "title": "Task 5 - KG+Text regenerated question",
+      "chip": "Explanation: KG+Text",
+      "condition": "KG+Text - regenerated medium-difficulty item",
+      "mode": "both",
+      "regenerated": true,
+      "tooEasy": false,
+      "difficulty": "Medium",
+      "target": "Intussusception",
+      "source": "Pediatrics - Digestive system - Nelson Essentials of Pediatrics, 8th ed. - intussusception regenerated medium version",
+      "correct": "C",
+      "question_stem": "What is the most likely diagnosis?",
+      "vignette": "An 11-month-old boy is brought to the emergency department because of several unusual episodes over the past 6 hours. Every 15–20 minutes, he suddenly stops playing, becomes pale and briefly lethargic, cries intensely, and draws his legs toward his abdomen. Each episode lasts about 2 minutes, after which he becomes quiet and appears almost normal. He has vomited twice and has taken less fluid than usual. He has no diarrhea. Examination between episodes shows a tired but responsive infant with mild, poorly localized abdominal tenderness. No abdominal mass is confidently palpated.",
+      "options": {
+        "A": "Viral gastroenteritis",
+        "B": "Malrotation with volvulus",
+        "C": "Intussusception",
+        "D": "Functional constipation",
+        "E": "Acute appendicitis"
+      },
+      "supporting": [
+        {
+          "phrase": "11-month-old boy",
+          "why": "The infant age supports intussusception as a common cause of intermittent intestinal obstruction."
+        },
+        {
+          "phrase": [
+            "Every 15–20 minutes",
+            "draws his legs toward his abdomen"
+          ],
+          "why": "Regularly recurring distress with knee drawing indicates an intermittent intestinal obstructive pattern."
+        },
+        {
+          "phrase": [
+            "becomes pale and briefly lethargic",
+            "appears almost normal"
+          ],
+          "why": "Transient pallor and lethargy with recovery between attacks support an intermittent intestinal obstructive pattern and, in an infant, raise concern for intussusception."
+        },
+        {
+          "phrase": [
+            "vomited twice",
+            "taken less fluid than usual"
+          ],
+          "why": "Vomiting and reduced intake provide additional support for an intestinal obstructive process."
+        }
+      ],
+      "distractors": [
+        {
+          "letter": "A",
+          "disease": "Viral gastroenteritis",
+          "plausible": "Vomiting and reduced intake can occur with gastroenteritis.",
+          "incorrect": "The absence of diarrhea and highly stereotyped attacks with recovery between episodes are less consistent with infection."
+        },
+        {
+          "letter": "B",
+          "disease": "Malrotation with volvulus",
+          "plausible": "Vomiting and abdominal distress in an infant require consideration of volvulus.",
+          "incorrect": "The recurrent brief attacks with recovery are less typical of an acute, progressively toxic volvulus."
+        },
+        {
+          "letter": "D",
+          "disease": "Functional constipation",
+          "plausible": "Constipation can cause episodic abdominal discomfort.",
+          "incorrect": "There is no chronic hard-stool or withholding history, and the sudden pallid attacks with lethargy are not typical functional constipation."
+        },
+        {
+          "letter": "E",
+          "disease": "Acute appendicitis",
+          "plausible": "Appendicitis can cause abdominal pain, vomiting, and reduced intake.",
+          "incorrect": "The patient is very young and has short stereotyped attacks with near-normal intervals rather than persistent localized pain."
+        }
+      ],
+      "kgData": {
+        "nodes": [
+          {
+            "id": "ev1",
+            "label": "11-month-old\nboy",
+            "short": "11-month-old boy",
+            "phrase": "11-month-old boy",
+            "nodeType": "risk",
+            "kind": "evidence"
+          },
+          {
+            "id": "ev2",
+            "label": "Stereotyped attacks\nwith knee drawing",
+            "short": "Colicky attacks with knee drawing",
+            "phrase": [
+              "Every 15–20 minutes",
+              "draws his legs toward his abdomen"
+            ],
+            "nodeType": "course",
+            "kind": "evidence"
+          },
+          {
+            "id": "ev3",
+            "label": "Vomiting with\nreduced intake",
+            "short": "Vomiting with reduced intake",
+            "phrase": [
+              "vomited twice",
+              "taken less fluid than usual"
+            ],
+            "nodeType": "symptom",
+            "kind": "evidence"
+          },
+          {
+            "id": "ev4",
+            "label": "Pallor and transient\nlethargy",
+            "short": "Pallor and transient lethargy",
+            "phrase": "becomes pale and briefly lethargic",
+            "nodeType": "symptom",
+            "kind": "evidence"
+          },
+          {
+            "id": "ev5",
+            "label": "Near-normal between\nepisodes",
+            "short": "Recovery between episodes",
+            "phrase": "appears almost normal",
+            "nodeType": "sign",
+            "kind": "evidence"
+          },
+          {
+            "id": "ev6",
+            "label": "No diarrhea",
+            "short": "No infectious pattern",
+            "phrase": "no diarrhea",
+            "nodeType": "pattern",
+            "kind": "evidence"
+          },
+          {
+            "id": "f1",
+            "label": "Typical infant\nage",
+            "nodeType": "risk",
+            "deleteEvidenceIds": [
+              "ev1"
+            ],
+            "tooltip": "The infant age supports intussusception as a common cause of intermittent obstruction.",
+            "kind": "pattern"
+          },
+          {
+            "id": "f2",
+            "label": "Stereotyped colicky\nepisodes",
+            "nodeType": "course",
+            "deleteEvidenceIds": [
+              "ev2"
+            ],
+            "tooltip": "Regularly recurring distress with knee drawing indicates an intermittent intestinal process.",
+            "kind": "pattern"
+          },
+          {
+            "id": "f3",
+            "label": "Vomiting with\nreduced intake",
+            "nodeType": "localization",
+            "deleteEvidenceIds": [
+              "ev3"
+            ],
+            "tooltip": "Vomiting and reduced intake provide additional support for intestinal obstruction.",
+            "kind": "pattern"
+          },
+          {
+            "id": "f5",
+            "label": "Pallor, lethargy,\nand interval recovery",
+            "nodeType": "sign",
+            "deleteEvidenceIds": [
+              "ev4",
+              "ev5"
+            ],
+            "tooltip": "Transient pallor and lethargy with recovery between attacks support an intermittent intestinal obstructive pattern.",
+            "kind": "pattern"
+          },
+          {
+            "id": "m1",
+            "label": "Intermittent intestinal\nobstruction",
+            "nodeType": "mechanism",
+            "layer": "upstream",
+            "deleteEvidenceIds": [
+              "ev2",
+              "ev3"
+            ],
+            "tooltip": "Stereotyped pain attacks and vomiting indicate intermittent intestinal obstruction.",
+            "kind": "mechanism"
+          },
+          {
+            "id": "dx",
+            "label": "Intussusception",
+            "nodeType": "diagnosis",
+            "tooltip": "In an infant, recurrent brief attacks of severe pain with knee drawing, pallor, lethargy, vomiting, and interval recovery support intussusception.",
+            "kind": "diagnosis"
+          }
+        ],
+        "edges": [
+          {
+            "from": "ev1",
+            "to": "f1",
+            "relation": "indicates"
+          },
+          {
+            "from": "ev2",
+            "to": "f2",
+            "relation": "indicates"
+          },
+          {
+            "from": "ev3",
+            "to": "f3",
+            "relation": "indicates"
+          },
+          {
+            "from": "ev4",
+            "to": "f5",
+            "relation": "indicates"
+          },
+          {
+            "from": "ev5",
+            "to": "f5",
+            "relation": "indicates"
+          },
+          {
+            "from": "f2",
+            "to": "m1",
+            "relation": "indicates"
+          },
+          {
+            "from": "f3",
+            "to": "m1",
+            "relation": "supports"
+          },
+          {
+            "from": "f5",
+            "to": "m1",
+            "relation": "supports"
+          },
+          {
+            "from": "f1",
+            "to": "dx",
+            "relation": "supports",
+            "curve": "gentle_down"
+          },
+          {
+            "from": "m1",
+            "to": "dx",
+            "relation": "supports"
+          }
+        ],
+        "layout": {
+          "minH": 620,
+          "nodeY": {
+            "f1": 80,
+            "f2": 190,
+            "f3": 340,
+            "f5": 490,
+            "m1": 340,
+            "dx": 340
+          },
+          "nodeX": {
+            "m1": 690
+          }
+        },
+        "excludeCards": [
+          {
+            "target": "Viral gastroenteritis",
+            "supports": [
+              "ev3"
+            ],
+            "against": [
+              "ev6",
+              "ev5"
+            ],
+            "expected": "Diarrhea, fever, and continuous infectious symptoms",
+            "expectedExplanation": "Gastroenteritis usually produces a more continuous illness rather than highly stereotyped attacks with recovery.",
+            "explanation": "Vomiting overlaps, but no diarrhea and near-normal intervals weaken gastroenteritis.",
+            "rationales": {
+              "supports": {
+                "ev3": "Vomiting and reduced intake can occur in gastroenteritis."
+              },
+              "against": {
+                "ev6": "The absence of diarrhea weakens gastroenteritis.",
+                "ev5": "Near-normal recovery between stereotyped attacks is less consistent with continuous infection."
+              }
+            }
+          },
+          {
+            "target": "Malrotation with volvulus",
+            "supports": [
+              "ev3"
+            ],
+            "against": [
+              "ev5"
+            ],
+            "expected": "Acute bilious obstructive emesis",
+            "expectedExplanation": "Volvulus is classically feared with bilious emesis and acute obstructive toxicity.",
+            "explanation": "Vomiting overlaps, but repeated brief attacks with recovery are less typical of an acute progressively toxic volvulus.",
+            "rationales": {
+              "supports": {
+                "ev3": "Vomiting and reduced intake can occur with volvulus."
+              },
+              "against": {
+                "ev5": "Recovery between brief attacks is less typical of sustained volvulus."
+              }
+            }
+          },
+          {
+            "target": "Functional constipation",
+            "supports": [
+              "ev2"
+            ],
+            "against": [
+              "ev4"
+            ],
+            "expected": "Chronic hard stools and withholding behavior",
+            "expectedExplanation": "Functional constipation requires a chronic stool-retention pattern rather than sudden pallid attacks.",
+            "explanation": "Abdominal discomfort overlaps, but pallor and transient lethargy during sudden attacks are not typical functional constipation.",
+            "rationales": {
+              "supports": {
+                "ev2": "Abdominal distress can occur with constipation."
+              },
+              "against": {
+                "ev4": "Transient pallor and lethargy suggest an acute episodic process."
+              }
+            }
+          },
+          {
+            "target": "Acute appendicitis",
+            "supports": [
+              "ev3"
+            ],
+            "against": [
+              "ev1",
+              "ev5"
+            ],
+            "expected": "Persistent localized pain and peritoneal irritation",
+            "expectedExplanation": "Appendicitis more often produces persistent and increasingly localized pain than short attacks with recovery.",
+            "explanation": "Vomiting overlaps, but the very young age and near-normal intervals favor intussusception.",
+            "rationales": {
+              "supports": {
+                "ev3": "Vomiting and reduced intake can occur in appendicitis."
+              },
+              "against": {
+                "ev1": "Appendicitis is less common at 11 months than intussusception.",
+                "ev5": "Near-normal recovery between stereotyped attacks is not the usual appendicitis course."
+              }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "respiratory": {
+    "pickerQuestions": [
+      {
+        "id": 1,
         "title": "Primary ciliary dyskinesia",
-        "domain": "Pediatrics",
+        "domain": "Pediatrics - Respiratory system",
         "date": "2026-06-15",
         "vignette": "Chronic wet cough since infancy with term neonatal respiratory distress and recurrent otitis media.",
         "stem": "What is the most likely diagnosis?"
@@ -2248,7 +3885,7 @@ const STUDY_DATA={
       {
         "id": 2,
         "title": "Foreign body aspiration",
-        "domain": "Pediatrics",
+        "domain": "Pediatrics - Respiratory system",
         "date": "2026-06-15",
         "vignette": "Toddler with choking while eating peanuts, unilateral focal wheeze, and unilateral air trapping.",
         "stem": "What is the most appropriate next step in management?"
@@ -2256,7 +3893,7 @@ const STUDY_DATA={
       {
         "id": 3,
         "title": "Pertussis in a young infant",
-        "domain": "Pediatrics",
+        "domain": "Pediatrics - Respiratory system",
         "date": "2026-06-15",
         "vignette": "Six-week-old with paroxysmal cough, apnea/cyanosis, post-tussive vomiting, and a questionable classic whoop clue.",
         "stem": "What is the most likely diagnosis?"
@@ -2264,7 +3901,7 @@ const STUDY_DATA={
       {
         "id": 4,
         "title": "Cystic fibrosis with KG node review",
-        "domain": "Pediatrics",
+        "domain": "Pediatrics - Respiratory system",
         "date": "2026-06-15",
         "vignette": "Infant with failure to thrive, greasy stools, recurrent pneumonia, and a questionable digital-clubbing node.",
         "stem": "What is the most likely diagnosis?"
@@ -2272,7 +3909,7 @@ const STUDY_DATA={
       {
         "id": 5,
         "title": "Asthma regeneration task",
-        "domain": "Pediatrics",
+        "domain": "Pediatrics - Respiratory system",
         "date": "2026-06-15",
         "vignette": "Too-easy asthma item with text+KG and a regenerated medium-difficulty version.",
         "stem": "What is the most likely diagnosis?"
@@ -3644,8 +5281,23 @@ const STUDY_DATA={
   }
 };
 
-activateDomain('pediatrics',{resetPicker:false});
+// Counterbalance 1 presentation order:
+// Text, KG, Text, KG, KG+Text.
+// Keep each question and its explanation data together while reassigning slots.
+{
+  const pediatricData=STUDY_DATA.pediatrics;
+  [pediatricData.tasks["1"],pediatricData.tasks["2"]]=[pediatricData.tasks["2"],pediatricData.tasks["1"]];
+  [pediatricData.tasks["3"],pediatricData.tasks["4"]]=[pediatricData.tasks["4"],pediatricData.tasks["3"]];
+  [pediatricData.pickerQuestions[0],pediatricData.pickerQuestions[1]]=[pediatricData.pickerQuestions[1],pediatricData.pickerQuestions[0]];
+  [pediatricData.pickerQuestions[2],pediatricData.pickerQuestions[3]]=[pediatricData.pickerQuestions[3],pediatricData.pickerQuestions[2]];
+  pediatricData.pickerQuestions.forEach((question,index)=>{question.id=index+1;});
+  Object.entries(pediatricData.tasks).forEach(([slot,task])=>{
+    task.title=`Task ${slot} - Expert review item`;
+    task.condition=`Review item ${slot} - ${task.mode==='kg'?'Knowledge graph explanation':task.mode==='text'?'Text explanation':'Knowledge graph + text explanation'}`;
+  });
+}
 
+activateDomain('pediatrics',{resetPicker:false});
 
 
 // ==============================================================
@@ -4451,9 +6103,15 @@ function makeEdge(from,to,label,color,meta={}){
   const dy=to.cy-from.cy;
   let ax,ay,bx,by;
   if(Math.abs(dx)>Math.abs(dy)*0.7){
-    // Mostly horizontal — right edge to left edge
-    ax=from.right; ay=from.cy;
-    bx=to.left;    by=to.cy;
+    // Mostly horizontal: choose anchors according to the actual edge
+    // direction so right-to-left causal links do not cross both nodes.
+    if(dx>=0){
+      ax=from.right; ay=from.cy;
+      bx=to.left;    by=to.cy;
+    }else{
+      ax=from.left;  ay=from.cy;
+      bx=to.right;   by=to.cy;
+    }
   } else if(dy>0){
     // Mostly going down — bottom to top
     ax=from.cx; ay=from.cy+from.h/2;
@@ -4465,6 +6123,24 @@ function makeEdge(from,to,label,color,meta={}){
   }
   const cpx=(ax+bx)/2;
   const cpy=(ay+by)/2;
+  const customRouteY=Number(meta.routeY);
+  const hasCustomRoute=Number.isFinite(customRouteY)&&Math.abs(dx)>80;
+  const hasGentleDownCurve=meta.curve==='gentle_down'&&dx>80&&dy>0;
+  let pathD;
+  if(hasGentleDownCurve){
+    const c1x=ax+dx*0.45;
+    const c2x=bx-dx*0.08;
+    const c2y=ay+dy*0.35;
+    pathD=`M${ax},${ay} C${c1x},${ay} ${c2x},${c2y} ${bx},${by}`;
+  }else if(hasCustomRoute){
+    const span=Math.abs(bx-ax);
+    const bend=Math.max(58,Math.min(130,span*0.18));
+    const c1x=ax+(bx>=ax?bend:-bend);
+    const c2x=bx-(bx>=ax?bend:-bend);
+    pathD=`M${ax},${ay} C${c1x},${ay} ${c1x},${customRouteY} ${cpx},${customRouteY} C${c2x},${customRouteY} ${c2x},${by} ${bx},${by}`;
+  }else{
+    pathD=`M${ax},${ay} C${cpx},${ay} ${cpx},${by} ${bx},${by}`;
+  }
   const classes=['kg-edge'];
   if(meta.focused)classes.push('focus-edge');
   if(meta.neighbor)classes.push('neighbor-edge');
@@ -4472,14 +6148,14 @@ function makeEdge(from,to,label,color,meta={}){
   
   const edgeAttr=meta.edgeId?` data-edge="${esc(meta.edgeId)}" data-from="${esc(meta.fromId||'')}" data-to="${esc(meta.toId||'')}" data-relation="${esc(label||'')}"`:'';
   let s=`<g class="${classes.join(' ').trim()}" style="cursor:default"${edgeAttr}>`;
-  s+=`<path d="M${ax},${ay} C${cpx},${ay} ${cpx},${by} ${bx},${by}" fill="none" stroke="transparent" stroke-width="12"/>`;
+  s+=`<path d="${pathD}" fill="none" stroke="transparent" stroke-width="12"/>`;
   const dashedAttr=meta.dashed?' stroke-dasharray="7 5" opacity="0.68"':'';
-  s+=`<path d="M${ax},${ay} C${cpx},${ay} ${cpx},${by} ${bx},${by}" fill="none" stroke="${color}" stroke-width="1.8"${dashedAttr} marker-end="url(#karrow)"/>`;
+  s+=`<path d="${pathD}" fill="none" stroke="${color}" stroke-width="1.8"${dashedAttr} marker-end="url(#karrow)"/>`;
   if(label){
-    const mx=(ax+bx)/2,my=(ay+by)/2;
+    const mx=(ax+bx)/2,my=hasGentleDownCurve?(ay+dy*0.26):(hasCustomRoute?customRouteY:(ay+by)/2);
     const lw=label.length*6.4+14;
     const tightGap=Math.abs(bx-ax)<lw+22;
-    const autoOffset=(label.length>10||tightGap)?(dy>=0?-26:26):0;
+    const autoOffset=(hasCustomRoute||hasGentleDownCurve)?-12:((label.length>10||tightGap)?(dy>=0?-26:26):0);
     const yOffset=(meta.labelOffsetY!==undefined && meta.labelOffsetY!==null)?meta.labelOffsetY:autoOffset;
     const ly=my+yOffset;
     s+=`<rect x="${mx-lw/2}" y="${ly-9}" width="${lw}" height="16" rx="8" fill="white" opacity="0.96"/>`;
@@ -4537,7 +6213,7 @@ function directNeighborIdsForFocus(kg,id){
 
 function edgeIdFor(fromId,toId,kind){return `${fromId}->${toId}:${kind}`;}
 function getEdgeLabel(edgeId,defaultLabel){
-  return defaultLabel;
+  return prettyTooltipTitle(defaultLabel);
 }
 function currentKg(){return tasks[currentTask]&&tasks[currentTask].kgData;}
 function defaultFindingToMechanismRelation(findingLabel,mechanismLabel){
@@ -4673,6 +6349,12 @@ function evidenceIdsForNodeId(kg,id,seen=new Set()){
   const ids=incomingNodeIds(kg,id).flatMap(src=>evidenceIdsForNodeId(kg,src,seen));
   return [...new Set(ids)].filter(eid=>!!getEvidenceById(kg,eid));
 }
+function deletionEvidenceIdsForNodeId(kg,id){
+  const rec=getNodeRecord(kg,id);
+  const explicit=rec&&Array.isArray(rec.node.deleteEvidenceIds)?rec.node.deleteEvidenceIds:null;
+  if(explicit)return [...new Set(explicit)].filter(eid=>!!getEvidenceById(kg,eid));
+  return evidenceIdsForNodeId(kg,id);
+}
 function nodeEvidenceIsRemoved(kg,id){
   return evidenceIdsForNodeId(kg,id).some(eid=>evidenceIsRemoved(eid));
 }
@@ -4681,7 +6363,7 @@ function nodeHasDeletableEvidence(id){
   if(!kg || !id)return false;
   const rec=getNodeRecord(kg,id);
   if(!rec || rec.type==='diagnosis')return false;
-  return evidenceIdsForNodeId(kg,id).some(eid=>!evidenceIsRemoved(eid));
+  return deletionEvidenceIdsForNodeId(kg,id).some(eid=>!evidenceIsRemoved(eid));
 }
 function evidenceLabelsForIds(kg,ids){
   return (ids||[]).map(id=>{
@@ -4728,7 +6410,7 @@ function deleteKgNodeById(id){
   if(!kg || !id){showToast('No KG node selected.');return;}
   const rec=getNodeRecord(kg,id);
   if(!rec || rec.type==='diagnosis'){showToast('This diagnosis node is kept as the graph answer.');return;}
-  const ids=evidenceIdsForNodeId(kg,id).filter(eid=>!evidenceIsRemoved(eid));
+  const ids=deletionEvidenceIdsForNodeId(kg,id).filter(eid=>!evidenceIsRemoved(eid));
   if(!ids.length){showToast('This node has no linked vignette sentence to delete.');return;}
   focusedKgNodeId=id;
   removeEvidenceForCurrentTask(ids,{
@@ -4786,6 +6468,7 @@ function renderKG(){
   board.style.display='block';
   board.classList.toggle('focus-active',!!focusedKgNodeId);
 
+  const showEvidenceNodes=kg.showEvidenceNodes===true;
   const visibleEvidence=kgEvidenceNodes(kg).filter(ev=>!ev.hiddenInMain && !evidenceIsRemoved(ev.id));
   const visibleFindings=kgFindingNodes(kg).filter(f=>!f.hiddenInMain && !nodeEvidenceIsRemoved(kg,f.id));
   const visibleFindingIds=new Set(visibleFindings.map(f=>f.id));
@@ -4806,17 +6489,19 @@ function renderKG(){
   const diagnosisNode=kgDiagnosisNode(kg);
   if(!diagnosisNode){board.innerHTML='';return;}
   const W=1180,LEGEND_H=44;
+  const evCount=showEvidenceNodes?visibleEvidence.length:0;
   const cfCount=visibleFindings.length,pCount=visiblePatterns.length,mCount=visibleMechanisms.length;
   const hasMechanismLayers=visibleMechanisms.some(m=>m.layer);
   const kgLayout=kg.layout || {};
   const NODE_H=52, GROUP_GAP=34;
-  const totalBandH=Math.max(cfCount,1)*NODE_H + Math.max(cfCount-1,0)*GROUP_GAP;
+  const maxColumnCount=Math.max(evCount,cfCount,pCount,mCount,1);
+  const totalBandH=maxColumnCount*NODE_H + Math.max(maxColumnCount-1,0)*GROUP_GAP;
   const layoutMinH=Number.isFinite(Number(kgLayout.minH)) ? Number(kgLayout.minH) : 360;
   const graphH=Math.max(totalBandH+120, layoutMinH);
   const H=graphH+LEGEND_H;
 
   const SIDE_PAD=130;
-  const colNames=['cf',...(pCount>0?['pattern']:[]),...(hasMechanismLayers?['mechanismUp','mechanismDown']:['mechanism']),'diagnosis'];
+  const colNames=[...(showEvidenceNodes?['evidence']:[]),...(cfCount>0?['cf']:[]),...(pCount>0?['pattern']:[]),...(hasMechanismLayers?['mechanismUp','mechanismDown']:['mechanism']),'diagnosis'];
   const colSpacing=(W-SIDE_PAD*2)/(colNames.length-1);
   const COL={};
   colNames.forEach((name,i)=>{ COL[name]=SIDE_PAD+i*colSpacing; });
@@ -4874,6 +6559,10 @@ function renderKG(){
     active.forEach(item=>{map[item.id]=Math.max(top,Math.min(bottom,item.y));});
   }
 
+  const evYSpread=ySpread(evCount,graphH,70);
+  const evYMap={};
+  if(showEvidenceNodes)visibleEvidence.forEach((ev,i)=>{evYMap[ev.id]=evYSpread[i]||graphH/2;});
+
   const cfYSpread=ySpread(cfCount,graphH,70);
   const cfYMap={};
   visibleFindings.forEach((cf,fi)=>{ cfYMap[cf.id]=cfYSpread[fi]||graphH/2; });
@@ -4884,7 +6573,7 @@ function renderKG(){
     const base=avgKnown(p.from,cfYMap,pFallback[i]||graphH/2);
     pYMap[p.id]=clampY(base+(pCount===1?8:(i%2?-14:14)));
   });
-  const sourceYForMechanism=id=>mechanismYMap[id]??pYMap[id]??cfYMap[id];
+  const sourceYForMechanism=id=>mechanismYMap[id]??pYMap[id]??cfYMap[id]??evYMap[id];
   const mFallback=ySpread(mCount,graphH,60);
   const mechanismYMap={};
   visibleMechanisms.forEach((m,i)=>{
@@ -4897,7 +6586,7 @@ function renderKG(){
       : ((currentTask===3 && m.id==='m1')?-28:(mCount===1?-18:(i%2?18:-18)));
     mechanismYMap[m.id]=clampY(base+mechanismOffset);
   });
-  const dxSourceMap={...cfYMap,...pYMap,...mechanismYMap};
+  const dxSourceMap={...evYMap,...cfYMap,...pYMap,...mechanismYMap};
   const diagnosisBase=avgKnown(incomingNodeIds(kg,diagnosisNode.id),dxSourceMap,graphH/2);
   const diagnosisY=[clampY(diagnosisBase-8)];
 
@@ -4910,6 +6599,7 @@ function renderKG(){
       if(Number.isFinite(yy) && targetMap[id]!==undefined)targetMap[id]=yy;
     });
   }
+  applyYLayout(kgLayout.nodeY,evYMap);
   applyYLayout(kgLayout.nodeY,cfYMap);
   applyYLayout(kgLayout.nodeY,pYMap);
   applyYLayout(kgLayout.nodeY,mechanismYMap);
@@ -4918,6 +6608,7 @@ function renderKG(){
   // Final pass: prevent same-column nodes from colliding after data-driven
   // semantic ordering. This keeps regenerated or edited graphs readable without
   // hand-tuning the renderer when the KG changes.
+  if(showEvidenceNodes)relaxLayerCollisions(visibleEvidence,evYMap,{minGap:88,top:72,bottom:graphH-76});
   relaxLayerCollisions(visibleFindings,cfYMap,{minGap:88,top:72,bottom:graphH-76});
   relaxLayerCollisions(visiblePatterns,pYMap,{minGap:88,top:72,bottom:graphH-76});
   relaxLayerCollisions(visibleMechanisms,mechanismYMap,{minGap:90,top:72,bottom:graphH-76});
@@ -4945,6 +6636,13 @@ function renderKG(){
     selected:false
   });
 
+  if(showEvidenceNodes)visibleEvidence.forEach(ev=>{
+    const pos=nodePos(ev.id,COL.evidence,evYMap[ev.id]);
+    const n=makeNode(ev.id,'evidence',ev.label,pos.cx,pos.cy,
+      isInteractive?{interactive:true,tooltip:mergedNodeTooltip(kg,ev.id,ev.tooltip),tooltipTitle:'Vignette evidence',evid:ev.id,...focusMeta(ev.id)}:{evid:ev.id,...focusMeta(ev.id)});
+    nodeMap[ev.id]=n;nodesSvg+=n.svg;
+  });
+
   visibleFindings.forEach((cf)=>{
     const evidIds=incomingNodeIds(kg,cf.id).filter(id=>!!getEvidenceById(kg,id));
     const mergedMeta=evidIds.length?{evid:evidIds.join('|')}:{evid:cf.mergedEvidence||undefined};
@@ -4956,8 +6654,10 @@ function renderKG(){
   visiblePatterns.forEach((p,i)=>{
     const pos=nodePos(p.id,COL.pattern,pYMap[p.id]);
     const canEditDelete=nodeHasDeletableEvidence(p.id);
+    const linkedEvidenceIds=deletionEvidenceIdsForNodeId(kg,p.id);
+    const linkedMeta=linkedEvidenceIds.length?{evid:linkedEvidenceIds.join('|')}:{};
     const n=makeNode(p.id,semanticTypeFor(p,'pattern'),p.label,pos.cx,pos.cy,
-      isInteractive?{interactive:true,tooltip:mergedNodeTooltip(kg,p.id,p.tooltip),tooltipTitle:semanticTypeLabel(p,'pattern'),...focusMeta(p.id)}:{...focusMeta(p.id)});
+      isInteractive?{interactive:true,tooltip:mergedNodeTooltip(kg,p.id,p.tooltip),tooltipTitle:semanticTypeLabel(p,'pattern'),...linkedMeta,...focusMeta(p.id)}:{...linkedMeta,...focusMeta(p.id)});
     nodeMap[p.id]=n;nodesSvg+=n.svg;
   });
   function layoutX(layoutMap,id,fallback){
@@ -4970,8 +6670,10 @@ function renderKG(){
   visibleMechanisms.forEach((m,i)=>{
     const pos=nodePos(m.id,layoutX(kgLayout.nodeX,m.id,mechanismXFor(m)),mechanismYMap[m.id]);
     const canEditDelete=nodeHasDeletableEvidence(m.id);
+    const linkedEvidenceIds=deletionEvidenceIdsForNodeId(kg,m.id);
+    const linkedMeta=linkedEvidenceIds.length?{evid:linkedEvidenceIds.join('|')}:{};
     const n=makeNode(m.id,semanticTypeFor(m,'mechanism'),m.label,pos.cx,pos.cy,
-      isInteractive?{interactive:true,tooltip:mergedNodeTooltip(kg,m.id,m.tooltip),tooltipTitle:semanticTypeLabel(m,'mechanism'),...focusMeta(m.id)}:{...focusMeta(m.id)});
+      isInteractive?{interactive:true,tooltip:mergedNodeTooltip(kg,m.id,m.tooltip),tooltipTitle:semanticTypeLabel(m,'mechanism'),...linkedMeta,...focusMeta(m.id)}:{...linkedMeta,...focusMeta(m.id)});
     nodeMap[m.id]=n;nodesSvg+=n.svg;
   });
   const diagnosisPos=nodePos(diagnosisNode.id,COL.diagnosis,diagnosisY[0]);
@@ -4981,9 +6683,10 @@ function renderKG(){
 
   // finding → pattern
   visiblePatterns.forEach(p=>{
-    incomingNodeIds(kg,p.id).forEach(cfId=>{
+    incomingEdgesForNode(kg,p.id).forEach(edge=>{
+      const cfId=edge.from;
       if(!nodeMap[cfId]||!nodeMap[p.id])return;
-      const relation=resolveEdgeRelation(kg,{from:cfId,to:p.id});
+      const relation=resolveEdgeRelation(kg,edge);
       const eid=edgeIdFor(cfId,p.id,relation);
       edgesSvg+=makeEdge(nodeMap[cfId],nodeMap[p.id],getEdgeLabel(eid,relation),'#7b4da0',
         isInteractive?edgeMeta(cfId,p.id,relation,{}):edgeMeta(cfId,p.id,relation));
@@ -4991,9 +6694,10 @@ function renderKG(){
   });
   // finding → mechanism
   visibleMechanisms.forEach(m=>{
-    incomingNodeIds(kg,m.id).forEach(cfId=>{
+    incomingEdgesForNode(kg,m.id).forEach(edge=>{
+      const cfId=edge.from;
       if(!nodeMap[cfId]||!nodeMap[m.id])return;
-      const relation=resolveEdgeRelation(kg,{from:cfId,to:m.id});
+      const relation=resolveEdgeRelation(kg,edge);
       const eid=edgeIdFor(cfId,m.id,relation);
       const weakContextEdge=false;
       edgesSvg+=makeEdge(nodeMap[cfId],nodeMap[m.id],getEdgeLabel(eid,relation),'#1a7a7a',
@@ -5001,16 +6705,17 @@ function renderKG(){
     });
   });
   // mechanism/finding → dx
-  incomingNodeIds(kg,diagnosisNode.id).forEach(srcId=>{
+  incomingEdgesForNode(kg,diagnosisNode.id).forEach(edge=>{
+    const srcId=edge.from;
     const src=nodeMap[srcId];
     if(!src)return;
     const record=getNodeRecord(kg,srcId);
     const node=record?.node;
-    const defaultDxRelation=defaultDiagnosisRelation(record,diagnosisNode.label);
-    const eid=edgeIdFor(srcId,diagnosisNode.id,defaultDxRelation);
+    const diagnosisRelation=edge.relation||defaultDiagnosisRelation(record,diagnosisNode.label);
+    const eid=edgeIdFor(srcId,diagnosisNode.id,diagnosisRelation);
     const weakContextDxEdge=false;
-    edgesSvg+=makeEdge(src,nodeMap[diagnosisNode.id],getEdgeLabel(eid,defaultDxRelation),'#2d5f8a',
-      isInteractive?edgeMeta(srcId,diagnosisNode.id,defaultDxRelation,{labelOffsetY:defaultDxRelation==='pathophysiology_of'?-12:null,dashed:weakContextDxEdge}):edgeMeta(srcId,diagnosisNode.id,defaultDxRelation,{labelOffsetY:defaultDxRelation==='pathophysiology_of'?-12:null,dashed:weakContextDxEdge}));
+    edgesSvg+=makeEdge(src,nodeMap[diagnosisNode.id],getEdgeLabel(eid,diagnosisRelation),'#2d5f8a',
+      isInteractive?edgeMeta(srcId,diagnosisNode.id,diagnosisRelation,{labelOffsetY:diagnosisRelation==='pathophysiology_of'?-12:null,routeY:edge.routeY,curve:edge.curve,dashed:weakContextDxEdge}):edgeMeta(srcId,diagnosisNode.id,diagnosisRelation,{labelOffsetY:diagnosisRelation==='pathophysiology_of'?-12:null,routeY:edge.routeY,curve:edge.curve,dashed:weakContextDxEdge}));
   });
   // Optional KG-internal edges, used when one mapped concept modifies another
   // rather than feeding directly into mechanism or diagnosis.
@@ -5028,6 +6733,7 @@ function renderKG(){
   });
 
   const usedLegendTypes=Array.from(new Set([
+    ...(showEvidenceNodes?['evidence']:[]),
     ...visibleFindings.map(n=>semanticTypeFor(n,'finding')),
     ...visiblePatterns.map(n=>semanticTypeFor(n,'pattern')),
     ...visibleMechanisms.map(n=>semanticTypeFor(n,'mechanism')),
