@@ -399,10 +399,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);fon
     <div class="setup-desc">Configure your medical education question parameters</div>
     <div class="field">
       <div class="field-label">Domain</div>
-      <select class="select-box" id="setupDomain" onchange="switchDomainPage()"><option value="pediatrics" selected>Pediatric digestive system</option><option value="respiratory">Pediatric respiratory system</option><option value="neurology">Neurology</option></select>    </div>
+      <select class="select-box" id="setupDomain" onchange="switchDomainPage()">
+        <option value="pediatrics" selected>Pediatric</option>
+        <option value="neurology">Neurology</option>
+      </select>
+    </div>
     <div class="field">
       <div class="field-label">Topic</div>
-      <select class="select-box" id="setupTopic"><option value="pediatric_digestive_system" selected>Pediatric digestive system</option></select>    </div>
+      <select class="select-box" id="setupTopic" onchange="switchTopicPage()">
+        <option value="digestive" selected>Digestive system</option>
+        <option value="respiratory">Respiratory system</option>
+      </select>
+    </div>
     <div class="field">
       <div class="field-label">Difficulty Level</div>
       <div class="diff-row">
@@ -529,26 +537,56 @@ let selectedPickerTask=null;
 let currentDomain='pediatrics';
 var domainStateReady=false;
 
+// The setup page uses a broad domain and a narrower topic.
+// The existing STUDY_DATA keys are preserved internally to avoid changing task data.
 const DOMAIN_TOPICS = {
-  neurology: [{value: 'cerebral_hemispheres_vascular_supply', label: 'Cerebral hemispheres and vascular supply'}],
-  pediatrics: [{value: 'pediatric_digestive_system', label: 'Pediatric digestive system'}],
-  respiratory: [{value: 'pediatric_respiratory_system', label: 'Pediatric respiratory system'}]
+  pediatrics: [
+    {value: 'digestive', label: 'Digestive system', dataset: 'pediatrics'},
+    {value: 'respiratory', label: 'Respiratory system', dataset: 'respiratory'}
+  ],
+  neurology: [
+    {value: 'cerebral_hemispheres_vascular_supply', label: 'Cerebral hemispheres and vascular supply', dataset: 'neurology'}
+  ]
+};
+
+const DATASET_SELECTION = {
+  pediatrics: {domain: 'pediatrics', topic: 'digestive'},
+  respiratory: {domain: 'pediatrics', topic: 'respiratory'},
+  neurology: {domain: 'neurology', topic: 'cerebral_hemispheres_vascular_supply'}
 };
 
 const DOMAIN_COPY = {
   neurology: {
-    sub: 'Neurology prototype - Question Setup',
+    sub: 'Neurology · Cerebral hemispheres and vascular supply',
     desc: 'Configure neurology MCQ review materials'
   },
   pediatrics: {
-    sub: 'Pediatric digestive system - Question Setup',
-    desc: 'Configure pediatric digestive-system MCQ review materials'
+    sub: 'Pediatric · Digestive system',
+    desc: 'Configure Pediatric questions in the Digestive system topic'
   },
   respiratory: {
-    sub: 'Pediatric respiratory system - Question Setup',
-    desc: 'Configure pediatric respiratory-system MCQ review materials'
+    sub: 'Pediatric · Respiratory system',
+    desc: 'Configure Pediatric questions in the Respiratory system topic'
   }
 };
+
+function datasetFromSelection(domain,topic){
+  const topics=DOMAIN_TOPICS[domain]||DOMAIN_TOPICS.neurology;
+  const selected=topics.find(item=>item.value===topic)||topics[0];
+  return selected.dataset;
+}
+
+function selectionFromDataset(dataset){
+  return DATASET_SELECTION[dataset]||DATASET_SELECTION.neurology;
+}
+
+function renderTopicOptions(domain,selectedTopic){
+  const topicEl=document.getElementById('setupTopic');
+  if(!topicEl)return;
+  const topics=DOMAIN_TOPICS[domain]||DOMAIN_TOPICS.neurology;
+  topicEl.innerHTML=topics.map(t=>`<option value="${t.value}">${t.label}</option>`).join('');
+  topicEl.value=topics.some(t=>t.value===selectedTopic)?selectedTopic:topics[0].value;
+}
 
 function deepClone(obj){return JSON.parse(JSON.stringify(obj));}
 function hydrateDomainRuntime(domain){
@@ -596,13 +634,10 @@ function activateDomain(domain,opts={}){
   updateSetupForDomain();
 }
 function updateSetupForDomain(){
+  const selection=selectionFromDataset(currentDomain);
   const domainEl=document.getElementById('setupDomain');
-  if(domainEl)domainEl.value=currentDomain;
-  const topicEl=document.getElementById('setupTopic');
-  if(topicEl){
-    topicEl.innerHTML=(DOMAIN_TOPICS[currentDomain]||DOMAIN_TOPICS.neurology)
-      .map(t=>`<option value="${t.value}">${t.label}</option>`).join('');
-  }
+  if(domainEl)domainEl.value=selection.domain;
+  renderTopicOptions(selection.domain,selection.topic);
   const copy=DOMAIN_COPY[currentDomain]||DOMAIN_COPY.neurology;
   const sub=document.querySelector('#setupPage .setup-sub');
   const desc=document.querySelector('#setupPage .setup-desc');
@@ -611,7 +646,15 @@ function updateSetupForDomain(){
 }
 function switchDomainPage(){
   const domain=document.getElementById('setupDomain')?.value||'neurology';
-  activateDomain(domain,{resetPicker:true});
+  const firstTopic=(DOMAIN_TOPICS[domain]||DOMAIN_TOPICS.neurology)[0];
+  renderTopicOptions(domain,firstTopic.value);
+  activateDomain(firstTopic.dataset,{resetPicker:true});
+  return false;
+}
+function switchTopicPage(){
+  const domain=document.getElementById('setupDomain')?.value||'neurology';
+  const topic=document.getElementById('setupTopic')?.value;
+  activateDomain(datasetFromSelection(domain,topic),{resetPicker:true});
   return false;
 }
 function selectDiff(d){['easy','medium','hard'].forEach(x=>document.getElementById('diff-'+x).classList.remove('active'));document.getElementById('diff-'+d).classList.add('active');}
@@ -669,7 +712,10 @@ function confirmPicker(){
 }
 
 function startStudy(){
-  switchDomainPage();
+  const domain=document.getElementById('setupDomain')?.value||'neurology';
+  const topic=document.getElementById('setupTopic')?.value;
+  const selectedDataset=datasetFromSelection(domain,topic);
+  if(selectedDataset!==currentDomain)activateDomain(selectedDataset,{resetPicker:false});
   document.getElementById('setupPage').style.display='none';
   document.getElementById('appPage').style.display='block';
   loadTask(selectedPickerTask||1);
@@ -2848,7 +2894,7 @@ const STUDY_DATA={
                 "ev2",
                 "ev3"
               ],
-              "tooltip": "Vomiting, feeding refusal, and texture aversion form the typical young-child presentation of eosinophilic esophagitis."
+              "tooltip": "Selective refusal of textured solids despite preserved liquid intake localizes the difficulty to swallowing rather than a generalized loss of appetite."
             },
             {
               "id": "p2",
@@ -2858,7 +2904,7 @@ const STUDY_DATA={
               "deleteEvidenceIds": [
                 "ev4"
               ],
-              "tooltip": "Poor weight gain with reduced subcutaneous fat shows that the feeding disorder has nutritional consequences."
+              "tooltip": "Poor weight gain and reduced subcutaneous fat show that the feeding problem has persisted long enough to impair nutritional status."
             },
             {
               "id": "p3",
@@ -2868,7 +2914,7 @@ const STUDY_DATA={
               "deleteEvidenceIds": [
                 "ev6"
               ],
-              "tooltip": "Food bolus impaction is a characteristic manifestation of clinically significant esophageal narrowing."
+              "tooltip": "A food bolus requiring endoscopic removal localizes the obstruction to the esophagus and indicates clinically significant narrowing."
             },
             {
               "id": "m1",
@@ -2880,7 +2926,7 @@ const STUDY_DATA={
                 "ev3",
                 "ev4"
               ],
-              "tooltip": "Persistent feeding dysfunction with vomiting and impaired growth indicates clinically significant esophageal disease."
+              "tooltip": "Vomiting, selective solid-food avoidance, and preserved liquid intake point to chronic esophageal dysfunction rather than primary intestinal malabsorption."
             },
             {
               "id": "m2",
@@ -2890,7 +2936,7 @@ const STUDY_DATA={
               "deleteEvidenceIds": [
                 "ev5"
               ],
-              "tooltip": "Eczema and food allergy indicate an atopic predisposition that increases the likelihood of eosinophilic esophagitis."
+              "tooltip": "Eczema and cow’s-milk allergy indicate an atopic phenotype commonly associated with eosinophilic inflammation of the esophagus."
             },
             {
               "id": "m3",
@@ -2900,14 +2946,14 @@ const STUDY_DATA={
               "deleteEvidenceIds": [
                 "ev6"
               ],
-              "tooltip": "Food impaction can result from reduced esophageal caliber associated with chronic inflammatory remodeling."
+              "tooltip": "Chronic eosinophilic inflammation can remodel the esophageal wall, reduce its luminal caliber, and predispose to food impaction."
             },
             {
               "id": "dx",
               "label": "Eosinophilic\nesophagitis",
               "nodeType": "diagnosis",
               "kind": "diagnosis",
-              "tooltip": "Feeding dysfunction, growth faltering, an atopic background, and food impaction support eosinophilic esophagitis."
+              "tooltip": "Atopy together with selective solid-food difficulty and impaired growth is more coherent with eosinophilic esophagitis than isolated reflux or a purely behavioral feeding disorder."
             }
           ],
           "edges": [
@@ -3276,11 +3322,11 @@ const STUDY_DATA={
             {
               "id": "f1",
               "label": "Typical infant\nage",
-              "nodeType": "risk",
+              "nodeType": "demographic",
               "deleteEvidenceIds": [
                 "ev1"
               ],
-              "tooltip": "The infant age is typical for intussusception and raises its prior probability.",
+              "tooltip": "An age of 10 months fits the usual age distribution of intussusception and strengthens the diagnosis when paired with recurrent colicky episodes.",
               "kind": "pattern"
             },
             {
@@ -3291,7 +3337,7 @@ const STUDY_DATA={
                 "ev2",
                 "ev4"
               ],
-              "tooltip": "Repeated severe pain with knee drawing and pallor forms a stereotyped colicky pattern.",
+              "tooltip": "Abrupt pain episodes separated by calmer intervals distinguish intermittent obstruction from the steadily progressive pain expected in many inflammatory conditions.",
               "kind": "pattern"
             },
             {
@@ -3301,7 +3347,7 @@ const STUDY_DATA={
               "deleteEvidenceIds": [
                 "ev3"
               ],
-              "tooltip": "Vomiting provides additional support for an intestinal obstructive process.",
+              "tooltip": "Vomiting is nonspecific on its own, but in this episodic colicky pattern it adds support for bowel obstruction.",
               "kind": "pattern"
             },
             {
@@ -3311,7 +3357,7 @@ const STUDY_DATA={
               "deleteEvidenceIds": [
                 "ev5"
               ],
-              "tooltip": "A sausage-shaped mass represents swollen telescoped bowel.",
+              "tooltip": "A sausage-shaped abdominal mass reflects the intussuscepted bowel and is a strong sign, although it is not palpable in every case.",
               "kind": "pattern"
             },
             {
@@ -3321,7 +3367,7 @@ const STUDY_DATA={
               "deleteEvidenceIds": [
                 "ev6"
               ],
-              "tooltip": "Currant-jelly stool reflects venous congestion and mucosal bleeding.",
+              "tooltip": "Currant-jelly stool results from venous congestion and mucosal ischemia, but it is often a later finding and is not required for diagnosis.",
               "kind": "pattern"
             },
             {
@@ -3333,7 +3379,7 @@ const STUDY_DATA={
                 "ev3",
                 "ev4"
               ],
-              "tooltip": "Colicky attacks and vomiting indicate intermittent intestinal obstruction.",
+              "tooltip": "Periodic luminal blockage explains the recurring severe pain and vomiting, with partial symptom relief between attacks.",
               "kind": "mechanism"
             },
             {
@@ -3346,14 +3392,14 @@ const STUDY_DATA={
                 "ev5",
                 "ev6"
               ],
-              "tooltip": "A telescoped bowel mass together with ischemic mucosal bleeding identifies a bowel telescoping process.",
+              "tooltip": "One bowel segment telescopes into another, creating a mass and compromising venous drainage enough to produce mucosal bleeding.",
               "kind": "mechanism"
             },
             {
               "id": "dx",
               "label": "Intussusception",
               "nodeType": "diagnosis",
-              "tooltip": "Episodic colicky pain, a sausage-shaped abdominal mass, and currant-jelly stool strongly support intussusception.",
+              "tooltip": "The combined episodic pain pattern, bowel mass, and bloody mucoid stool is highly characteristic, although the mass and stool finding may be absent early.",
               "kind": "diagnosis"
             }
           ],
@@ -3658,11 +3704,11 @@ const STUDY_DATA={
           {
             "id": "f1",
             "label": "Typical infant\nage",
-            "nodeType": "risk",
+            "nodeType": "demographic",
             "deleteEvidenceIds": [
               "ev1"
             ],
-            "tooltip": "The infant age supports intussusception as a common cause of intermittent obstruction.",
+            "tooltip": "An age of 11 months fits the usual age distribution of intussusception and strengthens the diagnosis when paired with recurrent colicky episodes.",
             "kind": "pattern"
           },
           {
@@ -3672,7 +3718,7 @@ const STUDY_DATA={
             "deleteEvidenceIds": [
               "ev2"
             ],
-            "tooltip": "Regularly recurring distress with knee drawing indicates an intermittent intestinal process.",
+            "tooltip": "Brief attacks recurring at regular intervals with knee drawing favor intermittent obstruction over continuously progressive inflammatory pain.",
             "kind": "pattern"
           },
           {
@@ -3682,7 +3728,7 @@ const STUDY_DATA={
             "deleteEvidenceIds": [
               "ev3"
             ],
-            "tooltip": "Vomiting and reduced intake provide additional support for intestinal obstruction.",
+            "tooltip": "Vomiting and reduced intake are nonspecific alone; they become more informative when paired with recurrent colicky attacks.",
             "kind": "pattern"
           },
           {
@@ -3693,7 +3739,7 @@ const STUDY_DATA={
               "ev4",
               "ev5"
             ],
-            "tooltip": "Transient pallor and lethargy with recovery between attacks support an intermittent intestinal obstructive pattern.",
+            "tooltip": "Near-normal recovery between attacks is more discriminative than lethargy alone because it shows an episodic rather than continuously progressive process.",
             "kind": "pattern"
           },
           {
@@ -3705,14 +3751,14 @@ const STUDY_DATA={
               "ev2",
               "ev3"
             ],
-            "tooltip": "Stereotyped pain attacks and vomiting indicate intermittent intestinal obstruction.",
+            "tooltip": "Transient bowel obstruction can produce repeated severe attacks and vomiting while allowing partial recovery when the obstruction briefly relaxes.",
             "kind": "mechanism"
           },
           {
             "id": "dx",
             "label": "Intussusception",
             "nodeType": "diagnosis",
-            "tooltip": "In an infant, recurrent brief attacks of severe pain with knee drawing, pallor, lethargy, vomiting, and interval recovery support intussusception.",
+            "tooltip": "Recurrent, similar attacks with near-normal recovery between episodes are characteristic of intussusception; a palpable abdominal mass and currant-jelly stool may be absent.",
             "kind": "diagnosis"
           }
         ],
